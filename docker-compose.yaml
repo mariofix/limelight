@@ -1,0 +1,19 @@
+version: '3'
+services:
+  db:
+    image: mariadb:latest
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --default-authentication-plugin=mysql_native_password
+    restart: always
+    volumes:
+      - db_data:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=limelight
+      - MYSQL_USER=limelight
+      - MYSQL_ROOT_PASSWORD=limelight
+      - MYSQL_PASSWORD=limelight
+    expose:
+      - 3306
+    network_mode: host
+
+volumes:
+  db_data:
