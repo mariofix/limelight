@@ -12,7 +12,6 @@ class AdminModelView(ModelView):
 
     # We want the form token
     form_base_class = SecureForm
-    page_size = 50
 
     def is_accessible(self):
         return (

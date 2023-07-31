@@ -1,7 +1,10 @@
 import logging.config
 
-from flask import Flask, render_template, request, session, url_for
+from authlib.integrations.flask_client import OAuth
+from celery import Celery, Task
+from flask import Flask, request, session, url_for
 from flask_babel import Babel
+from flask_debugtoolbar import DebugToolbarExtension
 from flask_http_middleware import MiddlewareManager
 from flask_security.core import Security
 from flask_security.datastore import SQLAlchemyUserDatastore
@@ -14,6 +17,10 @@ from .admin.site import admin_site
 from .database import db, migrations
 from .middleware import AllowedDomainsMiddleware
 from .models import Role, User
+from .tasks import *  # noqa: ignore
+from .the_pack import blueprint as the_pack
+from .version import __version_info_str__
+from .website import blueprint as website
 
 
 def create_app(settings_file: str | None = None) -> Flask:
@@ -29,8 +36,10 @@ def create_app(settings_file: str | None = None) -> Flask:
 
     # Configure Loggers
     logging.config.dictConfig(app.config.get("APP_LOGGING_CONFIG", {"disable_existing_loggers": False}))
-    # toolbar = DebugToolbarExtension(app)
-    # Sentry Here
+    DebugToolbarExtension(app)
+
+    # Celery
+    celery_init_app(app)
 
     # SQLAlchemy
     db.init_app(app)
@@ -40,6 +49,18 @@ def create_app(settings_file: str | None = None) -> Flask:
     admin_site.init_app(app)
 
     # Flask-Security
+    oauth = OAuth(app)
+    oauth.register(
+        name="github",
+        access_token_url="https://github.com/login/oauth/access_token",
+        access_token_params=None,
+        authorize_url="https://github.com/login/oauth/authorize",
+        authorize_params=None,
+        api_base_url="https://api.github.com/",
+        client_kwargs={"scope": "user:email"},
+    )
+    app.extensions["oauth"] = oauth
+
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     security = Security(app, user_datastore)
 
@@ -70,12 +91,24 @@ def create_app(settings_file: str | None = None) -> Flask:
             "app": app,
         }
 
-    @app.get("/")
-    def home():
-        return render_template("index.html")
+    @app.context_processor
+    def default_data():
+        return {"app_version": __version_info_str__}
 
-    @app.get("/robots.txt")
-    def robots_txt():
-        return "# robots.txt\n\nUser-agent: *\n\n"
+    app.register_blueprint(website)
+    app.register_blueprint(the_pack)
 
     return app
+
+
+def celery_init_app(app: Flask) -> Celery:
+    class FlaskTask(Task):
+        def __call__(self, *args: object, **kwargs: object) -> object:
+            with app.app_context():
+                return self.run(*args, **kwargs)
+
+    celery_app = Celery(app.name, task_cls=FlaskTask)
+    celery_app.config_from_object(app.config["CELERY"])
+    celery_app.set_default()
+    app.extensions["celery"] = celery_app
+    return celery_app

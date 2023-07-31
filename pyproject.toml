@@ -5,7 +5,7 @@ description = "djangopackages.org for Flask"
 authors = ["Mario Hernandez <mariofix@proton.me>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "limelight"}]
+packages = [{ include = "limelight" }]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -16,21 +16,32 @@ python-dotenv = "^1.0.0"
 flask-babel = "^3.1.0"
 pymysql = "^1.1.0"
 python-multipart = "^0.0.6"
-flask-security-too = {version = "^5.2.0", extras = ["babel", "common", "sqla"]}
+flask-security-too = { version = "^5.2.0", extras = [
+    "babel",
+    "common",
+    "sqla",
+] }
 flask-sitemap = "^0.4.0"
+authlib = "^1.2.1"
+requests = "^2.31.0"
+celery = {version = "^5.3.1", extras = ["redis"]}
+sqlalchemy-mixins = "^2.0.4"
+python-gitlab = "^3.15.0"
 
 [tool.poetry.group.dev]
-optional = true
+optional = false
 
 [tool.poetry.group.dev.dependencies]
 pre-commit = "^3.3.3"
-sentry-sdk = {version = "^1.28.1", extras = ["flask"]}
-flask-debugtoolbar = {git = "https://github.com/pallets-eco/flask-debugtoolbar.git", rev = "master"}
+sentry-sdk = { version = "^1.28.1", extras = ["flask"] }
+flask-debugtoolbar = { git = "https://github.com/pallets-eco/flask-debugtoolbar.git", rev = "master" }
 trove-classifiers = "^2023.7.6"
+black = "^23.7.0"
+rich = "^13.4.2"
 
 [tool.autopep8]
 max_line_length = 119
-ignore = "E501,W6"  # or ["E501", "W6"]
+ignore = "E501,W6"    # or ["E501", "W6"]
 in-place = true
 recursive = true
 aggressive = 3
@@ -42,12 +53,8 @@ target-version = ['py311']
 [tool.pytest.ini_options]
 minversion = "6.0"
 addopts = "-ra"
-testpaths = [
-    "tests",
-]
-python_files =[
-    "test*.py"
-]
+testpaths = ["tests"]
+python_files = ["test*.py"]
 
 [tool.isort]
 profile = "black"

@@ -2,10 +2,11 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=flask
 
 ### Project ###
-*.sublime-*
+.vscode
 flask_admin/
 flask_adminlte4/
 startbootstrap-new-age-master/
+old/
 
 ### Flask ###
 instance/*

@@ -1,0 +1,373 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+    <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
+    <title>{{ config.get('LIMELIGHT_APP_NAME')}} | {{ config.get('LIMELIGHT_APP_SLOGAN')}}</title>
+    <!-- CSS files -->
+    <link href="{{ url_for('static', filename='tabler/css/tabler.min.css', v='1.0.0-beta19')}}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='tabler/css/tabler-flags.min.css', v='1.0.0-beta19')}}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='tabler/css/tabler-payments.min.css', v='1.0.0-beta19')}}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='tabler/css/tabler-vendors.min.css', v='1.0.0-beta19')}}" rel="stylesheet"/>
+    <link href="{{ url_for('static', filename='tabler/css/demo.min.css', v='1.0.0-beta19')}}" rel="stylesheet"/>
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='favicon.ico', v=app_version)}}">
+    <style>
+      @import url('https://rsms.me/inter/inter.css');
+      :root {
+      	--tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+      body {
+      	font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+  </head>
+  <body >
+    <script src="{{ url_for('static', filename='tabler/js/demo-theme.min.js', v='1.0.0-beta19')}}"></script>
+    <div class="page">
+      <!-- Navbar -->
+      <header class="navbar navbar-expand-md navbar-overlap d-print-none"  data-bs-theme="dark">
+        <div class="container-xl">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <h1 class="navbar-brand navbar-brand-autodark d-none-navbar-horizontal pe-0 pe-md-3">
+            <a href="{{ url_for('website.home')}}">
+              <img src="{{ url_for('static', filename='limelight.svg')}}" width="110" height="32" alt="Tabler" class="navbar-brand-image">
+            </a>
+          </h1>
+          <div class="navbar-nav flex-row order-md-last">
+            <div class="d-none d-md-flex">
+              <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip"
+		   data-bs-placement="bottom">
+                <!-- Download SVG icon from http://tabler-icons.io/i/moon -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" /></svg>
+              </a>
+              <a href="?theme=light" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip"
+		   data-bs-placement="bottom">
+                <!-- Download SVG icon from http://tabler-icons.io/i/sun -->
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" /><path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" /></svg>
+              </a>
+            </div>
+          </div>
+          <div class="collapse navbar-collapse" id="navbar-menu">
+            <div class="d-flex flex-column flex-md-row flex-fill align-items-stretch align-items-md-center">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('website.home')}}" >
+                    <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l-2 0l9 -9l9 9l-2 0" /><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" /><path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" /></svg>
+                    </span>
+                    <span class="nav-link-title">
+                      Home
+                    </span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('website.list_stars')}}" >
+                    <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"></path>
+</svg>
+                    </span>
+                    <span class="nav-link-title">
+                      Stars
+                    </span>
+                  </a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{ url_for('website.list_styles')}}" >
+                    <span class="nav-link-icon d-md-none d-lg-inline-block"><!-- Download SVG icon from http://tabler-icons.io/i/home -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-music" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+   <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+   <path d="M3 17a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
+   <path d="M13 17a3 3 0 1 0 6 0a3 3 0 0 0 -6 0"></path>
+   <path d="M9 17v-13h10v13"></path>
+   <path d="M9 8h10"></path>
+</svg>
+                    </span>
+                    <span class="nav-link-title">
+                      Styles
+                    </span>
+                  </a>
+                </li>
+
+
+              </ul>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="page-wrapper">
+        <!-- Page header -->
+        <div class="page-header d-print-none text-white">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <!-- Page pre-title -->
+                <div class="page-pretitle">
+                  {{ config.get('LIMELIGHT_APP_SLOGAN')}}
+                </div>
+                <h2 class="page-title">
+                  {{ config.get('LIMELIGHT_APP_NAME')}}
+                </h2>
+              </div>
+              <!-- Page title actions -->
+              <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+
+                  <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"></path></svg>
+                    New star
+                  </a>
+                  <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal" data-bs-target="#modal-report" aria-label="Create new report">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Page body -->
+        <div class="page-body">
+          {% block page_body %}
+
+          {% endblock page_body %}
+        </div>
+        <footer class="footer footer-transparent d-print-none">
+          <div class="container-xl">
+            <div class="row text-center align-items-center flex-row-reverse">
+              <div class="col-lg-auto ms-lg-auto">
+                <ul class="list-inline list-inline-dots mb-0">
+                  <li class="list-inline-item"><a href="https://github.com/mariofix/limelight/blob/main/LICENSE" class="link-secondary">MIT License</a></li>
+                  <li class="list-inline-item"><a href="https://github.com/mariofix/limelight/" target="_blank" class="link-secondary" rel="noopener">Source code</a></li>
+                  <li class="list-inline-item">
+                    <a href="https://github.com/sponsors/codecalm" target="_blank" class="link-secondary" rel="noopener">
+                      <!-- Download SVG icon from http://tabler-icons.io/i/heart -->
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon text-pink icon-filled icon-inline" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" /></svg>
+                      Sponsor Tabler
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                <ul class="list-inline list-inline-dots mb-0">
+                  <li class="list-inline-item">
+                    Copyright &copy; 2023
+                    <a href="https://about.me/mariofix" class="link-secondary">mariofix</a>.
+                    All rights reserved.
+                  </li>
+                  <li class="list-inline-item">
+                    Current Release:
+                    <a href="https://github.com/mariofix/limelight/blob/main/CHANGELOG.md" class="link-secondary" rel="noopener">
+                      v{{ app_version }}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+    <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">New Star</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+          <form action="{{ url_for('website.create_star') }}" method="post" novalidate>
+          <div class="row row-cards">
+              <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" name="new-star-name" id="new-star-name" placeholder="Star's Name" oninput="PasteSlug()">
+            </div>
+            <div class="col-md-7">
+              <div class="mb-3">
+                <label class="form-label">Slug</label>
+                <input type="text" class="form-control" name="new-star-slug" id="new-star-slug" placeholder="Star's Slug">
+              </div>
+            </div>
+            <div class="col-md-5">
+              <div class="mb-3">
+                  <label class="form-label">Styles</label>
+                  <select class="form-select">
+                    {% for style in l_all_styles %}
+                    <option value="{{ style.slug }}">{{ style.title }} </option>
+                    {% endfor %}
+                  </select>
+                </div>
+            </div>
+
+            <label class="form-label">Repo</label>
+            <div class="form-selectgroup-boxes row mb-3">
+              <div class="col-lg-6">
+                <label class="form-selectgroup-item">
+                  <input type="checkbox" name="repos" value="pypi" class="form-selectgroup-input" oninput="RepoChange()">
+                  <span class="form-selectgroup-label d-flex align-items-center p-3">
+                    <span class="me-3">
+                      <span class="form-selectgroup-check"></span>
+                    </span>
+                    <span class="form-selectgroup-label-content">
+                      <span class="form-selectgroup-title strong mb-1">PyPi</span>
+                      <span class="d-block text-secondary">PyPi Package.</span>
+                    </span>
+                  </span>
+                </label>
+              </div>
+              <div class="col-lg-6">
+                <label class="form-selectgroup-item">
+                  <input type="checkbox" name="repos" value="conda" class="form-selectgroup-input" oninput="RepoChange()" disabled>
+                  <span class="form-selectgroup-label d-flex align-items-center p-3">
+                    <span class="me-3">
+                      <span class="form-selectgroup-check"></span>
+                    </span>
+                    <span class="form-selectgroup-label-content">
+                      <span class="form-selectgroup-title strong mb-1">Conda</span>
+                      <span class="d-block text-secondary">Conda Package (Soon)</span>
+                    </span>
+                  </span>
+                </label>
+              </div>
+              <div class="col-lg-6">
+                <label class="form-selectgroup-item">
+                  <input type="checkbox" name="repos" value="github" class="form-selectgroup-input" oninput="RepoChange()">
+                  <span class="form-selectgroup-label d-flex align-items-center p-3">
+                    <span class="me-3">
+                      <span class="form-selectgroup-check"></span>
+                    </span>
+                    <span class="form-selectgroup-label-content">
+                      <span class="form-selectgroup-title strong mb-1">Github</span>
+                      <span class="d-block text-secondary">Github Repo</span>
+                    </span>
+                  </span>
+                </label>
+              </div>
+              <div class="col-lg-6">
+                <label class="form-selectgroup-item">
+                  <input type="checkbox" name="repos" value="gitlab" class="form-selectgroup-input" oninput="RepoChange()" disabled>
+                  <span class="form-selectgroup-label d-flex align-items-center p-3">
+                    <span class="me-3">
+                      <span class="form-selectgroup-check"></span>
+                    </span>
+                    <span class="form-selectgroup-label-content">
+                      <span class="form-selectgroup-title strong mb-1">Gitlab</span>
+                      <span class="d-block text-secondary">Gitlab Repo (Soon)</span>
+                    </span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="row" id="pypi_info">
+              <div class="col-lg-12" >
+                <div class="mb-3">
+                  <label class="form-label">PyPi URL</label>
+                  <div class="input-group input-group-flat">
+                    <span class="input-group-text">
+                      https://pypi.org/project/
+                    </span>
+                    <input type="text" class="form-control ps-0" placeholder="package-slug" autocomplete="off" id="new-pypi-repo" name="new-pypi-repo">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" id="conda_info">
+              <div class="col-lg-12">
+                <div class="mb-3">
+                  <label class="form-label">Conda URL</label>
+                  <div class="input-group input-group-flat">
+                    <span class="input-group-text">
+                      https://anaconda.org/anaconda/
+                    </span>
+                    <input type="text" class="form-control ps-0" placeholder="package-slug" autocomplete="off" id="new-conda-repo" name="new-conda-repo">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row" id="github_info">
+              <div class="col-lg-12">
+                <div class="mb-3">
+                  <label class="form-label">Github Repo namespace</label>
+                  <div class="input-group input-group-flat">
+                    <span class="input-group-text">
+                      https://github.com/
+                    </span>
+                    <input type="text" class="form-control ps-0" placeholder="user/repo" autocomplete="off" id="new-github-repo" name="new-github-repo">
+                  </div>
+
+                </div>
+              </div>
+            </div>
+            <div class="row" id="gitlab_info">
+              <div class="col-lg-12">
+                <div class="mb-3">
+                  <label class="form-label">Gitlab Project ID</label>
+                  <input type="text" class="form-control" placeholder="123456" autocomplete="off"  id="new-gitlab-repo" name="new-gitlab-repo">
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          </div>
+          <div class="modal-footer">
+            <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+              Cancel
+            </a>
+            <button class="btn btn-primary ms-auto" data-bs-dismiss="modal" type="submit">
+              <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-star" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"></path><path d="M12 17.75l-6.172 3.245l1.179 -6.873l-5 -4.867l6.9 -1l3.086 -6.253l3.086 6.253l6.9 1l-5 4.867l1.179 6.873z"></path></svg>
+              Create Star
+              </button>
+
+          </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <!-- Tabler Core -->
+    <script src="{{ url_for('static', filename='tabler/js/tabler.min.js', v='1.0.0-beta19')}}" defer></script>
+    <script src="{{ url_for('static', filename='tabler/js/demo.min.js', v='1.0.0-beta19')}}" defer></script>
+    <script type="text/javascript">
+    function slugify(str) {
+      return str.toLowerCase().trim().replace(/[^\w\s-]/g, '').replace(/[\s_-]+/g, '-').replace(/^-+|-+$/g, '');
+    }
+    function PasteSlug(dest) {
+      origen = document.querySelector("#new-star-name");
+      slug = slugify(origen.value)
+      destino = document.querySelector("#new-star-slug");
+      destino.value = slug;
+      RepoChange("pypi");
+      // RepoChange("conda");
+      // RepoChange("github");
+      // RepoChange("gitlab");
+    }
+
+    function RepoChange(repo){
+      if (repo == "pypi") {
+        //unhide
+        pypi = document.querySelector("#new-pypi-repo");
+        pypi.value = document.querySelector("#new-star-slug").value;
+      }
+      if (repo == "conda") {
+        //unhide
+        conda = document.querySelector("#new-conda-repo");
+        conda.value = document.querySelector("#new-star-slug").value;
+      }
+      if (repo == "github") {
+        //unhide
+        conda = document.querySelector("#new-github-repo");
+        conda.value = document.querySelector("#new-star-slug").value;
+      }
+      if (repo == "gitlab") {
+        //unhide
+        conda = document.querySelector("#new-gitlab-repo");
+        conda.value = document.querySelector("#new-star-slug").value;
+      }
+    }
+    </script>
+  </body>
+</html>
