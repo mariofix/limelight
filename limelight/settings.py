@@ -54,8 +54,8 @@ SWAGGER_UI_OPERATION_ID = True
 SWAGGER_UI_REQUEST_DURATION = True
 
 # Flask Debugtoolbar
-DEBUG_TB_ENABLED = True
-DEBUG_TB_INTERCEPT_REDIRECTS = True
+DEBUG_TB_ENABLED = DEBUG
+DEBUG_TB_INTERCEPT_REDIRECTS = DEBUG
 DEBUG_TB_PANELS = (
     "flask_debugtoolbar.panels.versions.VersionDebugPanel",
     "flask_debugtoolbar.panels.timer.TimerDebugPanel",
@@ -85,8 +85,8 @@ MAIL_USE_LOCALTIME = False
 
 # CELERY
 CELERY = {
-    "broker_url": "redis://172.16.17.2/9",
-    "result_backend": "redis://172.16.17.2/9",
+    "broker_url": "redis://127.0.0.1/9",
+    "result_backend": "redis://127.0.0.1/9",
     "task_ignore_result": False,
     "timezone": "UTC",
     "worker_concurrency": 1,

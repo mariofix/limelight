@@ -31,7 +31,7 @@ def fetch_pypi_project(slug: str) -> dict:
     }
 
 
-@shared_task()
+@shared_task(rate_timit="30/m")
 def process_queue_item(queue_id: int) -> dict:
     print(f"lets_play({queue_id})")
     return lets_play(queue_id)

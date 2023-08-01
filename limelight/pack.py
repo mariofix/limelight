@@ -1,8 +1,10 @@
-from dataclasses import dataclass
-import requests
-from .database import db
-from .models import StarQueue, QueueStatus
 import datetime
+from dataclasses import dataclass
+
+import requests
+
+from .database import db
+from .models import QueueStatus, StarQueue
 
 
 @dataclass
