@@ -74,7 +74,7 @@ class Ron(Fetch):
         queue.github_repo.full_name = repo_info["full_name"]
         queue.github_repo.html_url = repo_info["html_url"]
         queue.github_repo.description = repo_info["description"]
-        queue.github_repo.license = str(repo_info["license"]["spdx_id"])
+        queue.github_repo.license = str(repo_info["license"])
         queue.github_repo.default_branch = repo_info["default_branch"]
         queue.github_repo.fork = repo_info["fork"]
         queue.github_repo.template = repo_info["is_template"]

@@ -210,7 +210,7 @@ class GithubRepo(db.Model, TimestampMixin):
     full_name: Mapped[str] = mapped_column(db.String(255), nullable=True, default=None)
     html_url: Mapped[str] = mapped_column(db.String(255), nullable=True, default=None)
     description: Mapped[str] = mapped_column(db.String(255), nullable=True, default=None)
-    license: Mapped[str] = mapped_column(db.String(32), nullable=True, default=None)
+    license: Mapped[str] = mapped_column(db.String(128), nullable=True, default=None)
     default_branch: Mapped[str] = mapped_column(db.String(255), nullable=True, default=None)
     fork: Mapped[bool] = mapped_column(db.Boolean(), nullable=False, default=False)
     template: Mapped[bool] = mapped_column(db.Boolean(), nullable=False, default=False)

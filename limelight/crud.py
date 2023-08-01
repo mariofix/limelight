@@ -52,7 +52,7 @@ def new_star_from_web(form_data) -> Star:
             raise Exception("No se pudo crear el repo Github")
 
     send_email.delay(
-        f"New Star {star.slug}",
+        f"New Star {new_star.slug}",
         "new_star",
         "bot@mariofix.com",
         ["mariohernandezc@gmail.com"],
