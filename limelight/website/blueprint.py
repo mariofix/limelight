@@ -11,13 +11,8 @@ blueprint = Blueprint("website", __name__, url_prefix="/")
 @blueprint.get("/")
 def home():
     context_data = {
-        "q_stars": db.session.query(Star).count(),
-        "q_styles": db.session.query(Style).count(),
-        "q_lineups": db.session.query(Lineup).count(),
-        "q_queues": db.session.query(StarQueue).count(),
         "l_last_5": db.session.query(Star).order_by(Star.created_at.desc()).limit(5).all(),
         "l_random_5": db.session.query(Star).order_by(func.rand()).limit(5).all(),
-        "l_all_styles": db.session.query(Style).all(),
     }
 
     return render_template("website/home.html", **context_data)
@@ -51,9 +46,13 @@ def list_stars():
 
 @blueprint.get("/star/<star_slug>")
 def interview_star(star_slug: str):
-    star = get_star_info(star_slug)
-    print(f"{star=}")
-    return render_template("website/home.html")
+    context_data = {
+        "l_last_5": db.session.query(Star).order_by(Star.created_at.desc()).limit(5).all(),
+        "l_random_5": db.session.query(Star).order_by(func.rand()).limit(5).all(),
+        "star": db.session.query(Star).filter(Star.slug == star_slug).first(),
+    }
+
+    return render_template("website/home.html", **context_data)
 
 
 @blueprint.get("/styles/")

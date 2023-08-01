@@ -1,6 +1,7 @@
 from .database import db
-from .models import GithubRepo, PypiRepo, QueueStatus, Star, StarQueue
+from .models import GithubRepo, Lineup, PypiRepo, QueueStatus, Star, StarQueue, Style
 from .tasks import send_email
+from .version import __version_info_str__ as __version__
 
 
 def new_star_from_web(form_data) -> Star:
@@ -65,3 +66,15 @@ def new_star_from_web(form_data) -> Star:
 
 def get_star_info(slug: str) -> Star:
     return db.session.query(Star).filter(Star.slug == slug).first()
+
+
+def get_context_data() -> dict:
+    data = {
+        "app_version": __version__,
+        "q_stars": db.session.query(Star).count(),
+        "q_styles": db.session.query(Style).count(),
+        "q_lineups": db.session.query(Lineup).count(),
+        "q_queues": db.session.query(StarQueue).filter(StarQueue.status == QueueStatus.CREATED).count(),
+        "l_all_styles": db.session.query(Style).all(),
+    }
+    return data

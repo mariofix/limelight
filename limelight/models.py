@@ -111,6 +111,14 @@ class Star(db.Model, TimestampMixin):
     def __str__(self):
         return self.slug
 
+    @property
+    def get_license(self) -> str:
+        return self.pypi_repo.license
+
+    @property
+    def get_version(self) -> str:
+        return self.pypi_repo.version
+
 
 class Lineup(db.Model, TimestampMixin):
     __tablename__ = "limelight_lineup"

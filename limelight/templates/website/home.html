@@ -112,14 +112,17 @@
                       </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                      <td nowrap="nowrap"><a href="#">Star Name</a></td>
-                      <td><a href="/syle/style-1">Framework</a>, <a href="/syle/style-2">ORM</a></td>
-                      <td><a href="/lineup/lineup-1">Admin Panels</a>, <a href="/lineup/lineup-2">Tools</a></td>
-                      <td><a href="#">MIT</a></td>
-                      <td><a href="#">0.0.0</a></td>
-                      <td><a href="#">Demo</a>, <a href="#">Docs</a>, <a href="#">Website</a></td>
-                    </tr>
+                    {% for project in l_last_5 %}
+                      <tr>
+                        <td nowrap="nowrap"><a href="{{ url_for('website.interview_star', star_slug=project.slug) }}"> {{ project.title }}</a></td>
+                        <td><a href="/syle/style-1">Framework</a>, <a href="/syle/style-2">ORM</a></td>
+                        <td><a href="/lineup/lineup-1">Admin Panels</a>, <a href="/lineup/lineup-2">Tools</a></td>
+                        <td>{{ project.get_license }}</td>
+                        <td>{{ project.get_version }}</td>
+                        <td><a href="#">Demo</a>, <a href="#">Docs</a>, <a href="#">Website</a></td>
+                      </tr>
+                    {% endfor %}
+
 
                     </tbody>
                   </table>
@@ -146,14 +149,16 @@
                       </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                      <td nowrap="nowrap"><a href="#">Star Name</a></td>
-                      <td><a href="/syle/style-1">Framework</a>, <a href="/syle/style-2">ORM</a></td>
-                      <td><a href="/lineup/lineup-1">Admin Panels</a>, <a href="/lineup/lineup-2">Tools</a></td>
-                      <td><a href="#">MIT</a></td>
-                      <td><a href="#">0.0.0</a></td>
-                      <td><a href="#">Demo</a>, <a href="#">Docs</a>, <a href="#">Website</a></td>
-                    </tr>
+                    {% for project in l_random_5 %}
+                      <tr>
+                        <td nowrap="nowrap"><a href="{{ url_for('website.interview_star', star_slug=project.slug) }}"> {{ project.title }}</a></td>
+                        <td><a href="/syle/style-1">Framework</a>, <a href="/syle/style-2">ORM</a></td>
+                        <td><a href="/lineup/lineup-1">Admin Panels</a>, <a href="/lineup/lineup-2">Tools</a></td>
+                        <td>{{ project.get_license }}</td>
+                        <td>{{ project.get_version }}</td>
+                        <td><a href="#">Demo</a>, <a href="#">Docs</a>, <a href="#">Website</a></td>
+                      </tr>
+                    {% endfor %}
 
                     </tbody>
                   </table>

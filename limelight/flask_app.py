@@ -13,6 +13,7 @@ from flask_sitemap import Sitemap
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from .admin.site import admin_site
+from .crud import get_context_data
 from .database import db, migrations
 from .mail import mail
 from .middleware import AllowedDomainsMiddleware
@@ -95,7 +96,7 @@ def create_app(settings_file: str | None = None) -> Flask:
 
     @app.context_processor
     def default_data():
-        return {"app_version": __version_info_str__}
+        return get_context_data()
 
     app.register_blueprint(website)
 
