@@ -17,7 +17,7 @@ FLASK_ADMIN_UI_MODE = "dark"  # dark
 FLASK_ADMIN_FLUID_LAYOUT = True
 LIMELIGHT_APP_NAME = "limelight"
 LIMELIGHT_APP_SLOGAN = "Flask's brightest stars"
-
+LIMELIGHT_FETCH_AUTOSTART = False
 
 # Flask-Security config
 SECURITY_PASSWORD_SALT = ""
@@ -93,6 +93,7 @@ CELERY = {
     "worker_max_tasks_per_child": 1,
     "worker_send_task_events": True,
     "task_send_sent_event": True,
+    "broker_connection_retry_on_startup": True,
 }
 SITEMAP_INCLUDE_RULES_WITHOUT_PARAMS = True
 SITEMAP_IGNORE_ENDPOINTS = [

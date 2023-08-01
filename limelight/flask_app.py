@@ -3,6 +3,7 @@ import logging.config
 from authlib.integrations.flask_client import OAuth
 from celery import Celery, Task
 from flask import Flask, request, session, url_for
+from flask_admin import helpers as admin_helpers
 from flask_babel import Babel
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_http_middleware import MiddlewareManager
@@ -11,14 +12,12 @@ from flask_security.datastore import SQLAlchemyUserDatastore
 from flask_sitemap import Sitemap
 from werkzeug.middleware.proxy_fix import ProxyFix
 
-from flask_admin import helpers as admin_helpers
-
 from .admin.site import admin_site
 from .database import db, migrations
+from .mail import mail
 from .middleware import AllowedDomainsMiddleware
 from .models import Role, User
 from .tasks import *  # noqa: ignore
-from .the_pack import blueprint as the_pack
 from .version import __version_info_str__
 from .website import blueprint as website
 
@@ -37,6 +36,9 @@ def create_app(settings_file: str | None = None) -> Flask:
     # Configure Loggers
     logging.config.dictConfig(app.config.get("APP_LOGGING_CONFIG", {"disable_existing_loggers": False}))
     DebugToolbarExtension(app)
+
+    # Mailer
+    mail.init_app(app)
 
     # Celery
     celery_init_app(app)
@@ -96,7 +98,6 @@ def create_app(settings_file: str | None = None) -> Flask:
         return {"app_version": __version_info_str__}
 
     app.register_blueprint(website)
-    app.register_blueprint(the_pack)
 
     return app
 

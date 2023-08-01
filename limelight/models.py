@@ -1,10 +1,9 @@
 import datetime
 import enum
 
+from flask_admin.babel import lazy_gettext as _
 from flask_security.core import RoleMixin, UserMixin
 from sqlalchemy.orm import Mapped, backref, declarative_mixin, mapped_column, relationship
-
-from flask_admin.babel import lazy_gettext as _
 
 from .database import db
 
@@ -149,8 +148,8 @@ class StarQueue(db.Model, TimestampMixin):
     github_repo_id = db.Column(db.Integer(), db.ForeignKey("limelight_repo_github.id"), nullable=True, default=None)
     github_repo = db.relationship("GithubRepo", back_populates="queues")
 
-    def __str__(self):
-        return self.id
+    def __str__(self) -> str:
+        return str(self.id)
 
 
 class PypiRepo(db.Model, TimestampMixin):
@@ -193,14 +192,18 @@ class PypiRepo(db.Model, TimestampMixin):
     queues = db.relationship("StarQueue", back_populates="pypi_repo")
     star = db.relationship("Star", back_populates="pypi_repo")
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.slug
+
+    def json_url(self) -> str:
+        return f"https://pypi.org/pypi/{self.slug}/json"
 
 
 class GithubRepo(db.Model, TimestampMixin):
     __tablename__ = "limelight_repo_github"
 
     id: Mapped[int] = mapped_column(primary_key=True)
+    namespace: Mapped[str] = mapped_column(db.String(128), nullable=True, default=None)
     github_json_url: Mapped[str] = mapped_column(db.String(128), nullable=True, default=None)
 
     name: Mapped[str] = mapped_column(db.String(255), nullable=True, default=None)
@@ -212,8 +215,8 @@ class GithubRepo(db.Model, TimestampMixin):
     fork: Mapped[bool] = mapped_column(db.Boolean(), nullable=False, default=False)
     template: Mapped[bool] = mapped_column(db.Boolean(), nullable=False, default=False)
     archived: Mapped[bool] = mapped_column(db.Boolean(), nullable=False, default=False)
-    creation_date: Mapped[datetime.datetime] = mapped_column(db.DateTime(timezone=True))
-    last_push_date: Mapped[datetime.datetime] = mapped_column(db.DateTime(timezone=True))
+    creation_date: Mapped[str] = mapped_column(db.String(32), nullable=True, default=None)
+    last_push_date: Mapped[str] = mapped_column(db.String(32), nullable=True, default=None)
     stargazers_count: Mapped[int] = mapped_column(db.Integer(), nullable=False, default=0)
     watchers_count: Mapped[int] = mapped_column(db.Integer(), nullable=False, default=0)
     forks_count: Mapped[int] = mapped_column(db.Integer(), nullable=False, default=0)
@@ -223,6 +226,12 @@ class GithubRepo(db.Model, TimestampMixin):
 
     queues = db.relationship("StarQueue", back_populates="github_repo")
     star = db.relationship("Star", back_populates="github_repo")
+
+    def json_url(self) -> str:
+        return f"https://api.github.com/repos/{self.namespace}"
+
+    def __str__(self) -> str:
+        return self.namespace
 
 
 class GitlabRepo(db.Model, TimestampMixin):

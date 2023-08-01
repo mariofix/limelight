@@ -206,7 +206,7 @@
             <div class="form-selectgroup-boxes row mb-3">
               <div class="col-lg-6">
                 <label class="form-selectgroup-item">
-                  <input type="checkbox" name="repos" value="pypi" class="form-selectgroup-input" oninput="RepoChange()">
+                  <input type="checkbox" name="repos" value="pypi" class="form-selectgroup-input" oninput="RepoChange('pypi')">
                   <span class="form-selectgroup-label d-flex align-items-center p-3">
                     <span class="me-3">
                       <span class="form-selectgroup-check"></span>
@@ -220,7 +220,7 @@
               </div>
               <div class="col-lg-6">
                 <label class="form-selectgroup-item">
-                  <input type="checkbox" name="repos" value="conda" class="form-selectgroup-input" oninput="RepoChange()" disabled>
+                  <input type="checkbox" name="repos" value="conda" class="form-selectgroup-input" oninput="RepoChange('conda')" disabled>
                   <span class="form-selectgroup-label d-flex align-items-center p-3">
                     <span class="me-3">
                       <span class="form-selectgroup-check"></span>
@@ -234,7 +234,7 @@
               </div>
               <div class="col-lg-6">
                 <label class="form-selectgroup-item">
-                  <input type="checkbox" name="repos" value="github" class="form-selectgroup-input" oninput="RepoChange()">
+                  <input type="checkbox" name="repos" value="github" class="form-selectgroup-input" oninput="RepoChange('github')">
                   <span class="form-selectgroup-label d-flex align-items-center p-3">
                     <span class="me-3">
                       <span class="form-selectgroup-check"></span>
@@ -248,7 +248,7 @@
               </div>
               <div class="col-lg-6">
                 <label class="form-selectgroup-item">
-                  <input type="checkbox" name="repos" value="gitlab" class="form-selectgroup-input" oninput="RepoChange()" disabled>
+                  <input type="checkbox" name="repos" value="gitlab" class="form-selectgroup-input" oninput="RepoChange('gitlab')" disabled>
                   <span class="form-selectgroup-label d-flex align-items-center p-3">
                     <span class="me-3">
                       <span class="form-selectgroup-check"></span>
@@ -261,10 +261,10 @@
                 </label>
               </div>
             </div>
-            <div class="row" id="pypi_info">
+            <div class="row d-none" id="pypi_info">
               <div class="col-lg-12" >
                 <div class="mb-3">
-                  <label class="form-label">PyPi URL</label>
+                  <label class="form-label">PyPi Project URL</label>
                   <div class="input-group input-group-flat">
                     <span class="input-group-text">
                       https://pypi.org/project/
@@ -274,10 +274,10 @@
                 </div>
               </div>
             </div>
-            <div class="row" id="conda_info">
+            <div class="row d-none" id="conda_info">
               <div class="col-lg-12">
                 <div class="mb-3">
-                  <label class="form-label">Conda URL</label>
+                  <label class="form-label">Conda Project URL</label>
                   <div class="input-group input-group-flat">
                     <span class="input-group-text">
                       https://anaconda.org/anaconda/
@@ -287,10 +287,10 @@
                 </div>
               </div>
             </div>
-            <div class="row" id="github_info">
+            <div class="row d-none" id="github_info">
               <div class="col-lg-12">
                 <div class="mb-3">
-                  <label class="form-label">Github Repo namespace</label>
+                  <label class="form-label">Github Namespace</label>
                   <div class="input-group input-group-flat">
                     <span class="input-group-text">
                       https://github.com/
@@ -301,7 +301,7 @@
                 </div>
               </div>
             </div>
-            <div class="row" id="gitlab_info">
+            <div class="row d-none" id="gitlab_info">
               <div class="col-lg-12">
                 <div class="mb-3">
                   <label class="form-label">Gitlab Project ID</label>
@@ -340,15 +340,19 @@
       slug = slugify(origen.value)
       destino = document.querySelector("#new-star-slug");
       destino.value = slug;
-      RepoChange("pypi");
-      // RepoChange("conda");
-      // RepoChange("github");
-      // RepoChange("gitlab");
+      if (slug.length > 0) {
+        RepoChange("pypi");
+        // RepoChange("conda");
+        RepoChange("github");
+        // RepoChange("gitlab");
+      }
+
+
     }
 
     function RepoChange(repo){
       if (repo == "pypi") {
-        //unhide
+        document.querySelector("#pypi_info").classList.remove("d-none");
         pypi = document.querySelector("#new-pypi-repo");
         pypi.value = document.querySelector("#new-star-slug").value;
       }
@@ -358,9 +362,9 @@
         conda.value = document.querySelector("#new-star-slug").value;
       }
       if (repo == "github") {
-        //unhide
-        conda = document.querySelector("#new-github-repo");
-        conda.value = document.querySelector("#new-star-slug").value;
+        document.querySelector("#github_info").classList.remove("d-none");
+        github = document.querySelector("#new-github-repo");
+        github.value = document.querySelector("#new-star-slug").value + "/" + document.querySelector("#new-star-slug").value;
       }
       if (repo == "gitlab") {
         //unhide

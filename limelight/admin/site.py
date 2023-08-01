@@ -1,15 +1,14 @@
-from flask_babel import lazy_gettext as _
-from redis import Redis
-
 from flask_admin import Admin
 from flask_admin.consts import ICON_TYPE_BI, ICON_TYPE_FONT_AWESOME
 from flask_admin.contrib import rediscli
+from flask_babel import lazy_gettext as _
+from redis import Redis
 
 from ..database import db
-from ..models import Lineup, PypiRepo, Role, Star, StarQueue, Style, User
-from .views import LineupAdmin, PypiRepoAdmin, QueueAdmin, RoleAdmin, StarAdmin, StyleAdmin, UserAdmin
+from ..models import GithubRepo, Lineup, PypiRepo, Role, Star, StarQueue, Style, User
+from .views import GithubRepoAdmin, LineupAdmin, PypiRepoAdmin, QueueAdmin, RoleAdmin, StarAdmin, StyleAdmin, UserAdmin
 
-redis = Redis(db=9, host="172.16.17.2", port=6379)
+redis = Redis(db=9, host="127.0.0.1", port=6379)
 admin_site = Admin(
     name="limelight",
     # base_template="adminlte4/master.html",
@@ -61,6 +60,17 @@ admin_site.add_view(
         category=_("System"),
         menu_icon_type=ICON_TYPE_BI,
         menu_icon_value="bi-box-seam",
+    )
+)
+
+
+admin_site.add_view(
+    GithubRepoAdmin(
+        GithubRepo,
+        db.session,
+        category=_("System"),
+        menu_icon_type=ICON_TYPE_BI,
+        menu_icon_value="bi-github",
     )
 )
 

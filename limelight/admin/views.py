@@ -1,8 +1,7 @@
-from flask_security.utils import hash_password
-from wtforms import fields
-
 from flask_admin.actions import action
 from flask_admin.babel import lazy_gettext as _
+from flask_security.utils import hash_password
+from wtforms import fields
 
 from ..models import Role, Star, StarQueue, User
 from .mixins import AdminModelView
@@ -84,15 +83,15 @@ class QueueAdmin(AppAdmin, AdminModelView):
     name = _("Queue")
     name_plural = _("Queue")
     icon = "bi-cpu"
-    column_list = ["request_url", "status", "post_process", "pypi_repo"]
+    column_list = ["request_url", "status", "post_process"]
 
     @action("process", _("Process Queue Items"), _("u sure?"))
     def action_process(self, ids):
-        from ..tasks import fetch_pypi_project
+        from ..tasks import process_queue_item
 
         members = StarQueue.query.filter(StarQueue.id.in_(ids))
         for member in members.all():
-            fetch_pypi_project.apply_async(kwargs={"slug": member.pypi_slug}, countdown=member.start_delay)
+            process_queue_item.apply_async(kwargs={"queue_id": member.id}, countdown=member.start_delay)
 
 
 class PypiRepoAdmin(AppAdmin, AdminModelView):
@@ -100,3 +99,10 @@ class PypiRepoAdmin(AppAdmin, AdminModelView):
     name_plural = _("PyPi Repos")
     icon = "bi-list-ul"
     column_list = ["slug", "name", "star", "version", "project_url"]
+
+
+class GithubRepoAdmin(AppAdmin, AdminModelView):
+    name = _("Github Repo")
+    name_plural = _("Github Repos")
+    icon = "bi-github"
+    column_list = ["namespace", "name", "star", "html_url"]
