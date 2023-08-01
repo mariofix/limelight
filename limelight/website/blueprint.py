@@ -1,9 +1,10 @@
 from flask import Blueprint, redirect, render_template, request
 from sqlalchemy.sql import func
 
-from ..crud import get_star_info, new_star_from_web
+from ..crud import get_star_info, new_star_from_browse, new_star_from_web
 from ..database import db
 from ..models import Lineup, Star, StarQueue, Style
+from ..tasks import send_email
 
 blueprint = Blueprint("website", __name__, url_prefix="/")
 
@@ -58,3 +59,36 @@ def interview_star(star_slug: str):
 @blueprint.get("/styles/")
 def list_styles():
     return render_template("website/home.html")
+
+
+@blueprint.get("/browse_pypi")
+def browse_pypi():
+    import xmlrpc.client
+
+    from rich import print
+
+    client = xmlrpc.client.ServerProxy("https://pypi.org/pypi")
+    packages = client.browse(["Framework :: Flask"])
+    lista: list = []
+    for package in packages:
+        if package[0] in lista:
+            continue
+        lista.append(package[0])
+        data = {
+            "new-star-name": package[0],
+            "new-star-slug": package[0],
+            "new-pypi-repo": package[0],
+            "repos": ["pypi"],
+        }
+        print(f"new_star_from_browse({data=})")
+        new_star_from_browse(data)
+        del data
+
+    send_email.delay(
+        f"{len(lista)} New Stars",
+        "new_star",
+        "bot@mariofix.com",
+        ["mariohernandezc@gmail.com"],
+        {},
+        "mariofix@pm.me",
+    )

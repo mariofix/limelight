@@ -85,8 +85,8 @@ MAIL_USE_LOCALTIME = False
 
 # CELERY
 CELERY = {
-    "broker_url": "redis://127.0.0.1/9",
-    "result_backend": "redis://127.0.0.1/9",
+    "broker_url": "redis://172.16.17.2/9",
+    "result_backend": "redis://172.16.17.2/9",
     "task_ignore_result": False,
     "timezone": "UTC",
     "worker_concurrency": 1,
