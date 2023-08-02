@@ -16,13 +16,13 @@ class TimestampMixin:
         db.DateTime(timezone=True),
         default=datetime.datetime.now,
         nullable=False,
-        name=_("created_at"),
+        name="created_at",
     )
     modified_at = db.Column(
         db.DateTime(timezone=True),
         default=datetime.datetime.now,
         nullable=False,
-        name=_("modified_at"),
+        name="modified_at",
     )
 
 

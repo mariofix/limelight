@@ -33,7 +33,7 @@ def new_star_from_web(form_data) -> Star:
             db.session.commit()
         except Exception as e:
             print(e)
-            raise Exception("No se pudo crear el repo PyPi")
+            raise Exception("There was an error creating the PyPiRepo")
     if "github" in form_data.get("repos"):
         try:
             new_github_repo = GithubRepo(namespace=form_data.get("new-github-repo"))
@@ -50,7 +50,7 @@ def new_star_from_web(form_data) -> Star:
             db.session.commit()
         except Exception as e:
             print(e)
-            raise Exception("No se pudo crear el repo Github")
+            raise Exception("There was an error creating the GithubRepo")
 
     send_email.delay(
         f"New Star {new_star.slug}",
@@ -94,7 +94,7 @@ def new_star_from_browse(form_data) -> Star:
             process_queue_item.apply_async(kwargs={"queue_id": new_queue.id}, countdown=new_queue.start_delay)
         except Exception as e:
             print(e)
-            raise Exception("No se pudo crear el repo PyPi")
+            raise Exception("There was an error creating the PyPiRepo")
     if "github" in form_data.get("repos"):
         try:
             new_github_repo = GithubRepo(namespace=form_data.get("new-github-repo"))
@@ -111,7 +111,7 @@ def new_star_from_browse(form_data) -> Star:
             db.session.commit()
         except Exception as e:
             print(e)
-            raise Exception("No se pudo crear el repo Github")
+            raise Exception("There was an error creating the GithubRepo")
 
     return new_star
 

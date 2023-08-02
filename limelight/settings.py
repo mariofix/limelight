@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from flask_admin.babel import lazy_gettext as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = ""
@@ -17,7 +18,7 @@ FLASK_ADMIN_UI_MODE = "dark"  # dark
 FLASK_ADMIN_FLUID_LAYOUT = True
 LIMELIGHT_APP_NAME = "limelight"
 LIMELIGHT_APP_SLOGAN = "Flask's brightest stars"
-LIMELIGHT_FETCH_AUTOSTART = False
+LIMELIGHT_FETCH_AUTOSTART = True
 
 # Flask-Security config
 SECURITY_PASSWORD_SALT = ""
@@ -44,6 +45,7 @@ SECURITY_OAUTH_BUILTIN_PROVIDERS = ["google", "github"]
 BABEL_DEFAULT_LOCALE = "en"
 BABEL_DEFAULT_TIMEZONE = "UTC"
 BABEL_DEFAULT_FOLDER = "limelight/translations"
+BABEL_DOMAIN = "limelight"
 LANGUAGES = {
     "en": {"flag": "us", "name": "English"},
     "es": {"flag": "cl", "name": "Español"},

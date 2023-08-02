@@ -33,12 +33,12 @@ class UserAdmin(AppAdmin, AdminModelView):
     name = _("User")
     name_plural = _("Users")
     icon = "fa-solid fa-user"
-    form_excluded_columns = [User.password]
-    column_list = [User.username, User.email, User.active, "roles"]
+    form_excluded_columns = ["password"]
+    column_list = ["username", "mail", "active", "roles"]
 
     def scaffold_form(self):
         form_class = super().scaffold_form()
-        form_class.password2 = fields.PasswordField(_("New Password"))
+        form_class.password2 = fields.PasswordField("New Password")
         return form_class
 
     def on_model_change(self, form, model, is_created):
@@ -50,7 +50,7 @@ class RoleAdmin(AppAdmin, AdminModelView):
     name = _("Role")
     name_plural = _("Roles")
     icon = "fa-solid fa-list"
-    column_list = [Role.name, Role.description, Role.permissions]
+    column_list = ["name", "description", "permissions"]
 
 
 class StyleAdmin(AppAdmin, AdminModelView):

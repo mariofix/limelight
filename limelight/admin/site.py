@@ -19,7 +19,7 @@ admin_site = Admin(
 admin_site.add_view(
     rediscli.RedisCli(
         redis,
-        name="Redis CLI",
+        name=_("Redis CLI"),
     ),
 )
 

@@ -1,0 +1,255 @@
+# English translations for LIMELIGHT.
+# Copyright (C) 2023 Mario Hernandez
+# This file is distributed under the same license as the  project.
+# Mario Hernandez <yo@mariofix.com>, 2023.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version:  0.1.0\n"
+"Report-Msgid-Bugs-To: yo@mariofix.com\n"
+"POT-Creation-Date: 2023-08-02 16:52-0400\n"
+"PO-Revision-Date: 2023-08-02 16:54-0400\n"
+"Last-Translator: FULL NAME <yo@mariofix.com>\n"
+"Language: en\n"
+"Language-Team: en <LL@li.org>\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.12.1\n"
+
+#: limelight/models.py:19
+msgid "created_at"
+msgstr ""
+
+#: limelight/models.py:25
+msgid "modified_at"
+msgstr ""
+
+#: limelight/models.py:139
+msgid "Created"
+msgstr ""
+
+#: limelight/models.py:140
+msgid "Processing"
+msgstr ""
+
+#: limelight/models.py:141
+msgid "Error"
+msgstr ""
+
+#: limelight/models.py:142
+msgid "Completed"
+msgstr ""
+
+#: limelight/admin/site.py:22
+msgid "Redis CLI"
+msgstr ""
+
+#: limelight/admin/site.py:30 limelight/admin/site.py:39
+#: limelight/admin/site.py:49 limelight/admin/site.py:60
+#: limelight/admin/site.py:71
+msgid "System"
+msgstr ""
+
+#: limelight/admin/site.py:81 limelight/admin/site.py:91
+#: limelight/admin/site.py:101
+msgid "Concerts"
+msgstr ""
+
+#: limelight/admin/views.py:33
+msgid "User"
+msgstr ""
+
+#: limelight/admin/views.py:34
+msgid "Users"
+msgstr ""
+
+#: limelight/admin/views.py:50
+msgid "Role"
+msgstr ""
+
+#: limelight/admin/views.py:51
+msgid "Roles"
+msgstr ""
+
+#: limelight/admin/views.py:57
+msgid "Style"
+msgstr ""
+
+#: limelight/admin/views.py:58 limelight/templates/website/home.html:18
+#: limelight/templates/website/home.html:55
+#: limelight/templates/website/main.html:91
+#: limelight/templates/website/main.html:196
+#: limelight/templates/website/top_cards.html:36
+msgid "Styles"
+msgstr ""
+
+#: limelight/admin/views.py:64
+msgid "Star"
+msgstr ""
+
+#: limelight/admin/views.py:65 limelight/templates/website/main.html:75
+#: limelight/templates/website/top_cards.html:15
+msgid "Stars"
+msgstr ""
+
+#: limelight/admin/views.py:69
+msgid "Update Metadata"
+msgstr ""
+
+#: limelight/admin/views.py:69 limelight/admin/views.py:92
+msgid "u sure?"
+msgstr ""
+
+#: limelight/admin/views.py:80
+msgid "Lineup"
+msgstr ""
+
+#: limelight/admin/views.py:81 limelight/templates/website/home.html:19
+#: limelight/templates/website/home.html:56
+#: limelight/templates/website/top_cards.html:78
+msgid "Lineups"
+msgstr ""
+
+#: limelight/admin/views.py:87 limelight/admin/views.py:88
+msgid "Queue"
+msgstr ""
+
+#: limelight/admin/views.py:92
+msgid "Process Queue Items"
+msgstr ""
+
+#: limelight/admin/views.py:102
+msgid "PyPi Repo"
+msgstr ""
+
+#: limelight/admin/views.py:103
+msgid "PyPi Repos"
+msgstr ""
+
+#: limelight/admin/views.py:109
+msgid "Github Repo"
+msgstr ""
+
+#: limelight/admin/views.py:110
+msgid "Github Repos"
+msgstr ""
+
+#: limelight/templates/accounts/login.html:58
+msgid "Show password"
+msgstr ""
+
+#: limelight/templates/accounts/login.html:88
+msgid "Don't have account yet?"
+msgstr ""
+
+#: limelight/templates/website/home.html:11
+#: limelight/templates/website/interview.html:12
+msgid "Last Stars"
+msgstr ""
+
+#: limelight/templates/website/home.html:17
+#: limelight/templates/website/home.html:54
+msgid "Star Name"
+msgstr ""
+
+#: limelight/templates/website/home.html:20
+#: limelight/templates/website/home.html:57
+msgid "License"
+msgstr ""
+
+#: limelight/templates/website/home.html:21
+#: limelight/templates/website/home.html:58
+msgid "Version"
+msgstr ""
+
+#: limelight/templates/website/home.html:22
+#: limelight/templates/website/home.html:59
+msgid "Links"
+msgstr ""
+
+#: limelight/templates/website/home.html:48
+msgid "Random Stars"
+msgstr ""
+
+#: limelight/templates/website/main.html:31
+msgid "Toggle navigation"
+msgstr ""
+
+#: limelight/templates/website/main.html:41
+msgid "Enable dark mode"
+msgstr ""
+
+#: limelight/templates/website/main.html:46
+msgid "Enable light mode"
+msgstr ""
+
+#: limelight/templates/website/main.html:62
+msgid "Home"
+msgstr ""
+
+#: limelight/templates/website/main.html:122
+msgid "New star"
+msgstr ""
+
+#: limelight/templates/website/main.html:149
+msgid "Sponsor Tabler"
+msgstr ""
+
+#: limelight/templates/website/main.html:162
+msgid "Current Release"
+msgstr ""
+
+#: limelight/templates/website/main.html:178
+msgid "New Star"
+msgstr ""
+
+#: limelight/templates/website/main.html:185
+msgid "Name"
+msgstr ""
+
+#: limelight/templates/website/main.html:186
+msgid "Star's Name"
+msgstr ""
+
+#: limelight/templates/website/main.html:190
+msgid "Slug"
+msgstr ""
+
+#: limelight/templates/website/main.html:191
+msgid "Star's Slug"
+msgstr ""
+
+#: limelight/templates/website/main.html:205
+msgid "Repo"
+msgstr ""
+
+#: limelight/templates/website/main.html:267
+msgid "PyPi Project URL"
+msgstr ""
+
+#: limelight/templates/website/main.html:280
+msgid "Conda Project URL"
+msgstr ""
+
+#: limelight/templates/website/main.html:293
+msgid "Github Namespace"
+msgstr ""
+
+#: limelight/templates/website/main.html:307
+msgid "Gitlab Project ID"
+msgstr ""
+
+#: limelight/templates/website/main.html:319
+msgid "Cancel"
+msgstr ""
+
+#: limelight/templates/website/main.html:323
+msgid "Create Star"
+msgstr ""
+
+#: limelight/templates/website/top_cards.html:57
+msgid "Pending"
+msgstr ""
+
