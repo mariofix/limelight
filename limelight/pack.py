@@ -126,7 +126,10 @@ def lets_play(queue_id: int) -> dict:
             return Ron().github(
                 queue.request_url,
                 queue,
-                headers={},
+                headers={
+                    "Authorization": "Bearer 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",
+                    "X-GitHub-Api-Version": "2022-11-28",
+                },
             )
         except Exception as e:
             queue.status = QueueStatus.ERROR
