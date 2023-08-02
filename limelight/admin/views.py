@@ -63,13 +63,7 @@ class StarAdmin(AppAdmin, AdminModelView):
     name = _("Star")
     name_plural = _("Stars")
     icon = "bi-star"
-    column_list = ["slug", "title", "freeze", "pypi_repo", "github_repo", "star_url", "booklet_url", "demo_url"]
-
-    @action("unfreeze", _("Un-Freeze Star"), _("u sure?"))
-    def action_unfreeze(self, ids):
-        members = Star.query.filter(Star.id.in_(ids))
-        for _member in members.all():
-            pass
+    column_list = ["slug", "title", "description", "pypi_repo", "github_repo", "star_url", "booklet_url"]
 
 
 class LineupAdmin(AppAdmin, AdminModelView):

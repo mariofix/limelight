@@ -1,10 +1,9 @@
-from flask import Blueprint, redirect, render_template, request
+from flask import Blueprint, redirect, render_template, request, jsonify
 from sqlalchemy.sql import func
 
-from ..crud import get_star_info, new_star_from_browse, new_star_from_web
+from ..crud import new_star_from_web
 from ..database import db
-from ..models import Lineup, Star, StarQueue, Style
-from ..tasks import send_email
+from ..models import Star, StarQueue, GithubRepo, QueueStatus
 
 blueprint = Blueprint("website", __name__, url_prefix="/")
 
@@ -22,6 +21,9 @@ def home():
 @blueprint.get("/robots.txt")
 def robots_txt():
     return "# robots.txt\n\nUser-agent: *\n\n"
+
+
+None
 
 
 @blueprint.post("/star/")
@@ -61,34 +63,88 @@ def list_styles():
     return render_template("website/home.html")
 
 
-@blueprint.get("/browse_pypi")
-def browse_pypi():
-    import xmlrpc.client
-
+@blueprint.get("/copy_metadata")
+def copy_metadata():
     from rich import print
 
-    client = xmlrpc.client.ServerProxy("https://pypi.org/pypi")
-    packages = client.browse(["Framework :: Flask"])
-    lista: list = []
-    for package in packages:
-        if package[0] in lista:
-            continue
-        lista.append(package[0])
-        data = {
-            "new-star-name": package[0],
-            "new-star-slug": package[0],
-            "new-pypi-repo": package[0],
-            "repos": ["pypi"],
-        }
-        print(f"new_star_from_browse({data=})")
-        new_star_from_browse(data)
-        del data
+    todos = db.session.query(Star).all()
+    data: list = []
+    for p in todos:
+        row: dict = {}
+        # print(f"{p.slug=} {p.pypi_id=}")
+        row.update({"slug": p.slug})
+        if p.pypi_id:
+            row.update({"pypi_id": p.pypi_id})
+            queue = (
+                db.session.query(StarQueue)
+                .filter(StarQueue.pypi_repo_id == p.pypi_id)
+                .order_by(StarQueue.id.desc())
+                .first()
+            )
+            if queue:
+                row.update({"queue_id": queue.id})
+                if queue.response_data:
+                    info = queue.response_data.get("info", None)
+                    if info:
+                        upd = False
+                        if not p.description:
+                            p.description = info.get("summary", None)
+                            upd = True
+                        if not p.star_url:
+                            home_page = info.get("home_page", None)
+                            try:
+                                urls_home = info["project_urls"]["Homepage"]
+                            except Exception:
+                                urls_home = None
 
-    send_email.delay(
-        f"{len(lista)} New Stars",
-        "new_star",
-        "bot@mariofix.com",
-        ["mariohernandezc@gmail.com"],
-        {},
-        "mariofix@pm.me",
-    )
+                            if home_page == urls_home:
+                                p.star_url = home_page
+                            elif not home_page and urls_home:
+                                p.star_url = urls_home
+                            elif home_page and not urls_home:
+                                p.star_url = home_page
+                            upd = True
+
+                        if not p.booklet_url:
+                            docs_url = info.get("docs_url", None)
+                            try:
+                                urls_docs = info["project_urls"]["Documentation"]
+                            except Exception:
+                                urls_docs = None
+
+                            if docs_url == urls_docs:
+                                p.booklet_url = docs_url
+                            elif not docs_url and urls_docs:
+                                p.booklet_url = urls_docs
+                            elif docs_url and not urls_docs:
+                                p.booklet_url = docs_url
+                            upd = True
+
+                        row.update(
+                            {
+                                "data": {
+                                    "home_page": info.get("home_page", None),
+                                    "docs_url": info.get("docs_url", None),
+                                    "download_url": info.get("download_url", None),
+                                    "project_url": info.get("project_url", None),
+                                    "project_urls": info.get("project_urls", None),
+                                }
+                            }
+                        )
+                        if upd:
+                            print(f"Info updated for [bold]{p.slug}[/bold]!")
+                            db.session.commit()
+                    else:
+                        row.update({"data": "NO_INFO"})
+                else:
+                    row.update({"data": "NO_DATA"})
+
+            else:
+                row.update({"queue_id": "NO_ID"})
+
+        else:
+            row.update({"pypi_id": "NO_ID"})
+        print(f"{row=}")
+        data.append(row)
+
+    return jsonify(data)

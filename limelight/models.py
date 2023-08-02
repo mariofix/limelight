@@ -99,10 +99,10 @@ class Star(db.Model, TimestampMixin):
     demo_url: Mapped[str] = mapped_column(db.String(128), nullable=True, default=None)
 
     pypi_id: Mapped[int] = mapped_column(db.ForeignKey("limelight_repo_pypi.id"), nullable=True, default=None)
-    pypi_repo = db.relationship("PypiRepo", back_populates="star")
+    pypi_repo = db.relationship("PypiRepo", back_populates="star", cascade="all,delete")
 
     github_id: Mapped[int] = mapped_column(db.ForeignKey("limelight_repo_github.id"), nullable=True, default=None)
-    github_repo = db.relationship("GithubRepo", back_populates="star")
+    github_repo = db.relationship("GithubRepo", back_populates="star", cascade="all,delete")
 
     freeze: Mapped[bool] = mapped_column(default=False)
     # conda_id: Mapped[int] = mapped_column(db.ForeignKey("limelight_pypi.id"), nullable=True, default=None)
@@ -151,10 +151,10 @@ class StarQueue(db.Model, TimestampMixin):
     post_process: Mapped[str] = mapped_column(db.String(255), nullable=True, default=None)
 
     pypi_repo_id = db.Column(db.Integer(), db.ForeignKey("limelight_repo_pypi.id"), nullable=True, default=None)
-    pypi_repo = db.relationship("PypiRepo", back_populates="queues")
+    pypi_repo = db.relationship("PypiRepo", back_populates="queues", cascade="all,delete")
 
     github_repo_id = db.Column(db.Integer(), db.ForeignKey("limelight_repo_github.id"), nullable=True, default=None)
-    github_repo = db.relationship("GithubRepo", back_populates="queues")
+    github_repo = db.relationship("GithubRepo", back_populates="queues", cascade="all,delete")
 
     def __str__(self) -> str:
         return str(self.id)
@@ -197,8 +197,8 @@ class PypiRepo(db.Model, TimestampMixin):
 
     last_serial: Mapped[int] = mapped_column(db.Integer(), nullable=True, default=None)
 
-    queues = db.relationship("StarQueue", back_populates="pypi_repo")
-    star = db.relationship("Star", back_populates="pypi_repo")
+    queues = db.relationship("StarQueue", back_populates="pypi_repo", cascade="all,delete")
+    star = db.relationship("Star", back_populates="pypi_repo", cascade="all,delete")
 
     def __str__(self) -> str:
         return self.slug
@@ -232,8 +232,8 @@ class GithubRepo(db.Model, TimestampMixin):
     network_count: Mapped[int] = mapped_column(db.Integer(), nullable=False, default=0)
     subscribers_count: Mapped[int] = mapped_column(db.Integer(), nullable=False, default=0)
 
-    queues = db.relationship("StarQueue", back_populates="github_repo")
-    star = db.relationship("Star", back_populates="github_repo")
+    queues = db.relationship("StarQueue", back_populates="github_repo", cascade="all,delete")
+    star = db.relationship("Star", back_populates="github_repo", cascade="all,delete")
 
     def json_url(self) -> str:
         return f"https://api.github.com/repos/{self.namespace}"
