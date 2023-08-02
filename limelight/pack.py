@@ -9,9 +9,9 @@ from .models import QueueStatus, StarQueue
 
 @dataclass
 class Fetch:
-    def fetch(url: str = None) -> dict:
+    def fetch(url: str = None, headers: dict = None) -> dict:
         print(f"{url=}")
-        data = requests.get(url)
+        data = requests.get(url, headers=headers)
         data.raise_for_status()
         json_data = data.json()
         print(f"{json_data=}")
@@ -62,9 +62,9 @@ class Kleine(Fetch):
 @dataclass
 class Ron(Fetch):
     @classmethod
-    def github(cls, url: str, queue: StarQueue) -> dict:
+    def github(cls, url: str, queue: StarQueue, headers: dict = None) -> dict:
         print(f"{url=}")
-        data = cls.fetch(url)
+        data = cls.fetch(url, headers=headers)
         queue.response_data = data
         queue.status = QueueStatus.COMPLETED
         db.session.commit()
@@ -114,7 +114,24 @@ def lets_play(queue_id: int) -> dict:
     db.session.commit()
     if queue.post_process == "pypi_repo":
         print(f"Kleine().pypi({queue.request_url}, {queue})")
-        return Kleine().pypi(queue.request_url, queue)
+        try:
+            return Kleine().pypi(queue.request_url, queue)
+        except Exception as e:
+            queue.status = QueueStatus.ERROR
+            queue.response_data = f"{e}"
+            db.session.commit()
     if queue.post_process == "github_repo":
         print(f"Ron().github({queue.request_url}, {queue})")
-        return Ron().github(queue.request_url, queue)
+        try:
+            return Ron().github(
+                queue.request_url,
+                queue,
+                headers={
+                    "Authorization": "Bearer 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",
+                    "X-GitHub-Api-Version": "2022-11-28",
+                },
+            )
+        except Exception as e:
+            queue.status = QueueStatus.ERROR
+            queue.response_data = f"{e}"
+            db.session.commit()
