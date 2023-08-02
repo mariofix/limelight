@@ -127,7 +127,7 @@ def lets_play(queue_id: int) -> dict:
                 queue.request_url,
                 queue,
                 headers={
-                    "Authorization": "Bearer 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",
+                    "Authorization": "Bearer ",
                     "X-GitHub-Api-Version": "2022-11-28",
                 },
             )
