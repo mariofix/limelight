@@ -1,9 +1,9 @@
-from flask import Blueprint, redirect, render_template, request, jsonify
+from flask import Blueprint, jsonify, redirect, render_template, request
 from sqlalchemy.sql import func
 
 from ..crud import new_star_from_web
 from ..database import db
-from ..models import Star, StarQueue, GithubRepo, QueueStatus
+from ..models import GithubRepo, QueueStatus, Star, StarQueue
 
 blueprint = Blueprint("website", __name__, url_prefix="/")
 
@@ -55,7 +55,7 @@ def interview_star(star_slug: str):
         "star": db.session.query(Star).filter(Star.slug == star_slug).first(),
     }
 
-    return render_template("website/home.html", **context_data)
+    return render_template("website/interview.html", **context_data)
 
 
 @blueprint.get("/styles/")

@@ -1,5 +1,7 @@
 import datetime
 import enum
+import json
+from dataclasses import dataclass
 
 from flask_admin.babel import lazy_gettext as _
 from flask_security.core import RoleMixin, UserMixin
@@ -85,6 +87,7 @@ class Style(db.Model, TimestampMixin):
         return self.slug
 
 
+@dataclass
 class Star(db.Model, TimestampMixin):
     __tablename__ = "limelight_star"
 
@@ -160,6 +163,7 @@ class StarQueue(db.Model, TimestampMixin):
         return str(self.id)
 
 
+@dataclass
 class PypiRepo(db.Model, TimestampMixin):
     __tablename__ = "limelight_repo_pypi"
 
@@ -207,6 +211,7 @@ class PypiRepo(db.Model, TimestampMixin):
         return f"https://pypi.org/pypi/{self.slug}/json"
 
 
+@dataclass
 class GithubRepo(db.Model, TimestampMixin):
     __tablename__ = "limelight_repo_github"
 

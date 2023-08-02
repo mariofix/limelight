@@ -1,3 +1,4 @@
+from flask import flash
 from flask_admin.actions import action
 from flask_admin.babel import lazy_gettext as _
 from flask_security.utils import hash_password
@@ -64,6 +65,15 @@ class StarAdmin(AppAdmin, AdminModelView):
     name_plural = _("Stars")
     icon = "bi-star"
     column_list = ["slug", "title", "description", "pypi_repo", "github_repo", "star_url", "booklet_url"]
+
+    @action("metadata", _("Update Metadata"), _("u sure?"))
+    def action_metadata(self, ids):
+        members = Star.query.filter(Star.id.in_(ids))
+        for member in members.all():
+            if member.pypi_id:
+                flash(f"{member.pypi_repo=}")
+            if member.github_id:
+                flash(f"{member.github_repo=}")
 
 
 class LineupAdmin(AppAdmin, AdminModelView):
