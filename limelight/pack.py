@@ -126,10 +126,7 @@ def lets_play(queue_id: int) -> dict:
             return Ron().github(
                 queue.request_url,
                 queue,
-                headers={
-                    "Authorization": "",
-                    "X-GitHub-Api-Version": "2022-11-28",
-                },
+                headers={},
             )
         except Exception as e:
             queue.status = QueueStatus.ERROR
