@@ -10,7 +10,7 @@ packages = [{ include = "limelight" }]
 [tool.poetry.dependencies]
 python = "^3.11"
 flask = "^2.3.2"
-flask-http-middleware = "^0.3.1"
+flask-http-middleware = "^0.4.2"
 flask-migrate = "^4.0.4"
 python-dotenv = "^1.0.0"
 flask-babel = "^3.1.0"
