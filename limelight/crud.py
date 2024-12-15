@@ -52,7 +52,7 @@ def new_star_from_web(form_data) -> Star:
             print(e)
             raise Exception("There was an error creating the GithubRepo")
 
-    send_email.delay(
+    send_email(
         f"New Star {new_star.slug}",
         "new_star",
         "bot@mariofix.com",
@@ -91,7 +91,7 @@ def new_star_from_browse(form_data) -> Star:
             )
             db.session.add(new_queue)
             db.session.commit()
-            process_queue_item.apply_async(kwargs={"queue_id": new_queue.id}, countdown=new_queue.start_delay)
+            process_queue_item(queue_id=new_queue.id)
         except Exception as e:
             print(e)
             raise Exception("There was an error creating the PyPiRepo")

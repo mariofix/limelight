@@ -1,7 +1,8 @@
 from flask import flash
 from flask_admin.actions import action
 from flask_admin.babel import lazy_gettext as _
-from flask_security.utils import hash_password
+
+# from flask_security.utils import hash_password
 from wtforms import fields
 
 from ..models import Role, Star, StarQueue, User
@@ -43,7 +44,7 @@ class UserAdmin(AppAdmin, AdminModelView):
 
     def on_model_change(self, form, model, is_created):
         if len(model.password2):
-            model.password = hash_password(model.password2)
+            model.password = model.password2
 
 
 class RoleAdmin(AppAdmin, AdminModelView):

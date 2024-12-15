@@ -1,23 +1,26 @@
 import logging.config
 
-from authlib.integrations.flask_client import OAuth
-from celery import Celery, Task
+# from authlib.integrations.flask_client import OAuth
 from flask import Flask, request, session, url_for
-from flask_admin import helpers as admin_helpers
+
+# from flask_admin import helpers as admin_helpers
 from flask_babel import Babel
 from flask_debugtoolbar import DebugToolbarExtension
-from flask_http_middleware import MiddlewareManager
-from flask_security.core import Security
-from flask_security.datastore import SQLAlchemyUserDatastore
+
+# from flask_http_middleware import MiddlewareManager
+# from flask_security.core import Security
+# from flask_security.datastore import SQLAlchemyUserDatastore
 from flask_sitemap import Sitemap
-from werkzeug.middleware.proxy_fix import ProxyFix
+
+# from werkzeug.middleware.proxy_fix import ProxyFix
 
 from .admin.site import admin_site
 from .crud import get_context_data
 from .database import db, migrations
 from .mail import mail
-from .middleware import AllowedDomainsMiddleware
-from .models import Role, User
+
+# from .middleware import AllowedDomainsMiddleware
+# from .models import Role, User
 from .tasks import *  # noqa: ignore
 from .version import __version_info_str__
 from .website import blueprint as website
@@ -25,9 +28,9 @@ from .website import blueprint as website
 
 def create_app(settings_file: str | None = None) -> Flask:
     app = Flask(__name__)
-    app.wsgi_app = MiddlewareManager(app)
-    app.wsgi_app.add_middleware(AllowedDomainsMiddleware)
-    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
+    # app.wsgi_app = MiddlewareManager(app)
+    # app.wsgi_app.add_middleware(AllowedDomainsMiddleware)
+    # app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
     # Configure App
     if settings_file:
@@ -41,9 +44,6 @@ def create_app(settings_file: str | None = None) -> Flask:
     # Mailer
     mail.init_app(app)
 
-    # Celery
-    celery_init_app(app)
-
     # SQLAlchemy
     db.init_app(app)
     migrations.init_app(app, db, directory="limelight/migrations")
@@ -52,20 +52,20 @@ def create_app(settings_file: str | None = None) -> Flask:
     admin_site.init_app(app)
 
     # Flask-Security
-    oauth = OAuth(app)
-    oauth.register(
-        name="github",
-        access_token_url="https://github.com/login/oauth/access_token",
-        access_token_params=None,
-        authorize_url="https://github.com/login/oauth/authorize",
-        authorize_params=None,
-        api_base_url="https://api.github.com/",
-        client_kwargs={"scope": "user:email"},
-    )
-    app.extensions["oauth"] = oauth
+    # oauth = OAuth(app)
+    # oauth.register(
+    #     name="github",
+    #     access_token_url="https://github.com/login/oauth/access_token",
+    #     access_token_params=None,
+    #     authorize_url="https://github.com/login/oauth/authorize",
+    #     authorize_params=None,
+    #     api_base_url="https://api.github.com/",
+    #     client_kwargs={"scope": "user:email"},
+    # )
+    # app.extensions["oauth"] = oauth
 
-    user_datastore = SQLAlchemyUserDatastore(db, User, Role)
-    security = Security(app, user_datastore)
+    # user_datastore = SQLAlchemyUserDatastore(db, User, Role)
+    # security = Security(app, user_datastore)
 
     # Sitemap
     sitemap = Sitemap()
@@ -84,15 +84,15 @@ def create_app(settings_file: str | None = None) -> Flask:
 
     babel.init_app(app, locale_selector=get_locale, timezone_selector=get_timezone)
 
-    @security.context_processor
-    def security_context_processor():
-        return {
-            "admin_base_template": admin_site.base_template,  # type: ignore
-            "admin_view": admin_site.index_view,
-            "h": admin_helpers,  # type: ignore
-            "get_url": url_for,
-            "app": app,
-        }
+    # @security.context_processor
+    # def security_context_processor():
+    #     return {
+    #         "admin_base_template": admin_site.base_template,  # type: ignore
+    #         "admin_view": admin_site.index_view,
+    #         "h": admin_helpers,  # type: ignore
+    #         "get_url": url_for,
+    #         "app": app,
+    #     }
 
     @app.context_processor
     def default_data():
@@ -101,16 +101,3 @@ def create_app(settings_file: str | None = None) -> Flask:
     app.register_blueprint(website)
 
     return app
-
-
-def celery_init_app(app: Flask) -> Celery:
-    class FlaskTask(Task):
-        def __call__(self, *args: object, **kwargs: object) -> object:
-            with app.app_context():
-                return self.run(*args, **kwargs)
-
-    celery_app = Celery(app.name, task_cls=FlaskTask)
-    celery_app.config_from_object(app.config["CELERY"])
-    celery_app.set_default()
-    app.extensions["celery"] = celery_app
-    return celery_app

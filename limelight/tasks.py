@@ -1,4 +1,3 @@
-from celery import shared_task
 from flask import render_template
 from flask_mailman import EmailMultiAlternatives
 
@@ -8,13 +7,11 @@ from .pack import lets_play
 from .version import __version_info_str__
 
 
-@shared_task(rate_timit="3000/h")
 def process_queue_item(queue_id: int) -> dict:
     print(f"lets_play({queue_id})")
     return lets_play(queue_id)
 
 
-@shared_task()
 def send_email(
     subject: str,
     email_file: str,

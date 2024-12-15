@@ -11,7 +11,6 @@ dependencies = [
     "flask-migrate>=4.0.7",
     "flask>=3.1.0",
     "flask-http-middleware>=0.4.4",
-    "flask-security-too[babel,common,fsqla]>=5.5.2",
     "python-dotenv>=1.0.1",
     "flask-babel>=4.0.0",
     "pymysql>=1.1.1",
@@ -23,6 +22,8 @@ dependencies = [
     "sqlalchemy-mixins>=2.0.5",
     "python-github>=0.1.0.dev0",
     "python-gitlab>=5.1.0",
+    "flask-admin>=1.6.1",
+    "flask-security>=5.5.2",
 ]
 
 [dependency-groups]

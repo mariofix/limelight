@@ -4,7 +4,8 @@ import json
 from dataclasses import dataclass
 
 from flask_admin.babel import lazy_gettext as _
-from flask_security.core import RoleMixin, UserMixin
+
+# from flask_security.core import RoleMixin, UserMixin
 from sqlalchemy.orm import Mapped, backref, declarative_mixin, mapped_column, relationship
 
 from .database import db
@@ -34,7 +35,7 @@ class RolesUsers(db.Model):
     role_id = db.Column("role_id", db.Integer(), db.ForeignKey("security_role.id"))
 
 
-class Role(db.Model, RoleMixin, TimestampMixin):
+class Role(db.Model, TimestampMixin):
     __tablename__ = "security_role"
 
     id = db.Column(db.Integer(), primary_key=True)  # noqa: A003
@@ -49,7 +50,7 @@ class Role(db.Model, RoleMixin, TimestampMixin):
         return hash(self.name)
 
 
-class User(db.Model, UserMixin, TimestampMixin):
+class User(db.Model, TimestampMixin):
     __tablename__ = "firenze_user"
 
     id = db.Column(db.Integer(), primary_key=True)  # noqa: A003

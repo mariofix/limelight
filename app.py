@@ -8,7 +8,6 @@ load_dotenv()
 
 app_settings_file = os.getenv("FLASK_APP_SETTINGS_FILE")
 flask_app = create_app(app_settings_file)
-# celery_app = flask_app.extensions["celery"]
 
 if __name__ == "__main__":
     flask_app.run()
