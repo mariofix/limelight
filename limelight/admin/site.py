@@ -1,5 +1,5 @@
 from flask_admin import Admin
-from flask_admin.consts import ICON_TYPE_BI, ICON_TYPE_FONT_AWESOME
+from flask_admin.consts import ICON_TYPE_FONT_AWESOME
 from flask_admin.contrib import rediscli
 from flask_babel import lazy_gettext as _
 from redis import Redis
@@ -12,7 +12,7 @@ redis = Redis(db=9, host="127.0.0.1", port=6379)
 admin_site = Admin(
     name="limelight",
     # base_template="adminlte4/master.html",
-    template_mode="bootstrap5",
+    # template_mode="bootstrap4",
     url="/admin.site",
 )
 
@@ -28,7 +28,7 @@ admin_site.add_view(
         User,
         db.session,
         category=_("System"),
-        menu_icon_type=ICON_TYPE_BI,
+        # menu_icon_type=ICON_TYPE_BI,
         menu_icon_value="bi-person",
     )
 )
@@ -37,7 +37,7 @@ admin_site.add_view(
         Role,
         db.session,
         category=_("System"),
-        menu_icon_type=ICON_TYPE_BI,
+        # menu_icon_type=ICON_TYPE_BI,
         menu_icon_value="bi-key",
     )
 )
@@ -47,7 +47,7 @@ admin_site.add_view(
         StarQueue,
         db.session,
         category=_("System"),
-        menu_icon_type=ICON_TYPE_BI,
+        # menu_icon_type=ICON_TYPE_BI,
         menu_icon_value="bi-cpu",
     )
 )
@@ -58,7 +58,7 @@ admin_site.add_view(
         PypiRepo,
         db.session,
         category=_("System"),
-        menu_icon_type=ICON_TYPE_BI,
+        # menu_icon_type=ICON_TYPE_BI,
         menu_icon_value="bi-box-seam",
     )
 )
@@ -69,7 +69,7 @@ admin_site.add_view(
         GithubRepo,
         db.session,
         category=_("System"),
-        menu_icon_type=ICON_TYPE_BI,
+        # menu_icon_type=ICON_TYPE_BI,
         menu_icon_value="bi-github",
     )
 )
@@ -79,7 +79,7 @@ admin_site.add_view(
         Style,
         db.session,
         category=_("Concerts"),
-        menu_icon_type=ICON_TYPE_BI,
+        # menu_icon_type=ICON_TYPE_BI,
         menu_icon_value="bi-bookshelf",
     )
 )
@@ -89,7 +89,7 @@ admin_site.add_view(
         Star,
         db.session,
         category=_("Concerts"),
-        menu_icon_type=ICON_TYPE_BI,
+        # menu_icon_type=ICON_TYPE_BI,
         menu_icon_value="bi-star",
     )
 )
@@ -99,7 +99,7 @@ admin_site.add_view(
         Lineup,
         db.session,
         category=_("Concerts"),
-        menu_icon_type=ICON_TYPE_BI,
+        # menu_icon_type=ICON_TYPE_BI,
         menu_icon_value="bi-boxes",
     )
 )

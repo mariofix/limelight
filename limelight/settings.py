@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+
 from flask_admin.babel import lazy_gettext as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
