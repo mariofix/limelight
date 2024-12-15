@@ -38,7 +38,7 @@ def create_app(settings_file: str | None = None) -> Flask:
     app.config.from_prefixed_env()
 
     # Configure Loggers
-    logging.config.dictConfig(app.config.get("APP_LOGGING_CONFIG", {"disable_existing_loggers": False}))
+    # logging.config.dictConfig(app.config.get("APP_LOGGING_CONFIG", {"disable_existing_loggers": False}))
     DebugToolbarExtension(app)
 
     # Mailer
