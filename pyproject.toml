@@ -24,16 +24,12 @@ dependencies = [
     "python-gitlab>=5.1.0",
     "flask-admin>=1.6.1",
     "flask-security>=5.5.2",
+    "flask-debugtoolbar>=0.16.0",
+    "trove-classifiers>=2024.10.21.16",
 ]
 
 [dependency-groups]
-dev = [
-    "black>=24.10.0",
-    "flask-debugtoolbar>=0.16.0",
-    "pre-commit>=4.0.1",
-    "rich>=13.9.4",
-    "trove-classifiers>=2024.10.21.16",
-]
+dev = ["black>=24.10.0", "pre-commit>=4.0.1", "rich>=13.9.4"]
 
 
 [build-system]
