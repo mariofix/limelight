@@ -10,12 +10,12 @@ blueprint = Blueprint("website", __name__, url_prefix="/")
 
 @blueprint.get("/")
 def home():
-    context_data = {
-        "l_last_5": db.session.query(Star).order_by(Star.created_at.desc()).limit(5).all(),
-        "l_random_5": db.session.query(Star).order_by(func.rand()).limit(5).all(),
-    }
+    # context_data = {
+    #     "l_last_5": db.session.query(Star).order_by(Star.created_at.desc()).limit(5).all(),
+    #     "l_random_5": db.session.query(Star).order_by(func.rand()).limit(5).all(),
+    # }
 
-    return render_template("website/home.html", **context_data)
+    return render_template("website/landing.html")
 
 
 @blueprint.get("/robots.txt")
