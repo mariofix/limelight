@@ -252,4 +252,3 @@ msgstr ""
 #: limelight/templates/website/top_cards.html:57
 msgid "Pending"
 msgstr ""
-
