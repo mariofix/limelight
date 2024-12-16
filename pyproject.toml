@@ -18,18 +18,18 @@ dependencies = [
     "flask-sitemap>=0.4.0",
     "authlib>=1.3.2",
     "requests>=2.32.3",
-    "celery[redis]>=5.4.0",
     "sqlalchemy-mixins>=2.0.5",
     "python-github>=0.1.0.dev0",
     "python-gitlab>=5.1.0",
-    "flask-admin>=1.6.1",
-    "flask-security>=5.5.2",
+    "flask-admin[export,images,sqlalchemy-with-utils,translation]>=2.0.0",
     "flask-debugtoolbar>=0.16.0",
     "trove-classifiers>=2024.10.21.16",
     "black>=24.10.0",
     "pre-commit>=4.0.1",
     "rich>=13.9.4",
     "flask-mailman>=1.1.1",
+    "flask-security[babel,common,fsqla]>=5.5.2",
+    "setuptools>=75.6.0",
 ]
 
 [build-system]
@@ -61,3 +61,6 @@ profile = "black"
 line_length = 119
 multi_line_output = 5
 py_version = 311
+
+[tool.uv.sources]
+flask-admin = { git = "https://github.com/pallets-eco/flask-admin.git" }

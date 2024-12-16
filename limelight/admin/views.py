@@ -1,11 +1,11 @@
 from flask import flash
 from flask_admin.actions import action
 from flask_admin.babel import lazy_gettext as _
-
-# from flask_security.utils import hash_password
+from flask_security.utils import hash_password
 from wtforms import fields
 
-from ..models import Role, Star, StarQueue, User
+# from ..models import Role, Star, StarQueue, User
+from ..models import Role, User
 from .mixins import AdminModelView
 
 
@@ -18,7 +18,7 @@ class AppAdmin:
             "readonly": True,
         },
     }
-    page_size = 5
+    page_size = 100
     can_create = True
     can_edit = True
     can_delete = True
@@ -35,7 +35,7 @@ class UserAdmin(AppAdmin, AdminModelView):
     name_plural = _("Users")
     icon = "fa-solid fa-user"
     form_excluded_columns = ["password"]
-    column_list = ["username", "mail", "active", "roles"]
+    column_list = ["username", "email", "active", "roles"]
 
     def scaffold_form(self):
         form_class = super().scaffold_form()
@@ -44,14 +44,14 @@ class UserAdmin(AppAdmin, AdminModelView):
 
     def on_model_change(self, form, model, is_created):
         if len(model.password2):
-            model.password = model.password2
+            model.password = hash_password(model.password2)
 
 
 class RoleAdmin(AppAdmin, AdminModelView):
     name = _("Role")
     name_plural = _("Roles")
     icon = "fa-solid fa-list"
-    column_list = ["name", "description", "permissions"]
+    # column_list = ["name", "description", "permissions"]
 
 
 class StyleAdmin(AppAdmin, AdminModelView):
@@ -69,12 +69,13 @@ class StarAdmin(AppAdmin, AdminModelView):
 
     @action("metadata", _("Update Metadata"), _("u sure?"))
     def action_metadata(self, ids):
-        members = Star.query.filter(Star.id.in_(ids))
-        for member in members.all():
-            if member.pypi_id:
-                flash(f"{member.pypi_repo=}")
-            if member.github_id:
-                flash(f"{member.github_repo=}")
+        # members = Star.query.filter(Star.id.in_(ids))
+        # for member in members.all():
+        #     if member.pypi_id:
+        #         flash(f"{member.pypi_repo=}")
+        #     if member.github_id:
+        #         flash(f"{member.github_repo=}")
+        pass
 
 
 class LineupAdmin(AppAdmin, AdminModelView):
@@ -92,11 +93,12 @@ class QueueAdmin(AppAdmin, AdminModelView):
 
     @action("process", _("Process Queue Items"), _("u sure?"))
     def action_process(self, ids):
-        from ..tasks import process_queue_item
+        # from ..tasks import process_queue_item
 
-        members = StarQueue.query.filter(StarQueue.id.in_(ids))
-        for member in members.all():
-            process_queue_item.apply_async(kwargs={"queue_id": member.id}, countdown=member.start_delay)
+        # members = StarQueue.query.filter(StarQueue.id.in_(ids))
+        # for member in members.all():
+        #     process_queue_item.apply_async(kwargs={"queue_id": member.id}, countdown=member.start_delay)
+        pass
 
 
 class PypiRepoAdmin(AppAdmin, AdminModelView):

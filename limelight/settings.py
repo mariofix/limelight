@@ -5,35 +5,15 @@ from flask_admin.babel import lazy_gettext as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = ""
-DEBUG = False
+DEBUG = True
 LOG_LEVEL = "DEBUG" if DEBUG else "INFO"
-ALLOWED_DOMAINS = ["tardis.local", "127.0.0.1"]
-SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
+TRUSTED_HOSTS = ["web-shrv13ytjbyw.up-de-fra1-k8s-1.apps.run-on-seenode.com", "tardis.local"]
+SQLALCHEMY_DATABASE_URI = ""
 SQLALCHEMY_RECORD_QUERIES = DEBUG
 SQLALCHEMY_ECHO = False
 SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True, "pool_recycle": 1800}
 
-# Flask-Security config
 SECURITY_PASSWORD_SALT = ""
-
-# Flask-Security URLs, overridden because they don't put a / at the end
-SECURITY_LOGIN_URL = "/login/"
-SECURITY_LOGOUT_URL = "/logout/"
-SECURITY_LOGIN_USER_TEMPLATE = "accounts/login.html"
-
-SECURITY_POST_LOGIN_VIEW = "/admin.site/"
-SECURITY_POST_LOGOUT_VIEW = "/"
-
-# Flask-Security features
-SECURITY_REGISTERABLE = False
-SECURITY_CONFIRMABLE = False
-SECURITY_CHANGEABLE = False
-SECURITY_RECOVERABLE = False
-SECURITY_TRACKABLE = True
-SECURITY_USERNAME_ENABLE = True
-SECURITY_OAUTH_ENABLE = False
-SECURITY_OAUTH_BUILTIN_PROVIDERS = ["google", "github"]
-
 # Flask-Babel
 BABEL_DEFAULT_LOCALE = "en"
 BABEL_DEFAULT_TIMEZONE = "UTC"
@@ -44,12 +24,8 @@ LANGUAGES = {
     "es": {"flag": "cl", "name": "Español"},
 }
 
-# Flask-RestX/SwaggerUI
-SWAGGER_UI_OPERATION_ID = True
-SWAGGER_UI_REQUEST_DURATION = True
-
 # Flask Debugtoolbar
-DEBUG_TB_ENABLED = DEBUG
+DEBUG_TB_ENABLED = False
 DEBUG_TB_INTERCEPT_REDIRECTS = DEBUG
 DEBUG_TB_PANELS = (
     "flask_debugtoolbar.panels.versions.VersionDebugPanel",
@@ -69,11 +45,11 @@ EXPLAIN_TEMPLATE_LOADING = False
 
 
 # Flask-Mailman
-MAIL_SERVER = os.getenv("MAIL_SERVER")
+MAIL_SERVER = ""
 MAIL_PORT = 587
 MAIL_USE_TLS = True
-MAIL_USERNAME = os.getenv("MAIL_USERNAME")
-MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
+MAIL_USERNAME = ""
+MAIL_PASSWORD = ""
 MAIL_TIMEOUT = 5
 MAIL_USE_LOCALTIME = False
 
