@@ -5,21 +5,13 @@ from flask_admin.babel import lazy_gettext as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = ""
-DEBUG = True
+DEBUG = False
 LOG_LEVEL = "DEBUG" if DEBUG else "INFO"
 ALLOWED_DOMAINS = ["tardis.local", "127.0.0.1"]
 SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
 SQLALCHEMY_RECORD_QUERIES = DEBUG
 SQLALCHEMY_ECHO = False
 SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True, "pool_recycle": 1800}
-
-FLASK_ADMIN_SWATCH = "default"
-# TODO: AGREGAR DOCS
-FLASK_ADMIN_UI_MODE = "dark"  # dark
-FLASK_ADMIN_FLUID_LAYOUT = True
-LIMELIGHT_APP_NAME = "limelight"
-LIMELIGHT_APP_SLOGAN = "Flask's brightest stars"
-LIMELIGHT_FETCH_AUTOSTART = True
 
 # Flask-Security config
 SECURITY_PASSWORD_SALT = ""
@@ -85,19 +77,6 @@ MAIL_PASSWORD = os.getenv("MAIL_PASSWORD")
 MAIL_TIMEOUT = 5
 MAIL_USE_LOCALTIME = False
 
-
-# CELERY
-CELERY = {
-    "broker_url": "redis://172.16.17.2/9",
-    "result_backend": "redis://172.16.17.2/9",
-    "task_ignore_result": False,
-    "timezone": "UTC",
-    "worker_concurrency": 1,
-    "worker_max_tasks_per_child": 1,
-    "worker_send_task_events": True,
-    "task_send_sent_event": True,
-    "broker_connection_retry_on_startup": True,
-}
 SITEMAP_INCLUDE_RULES_WITHOUT_PARAMS = True
 SITEMAP_IGNORE_ENDPOINTS = [
     "admin.index",
@@ -120,38 +99,3 @@ SITEMAP_IGNORE_ENDPOINTS = [
     "role.edit_view",
     "role.details_view",
 ]
-
-APP_LOGGING_CONFIG = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "simple": {
-            "format": "{levelname}:\t  {message}",
-            "style": "{",
-        },
-        "verbose": {
-            "format": "{asctime} {name}.{levelname} {filename}({lineno}) {message}",
-            "style": "{",
-        },
-    },
-    "handlers": {
-        "file": {
-            "level": "DEBUG" if DEBUG else LOG_LEVEL,
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": "logs/limelight-web.log",
-            "formatter": "verbose",
-            "when": "midnight",
-            "interval": 1,
-        },
-        "console": {
-            "level": "DEBUG" if DEBUG else LOG_LEVEL,
-            "class": "logging.StreamHandler",
-            "formatter": "simple",
-        },
-    },
-    "loggers": {
-        "app": {
-            "handlers": ["file", "console"],
-        },
-    },
-}
