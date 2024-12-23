@@ -1,5 +1,10 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, redirect, jsonify
+from flask_wtf import FlaskForm
+from wtforms import StringField
+from wtforms.validators import DataRequired
 
+
+from . import utils
 from ..database import db
 
 blueprint = Blueprint("website", __name__)
@@ -8,6 +13,41 @@ blueprint = Blueprint("website", __name__)
 @blueprint.get("/")
 def home():
     return render_template("website/landing.html")
+
+
+class NewProjectForm(FlaskForm):
+    slug: str = StringField("slug", validators=[DataRequired()])
+
+
+@blueprint.route("/new-project/", methods=["GET", "POST"])
+def new_project():
+    form = NewProjectForm()
+    if form.validate_on_submit():
+        return redirect(f"/project/{form.slug.data}")
+    return render_template("website/new_project.html", form=form)
+
+
+@blueprint.get("/project/<str>")
+def get_project(project):
+    return render_template("website/project.html", project)
+
+
+@blueprint.get("/queue")
+def get_queue():
+    queue = utils.get_queue_items()
+    return jsonify(queue)
+
+
+@blueprint.put("/queue/<str>")
+def update_queue(extension):
+
+    return jsonify(extension)
+
+
+# @blueprint.get("/login-modal/")
+# def login_modal():
+#     form = LoginForm()
+#     return render_template("accounts/login-modal.html", login_user_form=form)
 
 
 # @blueprint.get("/robots.txt")

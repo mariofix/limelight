@@ -1,7 +1,7 @@
-from flask import Flask, request, session
+from flask import Flask, request, session, url_for
 from flask_babel import Babel
 from flask_debugtoolbar import DebugToolbarExtension
-from flask_security import Security, SQLAlchemyUserDatastore, hash_password
+from flask_security import Security, SQLAlchemyUserDatastore
 from flask_sitemap import Sitemap
 from werkzeug.middleware.proxy_fix import ProxyFix
 
@@ -23,7 +23,7 @@ def create_app(settings_file: str | None = None) -> Flask:
         app.config.from_object(settings_file)
     app.config.from_prefixed_env()
 
-    DebugToolbarExtension(app)
+    # DebugToolbarExtension(app)
 
     # Mailer
     mail.init_app(app)
@@ -50,6 +50,16 @@ def create_app(settings_file: str | None = None) -> Flask:
 
     user_datastore = SQLAlchemyUserDatastore(db, User, Role)
     security = Security(app, user_datastore)
+
+    @security.context_processor
+    def security_context_processor():
+        return {
+            "admin_base_template": admin_site.base_template,  # type: ignore
+            "admin_view": admin_site.index_view,
+            "h": admin_helpers,  # type: ignore
+            "get_url": url_for,
+            "app": app,
+        }
 
     # Sitemap
     sitemap = Sitemap()

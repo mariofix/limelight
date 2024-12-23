@@ -1,0 +1,59 @@
+{% extends "main.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-primary text-white text-center py-5">
+  <div class="container">
+    <h1>New Project</h1>
+    <p>Let us know a project we don't have.</p>
+    <div>
+      <a href="#" class="btn btn-light btn-lg" data-bs-toggle="modal" data-bs-target="#modalExtension">Add Extension</a>
+      <a href="#" class="btn btn-outline-light btn-lg" data-bs-toggle="modal" data-bs-target="#modalApp">Add Application</a>
+    </div>
+  </div>
+</section>
+<!-- Extension Modal -->
+<div class="modal fade" id="modalExtension" tabindex="-1" aria-labelledby="modalExtensionLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalExtensionLabel">
+          Add a Flask Extension
+        </h5>
+        <button type="button" class="btn btn-close bi bi-x" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Just add the slug (for now only PyPi is available), and we'll do the rest.</p>
+        <form method="POST" action="">
+          {{ form.csrf_token }}
+          {{ form.slug.label(text="https://pypi.org/project/") }} {{ form.slug(size=20, placeholder="project-slug") }}
+          <button type="button" class="btn btn-info">Add</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Extension Modal -->
+<div class="modal fade" id="modalApp" tabindex="-1" aria-labelledby="modalAppLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="modalAppLabel">
+          Add a Flask Project
+        </h5>
+        <button type="button" class="btn btn-close bi bi-x" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Register the github/gitlab url for the Application.</p>
+        <form method="POST" action="">
+          {{ form.csrf_token }}
+          {{ form.slug.label(text="Repository URL") }} {{ form.slug(size=20, placeholder="repo_url") }}
+          <button type="button" class="btn btn-info">Add</button>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

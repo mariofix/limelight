@@ -1,248 +1,181 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Limelight - Open Source Flask Extensions</title>
-    <link
-      href="{{ url_for('static', filename='css/bootstrap.min.css', v=app_version)}}"
-      rel="stylesheet"
-    />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <!-- Navigation -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-      <div class="container">
-        <a class="navbar-brand" href="#">
-          <i class="bi bi-cassette me-2"></i> Limelight
+{% extends "main.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-primary text-white text-center py-5">
+  <div class="container">
+    <h1>Discover Open Source Flask Extensions</h1>
+    <p>Community-Driven Development for Flask Enthusiasts</p>
+    <div>
+      <a href="#contribute" class="btn btn-light btn-lg">Contribute Extension</a>
+      <a href="#explore" class="btn btn-outline-light btn-lg">Browse Extensions</a>
+    </div>
+  </div>
+</section>
+
+<!-- Common Scenarios Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row text-center">
+      <div class="col-md-4 mb-3">
+        <a href="#" class="card shadow-sm text-decoration-none">
+          <div class="card-body">
+            <i class="bi bi-person-lock" style="font-size: 2rem; color: var(--primary)"></i>
+            <h5 class="card-title mt-2">I need user authentication</h5>
+            <p class="text-muted">
+              Extensions to manage users and sessions.
+            </p>
+          </div>
         </a>
-        <button
-          class="navbar-toggler"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navbarNav"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a class="nav-link" href="#">Home</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a
-                class="nav-link dropdown-toggle"
-                href="#"
-                id="discoverDropdown"
-                role="button"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Discover
-              </a>
-              <ul class="dropdown-menu" aria-labelledby="discoverDropdown">
-                <li><a class="dropdown-item" href="#">Applications</a></li>
-                <li><a class="dropdown-item" href="#">Frameworks</a></li>
-                <li><a class="dropdown-item" href="#">Libraries</a></li>
-                <li><a class="dropdown-item" href="#">Modules</a></li>
-              </ul>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Help</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">My Account</a>
-            </li>
-          </ul>
-        </div>
       </div>
-    </nav>
-
-    <!-- Hero Section -->
-    <section class="bg-primary text-white text-center py-5">
-      <div class="container">
-        <h1>Discover Open Source Flask Extensions</h1>
-        <p>Community-Driven Development for Flask Enthusiasts</p>
-        <div>
-          <a href="#contribute" class="btn btn-light btn-lg"
-            >Contribute Extension</a
-          >
-          <a href="#explore" class="btn btn-outline-light btn-lg"
-            >Browse Extensions</a
-          >
-        </div>
-      </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="py-5 bg-light">
-      <div class="container">
-        <div class="row text-center">
-          <div class="col-md-4 mb-3">
-            <div class="card bg-primary text-white">
-              <div class="card-body">
-                <h5 class="card-title">Applications</h5>
-                <p class="card-text">200</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="card bg-success text-white">
-              <div class="card-body">
-                <h5 class="card-title">Libraries</h5>
-                <p class="card-text">87</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="card bg-info text-white">
-              <div class="card-body">
-                <h5 class="card-title">Frameworks</h5>
-                <p class="card-text">45</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="card bg-warning text-dark">
-              <div class="card-body">
-                <h5 class="card-title">Modules</h5>
-                <p class="card-text">123</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="card bg-danger text-white">
-              <div class="card-body">
-                <h5 class="card-title">Contributors</h5>
-                <p class="card-text">35</p>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 mb-3">
-            <div class="card bg-secondary text-white">
-              <div class="card-body">
-                <h5 class="card-title">Downloads</h5>
-                <p class="card-text">10k+</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Features Section -->
-    <section class="py-5">
-      <div class="container">
-        <div class="row text-center">
-          <div class="col-md-4">
-            <div class="mb-3">
-              <i
-                class="bi bi-search"
-                style="font-size: 3rem; color: var(--primary)"
-              ></i>
-            </div>
-            <h3>Explore Extensions</h3>
-            <p>
-              Find top-rated Flask extensions across various categories like
-              authentication, databases, and APIs.
+      <div class="col-md-4 mb-3">
+        <a href="#" class="card shadow-sm text-decoration-none">
+          <div class="card-body">
+            <i class="bi bi-database" style="font-size: 2rem; color: var(--success)"></i>
+            <h5 class="card-title mt-2">I need database support</h5>
+            <p class="text-muted">
+              Explore tools for integrating databases.
             </p>
           </div>
-          <div class="col-md-4">
-            <div class="mb-3">
-              <i
-                class="bi bi-bar-chart"
-                style="font-size: 3rem; color: var(--success)"
-              ></i>
-            </div>
-            <h3>Community Driven</h3>
-            <p>
-              Contributed and curated by the Flask community, ensuring quality
-              and relevance of extensions.
+        </a>
+      </div>
+      <div class="col-md-4 mb-3">
+        <a href="#" class="card shadow-sm text-decoration-none">
+          <div class="card-body">
+            <i class="bi bi-plug" style="font-size: 2rem; color: var(--info)"></i>
+            <h5 class="card-title mt-2">I need to build an API</h5>
+            <p class="text-muted">Discover API frameworks and tools.</p>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4 mb-3">
+        <a href="#" class="card shadow-sm text-decoration-none">
+          <div class="card-body">
+            <i class="bi bi-ui-checks" style="font-size: 2rem; color: var(--warning)"></i>
+            <h5 class="card-title mt-2">I need form handling</h5>
+            <p class="text-muted">
+              Libraries to process and validate forms.
             </p>
           </div>
-          <div class="col-md-4">
-            <div class="mb-3">
-              <i
-                class="bi bi-rocket"
-                style="font-size: 3rem; color: var(--info)"
-              ></i>
-            </div>
-            <h3>Accelerate Development</h3>
-            <p>
-              Quickly find tools and libraries to speed up your Flask
-              application development process.
-            </p>
+        </a>
+      </div>
+      <div class="col-md-4 mb-3">
+        <a href="#" class="card shadow-sm text-decoration-none">
+          <div class="card-body">
+            <i class="bi bi-shield-lock" style="font-size: 2rem; color: var(--danger)"></i>
+            <h5 class="card-title mt-2">I need security features</h5>
+            <p class="text-muted">Secure your app with ready-made tools.</p>
+          </div>
+        </a>
+      </div>
+      <div class="col-md-4 mb-3">
+        <a href="#" class="card shadow-sm text-decoration-none">
+          <div class="card-body">
+            <i class="bi bi-box-arrow-up" style="font-size: 2rem; color: var(--secondary)"></i>
+            <h5 class="card-title mt-2">I need file uploads</h5>
+            <p class="text-muted">Easily manage file handling in Flask.</p>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Latest Inclusions and Top Extensions Section -->
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Latest Projects</h5>
+          </div>
+          <div class="card-body">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Category</th>
+                  <th>Added</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Flask-RESTX</td>
+                  <td>API</td>
+                  <td>2 days ago</td>
+                </tr>
+                <tr>
+                  <td>Flask-Migrate</td>
+                  <td>Database</td>
+                  <td>4 days ago</td>
+                </tr>
+                <tr>
+                  <td>Flask-Security</td>
+                  <td>Authentication</td>
+                  <td>1 week ago</td>
+                </tr>
+                <tr>
+                  <td>Flask-Marshmallow</td>
+                  <td>Serialization</td>
+                  <td>10 days ago</td>
+                </tr>
+                <tr>
+                  <td>Flask-SocketIO</td>
+                  <td>WebSockets</td>
+                  <td>2 weeks ago</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Contribute Section -->
-    <section id="contribute" class="py-5 bg-light">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-8 mx-auto">
-            <div class="card shadow">
-              <div class="card-header bg-primary text-white text-center">
-                <h2 class="mb-0">Contribute Your Flask Extension</h2>
-              </div>
-              <div class="card-body">
-                <form>
-                  <div class="row g-3">
-                    <div class="col-md-6">
-                      <label class="form-label">Extension Name</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        placeholder="Enter extension name"
-                      />
-                    </div>
-                    <div class="col-md-6">
-                      <label class="form-label">GitHub Repository</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        placeholder="https://github.com/username/repo"
-                      />
-                    </div>
-                    <div class="col-12">
-                      <label class="form-label">Description</label>
-                      <textarea
-                        class="form-control"
-                        rows="4"
-                        placeholder="Describe your Flask extension"
-                      ></textarea>
-                    </div>
-                    <div class="col-12">
-                      <button type="submit" class="btn btn-primary">
-                        Submit Extension
-                      </button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
+      <div class="col-md-6">
+        <div class="card h-100">
+          <div class="card-header bg-success text-white">
+            <h5 class="mb-0">Most Downloaded</h5>
+          </div>
+          <div class="card-body">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Downloads</th>
+                  <th>Category</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Flask-SQLAlchemy</td>
+                  <td>2.5M</td>
+                  <td>Database</td>
+                </tr>
+                <tr>
+                  <td>Flask-RESTful</td>
+                  <td>1.8M</td>
+                  <td>API</td>
+                </tr>
+                <tr>
+                  <td>Flask-Login</td>
+                  <td>1.5M</td>
+                  <td>Authentication</td>
+                </tr>
+                <tr>
+                  <td>Flask-WTF</td>
+                  <td>1.2M</td>
+                  <td>Forms</td>
+                </tr>
+                <tr>
+                  <td>Flask-Marshmallow</td>
+                  <td>950K</td>
+                  <td>Serialization</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3">
-      <div class="container">
-        <p>&copy; 2024 Limelight - Flask Extensions Showcase</p>
-        <div>
-          <a href="#" class="text-white mx-2">Privacy Policy</a>
-          <a href="#" class="text-white mx-2">Terms of Service</a>
-          <a href="#" class="text-white mx-2">Contact</a>
-        </div>
-      </div>
-    </footer>
-
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  </body>
-</html>
+    </div>
+  </div>
+</section>
+{% endblock content %}

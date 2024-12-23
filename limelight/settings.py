@@ -1,19 +1,35 @@
-import os
 from pathlib import Path
-
-from flask_admin.babel import lazy_gettext as _
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = ""
 DEBUG = True
 LOG_LEVEL = "DEBUG" if DEBUG else "INFO"
-TRUSTED_HOSTS = ["web-shrv13ytjbyw.up-de-fra1-k8s-1.apps.run-on-seenode.com", "tardis.local"]
+TRUSTED_HOSTS = ["tardis.local"]
+SESSION_COOKIE_NAME = "limelight"
+
 SQLALCHEMY_DATABASE_URI = ""
-SQLALCHEMY_RECORD_QUERIES = DEBUG
+SQLALCHEMY_RECORD_QUERIES = False
 SQLALCHEMY_ECHO = False
 SQLALCHEMY_ENGINE_OPTIONS = {"pool_pre_ping": True, "pool_recycle": 1800}
 
+SECURITY_EMAIL_SENDER = ""
 SECURITY_PASSWORD_SALT = ""
+SECURITY_LOGIN_URL = "/login/"
+SECURITY_LOGOUT_URL = "/logout/"
+SECURITY_POST_LOGIN_VIEW = "/"
+SECURITY_POST_LOGOUT_VIEW = "/"
+SECURITY_AUTO_LOGIN_AFTER_CONFIRM = True
+SECURITY_ANONYMOUS_USER_DISABLED = True
+SECURITY_SEND_REGISTER_EMAIL = False
+SECURITY_USERNAME_ENABLE = True
+SECURITY_USERNAME_REQUIRED = True
+SECURITY_REGISTERABLE = False
+SECURITY_CONFIRMABLE = False
+SECURITY_RECOVERABLE = False
+SECURITY_OAUTH_ENABLE = False
+SECURITY_OAUTH_BUILTIN_PROVIDERS = ["google", "github"]
+
+
 # Flask-Babel
 BABEL_DEFAULT_LOCALE = "en"
 BABEL_DEFAULT_TIMEZONE = "UTC"
@@ -25,7 +41,7 @@ LANGUAGES = {
 }
 
 # Flask Debugtoolbar
-DEBUG_TB_ENABLED = False
+DEBUG_TB_ENABLED = DEBUG
 DEBUG_TB_INTERCEPT_REDIRECTS = DEBUG
 DEBUG_TB_PANELS = (
     "flask_debugtoolbar.panels.versions.VersionDebugPanel",
@@ -41,7 +57,7 @@ DEBUG_TB_PANELS = (
     "flask_debugtoolbar.panels.g.GDebugPanel",
 )
 TEMPLATES_AUTO_RELOAD = True
-EXPLAIN_TEMPLATE_LOADING = False
+EXPLAIN_TEMPLATE_LOADING = DEBUG
 
 
 # Flask-Mailman
@@ -51,7 +67,7 @@ MAIL_USE_TLS = True
 MAIL_USERNAME = ""
 MAIL_PASSWORD = ""
 MAIL_TIMEOUT = 5
-MAIL_USE_LOCALTIME = False
+MAIL_USE_LOCALTIME = True
 
 SITEMAP_INCLUDE_RULES_WITHOUT_PARAMS = True
 SITEMAP_IGNORE_ENDPOINTS = [
