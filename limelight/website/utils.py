@@ -1,7 +1,4 @@
-# from ..database import db
-
-
-def get_queue_items():
+def get_queue_items(db):
     queue = [
         "pyflowcl",
         "django-payments-chile",

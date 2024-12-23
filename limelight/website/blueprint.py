@@ -15,6 +15,21 @@ def home():
     return render_template("website/landing.html")
 
 
+@blueprint.get("/help/")
+def help():
+    return render_template("website/landing.html")
+
+
+@blueprint.get("/<any(applications,frameworks,libraries,modules,projects):project_type>/")
+def projects(project_type):
+    return render_template("website/project_list.html", project_type=project_type)
+
+
+@blueprint.get("/projects/<slug>")
+def get_project(slug):
+    return render_template("website/project.html", slug)
+
+
 class NewProjectForm(FlaskForm):
     slug: str = StringField("slug", validators=[DataRequired()])
 
@@ -27,21 +42,16 @@ def new_project():
     return render_template("website/new_project.html", form=form)
 
 
-@blueprint.get("/project/<str>")
-def get_project(project):
-    return render_template("website/project.html", project)
-
-
 @blueprint.get("/queue")
 def get_queue():
-    queue = utils.get_queue_items()
+    queue = utils.get_queue_items(db)
     return jsonify(queue)
 
 
-@blueprint.put("/queue/<str>")
-def update_queue(extension):
+@blueprint.put("/queue/<project>")
+def update_queue(project):
 
-    return jsonify(extension)
+    return jsonify(project)
 
 
 # @blueprint.get("/login-modal/")

@@ -7,8 +7,8 @@
     <h1>Discover Open Source Flask Extensions</h1>
     <p>Community-Driven Development for Flask Enthusiasts</p>
     <div>
-      <a href="#contribute" class="btn btn-light btn-lg">Contribute Extension</a>
-      <a href="#explore" class="btn btn-outline-light btn-lg">Browse Extensions</a>
+      <a href="{{ url_for('website.new_project') }}" class="btn btn-light btn-lg">Contribute Project</a>
+      <a href="{{ url_for('website.projects', project_type='projects') }}" class="btn btn-outline-light btn-lg">Browse Projects</a>
     </div>
   </div>
 </section>

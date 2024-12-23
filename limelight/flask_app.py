@@ -23,7 +23,7 @@ def create_app(settings_file: str | None = None) -> Flask:
         app.config.from_object(settings_file)
     app.config.from_prefixed_env()
 
-    # DebugToolbarExtension(app)
+    DebugToolbarExtension(app)
 
     # Mailer
     mail.init_app(app)
