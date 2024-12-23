@@ -1,15 +1,7 @@
 from flask import render_template
 from flask_mailman import EmailMultiAlternatives
 
-from .database import db
-from .models import StarQueue
-from .pack import lets_play
 from .version import __version_info_str__
-
-
-def process_queue_item(queue_id: int) -> dict:
-    print(f"lets_play({queue_id})")
-    return lets_play(queue_id)
 
 
 def send_email(

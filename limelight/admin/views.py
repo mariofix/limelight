@@ -1,11 +1,11 @@
-from flask import flash
-from flask_admin.actions import action
+from flask import flash  # noqa
+from flask_admin.actions import action  # noqa
 from flask_admin.babel import lazy_gettext as _
 from flask_security.utils import hash_password
 from wtforms import fields
 
 # from ..models import Role, Star, StarQueue, User
-from ..models import Role, User
+from ..models import Role, User  # noqa
 from .mixins import AdminModelView
 
 
@@ -54,62 +54,62 @@ class RoleAdmin(AppAdmin, AdminModelView):
     # column_list = ["name", "description", "permissions"]
 
 
-class StyleAdmin(AppAdmin, AdminModelView):
-    name = _("Style")
-    name_plural = _("Styles")
-    icon = "bi-list-ul"
-    column_list = ["slug", "title", "moderated"]
+# class StyleAdmin(AppAdmin, AdminModelView):
+#     name = _("Style")
+#     name_plural = _("Styles")
+#     icon = "bi-list-ul"
+#     column_list = ["slug", "title", "moderated"]
 
 
-class StarAdmin(AppAdmin, AdminModelView):
-    name = _("Star")
-    name_plural = _("Stars")
-    icon = "bi-star"
-    column_list = ["slug", "title", "description", "pypi_repo", "github_repo", "star_url", "booklet_url"]
+# class StarAdmin(AppAdmin, AdminModelView):
+#     name = _("Star")
+#     name_plural = _("Stars")
+#     icon = "bi-star"
+#     column_list = ["slug", "title", "description", "pypi_repo", "github_repo", "star_url", "booklet_url"]
 
-    @action("metadata", _("Update Metadata"), _("u sure?"))
-    def action_metadata(self, ids):
-        # members = Star.query.filter(Star.id.in_(ids))
-        # for member in members.all():
-        #     if member.pypi_id:
-        #         flash(f"{member.pypi_repo=}")
-        #     if member.github_id:
-        #         flash(f"{member.github_repo=}")
-        pass
-
-
-class LineupAdmin(AppAdmin, AdminModelView):
-    name = _("Lineup")
-    name_plural = _("Lineups")
-    icon = "bi-star"
-    column_list = ["slug", "title"]
+#     @action("metadata", _("Update Metadata"), _("u sure?"))
+#     def action_metadata(self, ids):
+#         # members = Star.query.filter(Star.id.in_(ids))
+#         # for member in members.all():
+#         #     if member.pypi_id:
+#         #         flash(f"{member.pypi_repo=}")
+#         #     if member.github_id:
+#         #         flash(f"{member.github_repo=}")
+#         pass
 
 
-class QueueAdmin(AppAdmin, AdminModelView):
-    name = _("Queue")
-    name_plural = _("Queue")
-    icon = "bi-cpu"
-    column_list = ["request_url", "status", "post_process"]
-
-    @action("process", _("Process Queue Items"), _("u sure?"))
-    def action_process(self, ids):
-        # from ..tasks import process_queue_item
-
-        # members = StarQueue.query.filter(StarQueue.id.in_(ids))
-        # for member in members.all():
-        #     process_queue_item.apply_async(kwargs={"queue_id": member.id}, countdown=member.start_delay)
-        pass
+# class LineupAdmin(AppAdmin, AdminModelView):
+#     name = _("Lineup")
+#     name_plural = _("Lineups")
+#     icon = "bi-star"
+#     column_list = ["slug", "title"]
 
 
-class PypiRepoAdmin(AppAdmin, AdminModelView):
-    name = _("PyPi Repo")
-    name_plural = _("PyPi Repos")
-    icon = "bi-list-ul"
-    column_list = ["slug", "name", "star", "version", "project_url"]
+# class QueueAdmin(AppAdmin, AdminModelView):
+#     name = _("Queue")
+#     name_plural = _("Queue")
+#     icon = "bi-cpu"
+#     column_list = ["request_url", "status", "post_process"]
+
+#     @action("process", _("Process Queue Items"), _("u sure?"))
+#     def action_process(self, ids):
+#         # from ..tasks import process_queue_item
+
+#         # members = StarQueue.query.filter(StarQueue.id.in_(ids))
+#         # for member in members.all():
+#         #     process_queue_item.apply_async(kwargs={"queue_id": member.id}, countdown=member.start_delay)
+#         pass
 
 
-class GithubRepoAdmin(AppAdmin, AdminModelView):
-    name = _("Github Repo")
-    name_plural = _("Github Repos")
-    icon = "bi-github"
-    column_list = ["namespace", "name", "star", "html_url"]
+# class PypiRepoAdmin(AppAdmin, AdminModelView):
+#     name = _("PyPi Repo")
+#     name_plural = _("PyPi Repos")
+#     icon = "bi-list-ul"
+#     column_list = ["slug", "name", "star", "version", "project_url"]
+
+
+# class GithubRepoAdmin(AppAdmin, AdminModelView):
+#     name = _("Github Repo")
+#     name_plural = _("Github Repos")
+#     icon = "bi-github"
+#     column_list = ["namespace", "name", "star", "html_url"]

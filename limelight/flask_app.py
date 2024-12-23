@@ -1,4 +1,5 @@
 from flask import Flask, request, session, url_for
+from flask_admin import helpers as admin_helpers
 from flask_babel import Babel
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_security import Security, SQLAlchemyUserDatastore
@@ -10,7 +11,6 @@ from .crud import get_context_data
 from .database import db, migrations
 from .mail import mail
 from .models import Role, User
-from .version import __version_info_str__
 from .website import blueprint as website
 
 
@@ -54,11 +54,11 @@ def create_app(settings_file: str | None = None) -> Flask:
     @security.context_processor
     def security_context_processor():
         return {
-            "admin_base_template": admin_site.base_template,  # type: ignore
+            "admin_base_template": admin_site.theme.base_template,
             "admin_view": admin_site.index_view,
-            "h": admin_helpers,  # type: ignore
+            "theme": admin_site.theme,
+            "h": admin_helpers,
             "get_url": url_for,
-            "app": app,
         }
 
     # Sitemap

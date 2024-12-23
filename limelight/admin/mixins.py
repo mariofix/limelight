@@ -1,4 +1,4 @@
-from flask import abort, redirect, request, url_for
+from flask import abort, redirect, request, url_for  # noqa
 from flask_admin.contrib.sqla import ModelView
 from flask_admin.form import SecureForm
 
