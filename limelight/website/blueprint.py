@@ -1,11 +1,10 @@
-from flask import Blueprint, render_template, redirect, jsonify
+from flask import Blueprint, jsonify, redirect, render_template
 from flask_wtf import FlaskForm
 from wtforms import StringField
 from wtforms.validators import DataRequired
 
-
-from . import utils
 from ..database import db
+from . import utils
 
 blueprint = Blueprint("website", __name__)
 
