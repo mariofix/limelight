@@ -7,6 +7,7 @@ from flask_sitemap import Sitemap
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from .admin.site import admin_site
+from .api import blueprint as api
 from .crud import get_context_data
 from .database import db, migrations
 from .mail import mail
@@ -83,5 +84,6 @@ def create_app(settings_file: str | None = None) -> Flask:
         return get_context_data()
 
     app.register_blueprint(website, url_prefix="/")
+    app.register_blueprint(api, url_prefix="/api/")
 
     return app

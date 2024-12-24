@@ -1,11 +1,14 @@
-from flask import flash  # noqa
-from flask_admin.actions import action  # noqa
+import datetime
+
+from flask import flash
+from flask_admin.actions import action
 from flask_admin.babel import lazy_gettext as _
 from flask_security.utils import hash_password
 from wtforms import fields
 
-# from ..models import Role, Star, StarQueue, User
-from ..models import Role, User  # noqa
+from .. import utils
+from ..database import db
+from ..models import Project, ProjectDatalog, User
 from .mixins import AdminModelView
 
 
@@ -34,7 +37,7 @@ class UserAdmin(AppAdmin, AdminModelView):
     name = _("User")
     name_plural = _("Users")
     icon = "fa-solid fa-user"
-    form_excluded_columns = ["password"]
+    form_excluded_columns = [User.password]
     column_list = ["username", "email", "active", "roles"]
 
     def scaffold_form(self):
@@ -51,65 +54,56 @@ class RoleAdmin(AppAdmin, AdminModelView):
     name = _("Role")
     name_plural = _("Roles")
     icon = "fa-solid fa-list"
-    # column_list = ["name", "description", "permissions"]
 
 
-# class StyleAdmin(AppAdmin, AdminModelView):
-#     name = _("Style")
-#     name_plural = _("Styles")
-#     icon = "bi-list-ul"
-#     column_list = ["slug", "title", "moderated"]
+class DatalogAdmin(AppAdmin, AdminModelView):
+    name = _("Log")
+    name_plural = _("Logs")
+    icon = "bi-list-ul"
+    column_list = ["id", "created_at", "project_id", "origen"]
+
+    @action("process_datalog", "Process Datalog", "The project's data will be updated.")
+    def action_process_datalog(self, ids):
+        data_list = ProjectDatalog.query.filter(ProjectDatalog.id.in_(ids))
+        for data in data_list.all():
+            try:
+                utils.process_datalog(data)
+            except Exception as e:
+                flash(f"{e = }", "error")
+            else:
+                flash(f"Data Processed {data.id}", "info")
 
 
-# class StarAdmin(AppAdmin, AdminModelView):
-#     name = _("Star")
-#     name_plural = _("Stars")
-#     icon = "bi-star"
-#     column_list = ["slug", "title", "description", "pypi_repo", "github_repo", "star_url", "booklet_url"]
+class ProjectAdmin(AppAdmin, AdminModelView):
+    name = _("Project")
+    name_plural = _("Projects")
+    icon = "bi-star"
+    column_list = ["slug", "title", "description"]
 
-#     @action("metadata", _("Update Metadata"), _("u sure?"))
-#     def action_metadata(self, ids):
-#         # members = Star.query.filter(Star.id.in_(ids))
-#         # for member in members.all():
-#         #     if member.pypi_id:
-#         #         flash(f"{member.pypi_repo=}")
-#         #     if member.github_id:
-#         #         flash(f"{member.github_repo=}")
-#         pass
+    @action(
+        "fetch_data",
+        _("Fetch Project Data"),
+        _("Fetch the latest data from their repositories. Note: no post-data processing in this stage."),
+    )
+    def action_fetch_data(self, ids):
 
+        projects = Project.query.filter(Project.id.in_(ids))
+        for project in projects.all():
+            if project.pypi_slug:
+                data = utils.fetch_pypi_data(project.pypi_json_url())
+                project.pypi_data = data.json()
+                project.pypi_data_date = datetime.datetime.now()
+                db.session.commit()
+            flash(f"Data Retrieved: {project}", "info")
 
-# class LineupAdmin(AppAdmin, AdminModelView):
-#     name = _("Lineup")
-#     name_plural = _("Lineups")
-#     icon = "bi-star"
-#     column_list = ["slug", "title"]
+    @action(
+        "update_data",
+        _("Update Project Data"),
+        _("Update project info from pypi_data and conda_data."),
+    )
+    def action_update_data(self, ids):
 
-
-# class QueueAdmin(AppAdmin, AdminModelView):
-#     name = _("Queue")
-#     name_plural = _("Queue")
-#     icon = "bi-cpu"
-#     column_list = ["request_url", "status", "post_process"]
-
-#     @action("process", _("Process Queue Items"), _("u sure?"))
-#     def action_process(self, ids):
-#         # from ..tasks import process_queue_item
-
-#         # members = StarQueue.query.filter(StarQueue.id.in_(ids))
-#         # for member in members.all():
-#         #     process_queue_item.apply_async(kwargs={"queue_id": member.id}, countdown=member.start_delay)
-#         pass
-
-
-# class PypiRepoAdmin(AppAdmin, AdminModelView):
-#     name = _("PyPi Repo")
-#     name_plural = _("PyPi Repos")
-#     icon = "bi-list-ul"
-#     column_list = ["slug", "name", "star", "version", "project_url"]
-
-
-# class GithubRepoAdmin(AppAdmin, AdminModelView):
-#     name = _("Github Repo")
-#     name_plural = _("Github Repos")
-#     icon = "bi-github"
-#     column_list = ["namespace", "name", "star", "html_url"]
+        projects = Project.query.filter(Project.id.in_(ids))
+        for project in projects.all():
+            utils.process_pypi_data(project)
+            flash(f"Data Processed: {project}", "info")

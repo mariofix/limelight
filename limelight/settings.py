@@ -4,7 +4,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = ""
 DEBUG = True
 LOG_LEVEL = "DEBUG" if DEBUG else "INFO"
-TRUSTED_HOSTS = ["tardis.local"]
+TRUSTED_HOSTS = ["tardis.local", "flaskpackages.pythonanywhere.com"]
 SESSION_COOKIE_NAME = "limelight"
 
 SQLALCHEMY_DATABASE_URI = ""

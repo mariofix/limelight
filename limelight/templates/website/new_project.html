@@ -6,54 +6,119 @@
   <div class="container">
     <h1>New Project</h1>
     <p>Let us know a project we don't have.</p>
-    <div>
-      <a href="#" class="btn btn-light btn-lg" data-bs-toggle="modal" data-bs-target="#modalExtension">Add Extension</a>
-      <a href="#" class="btn btn-outline-light btn-lg" data-bs-toggle="modal" data-bs-target="#modalApp">Add Application</a>
+  </div>
+</section>
+
+<!-- Add Project Section -->
+<section class="container py-5">
+  <div class="row row-cols-1 row-cols-md-3 g-4">
+    <!-- PyPI Card -->
+    <div class="col">
+      <div class="card h-100 text-center">
+        <div class="card-body">
+          <i class="bi bi-boxes display-4 text-primary mb-3"></i>
+          <h5 class="card-title">Add from PyPI</h5>
+          <p class="card-text">Fetch Python project details using its PyPI slug.</p>
+          <form onsubmit="handleSubmit(event, 'pypi')">
+            <div class="input-group">
+              <span class="input-group-text" id="addon-wrapping"><i class="bi bi-boxes"></i></span>
+              <input type="text" class="form-control" id="pypiSlug" placeholder="project-slug" required>
+              <button type="submit" class="btn btn-secondary">Add</button>
+            </div>
+            <div class="valid-feedback">Project successfully added!</div>
+            <div class="invalid-feedback">Something went wrong. Please try again.</div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+    <!-- Anaconda Card -->
+    <div class="col">
+      <div class="card h-100 text-center">
+        <div class="card-body">
+          <i class="bi bi-c-circle display-4 text-success mb-3"></i>
+          <h5 class="card-title">Add from Anaconda</h5>
+          <p class="card-text">Fetch project details using its Anaconda slug.</p>
+
+          <form onsubmit="handleSubmit(event, 'anaconda')">
+            <div class="input-group">
+              <span class="input-group-text" id="addon-wrapping"><i class="bi bi-c-circle"></i></span>
+              <input type="text" class="form-control" id="anacondaSlug" placeholder="channel/project-slug" required>
+              <button type="submit" class="btn btn-secondary">Add</button>
+            </div>
+            <div class="valid-feedback">Project successfully added!</div>
+            <div class="invalid-feedback">Something went wrong. Please try again.</div>
+          </form>
+
+        </div>
+      </div>
+    </div>
+    <!-- Other Sources Card -->
+    <div class="col">
+      <div class="card h-100 text-center">
+        <div class="card-body">
+          <i class="bi bi-globe display-4 text-secondary mb-3"></i>
+          <h5 class="card-title">Add from Other Sources</h5>
+          <p class="card-text">Add a project from any git repository.<br>&nbsp;</p>
+
+          <form onsubmit="handleSubmit(event, 'git')">
+            <div class="input-group">
+              <span class="input-group-text" id="addon-wrapping"><i class="bi bi-globe"></i></span>
+              <input type="text" class="form-control" id="gitRepo" placeholder="Git Repo URL" required>
+              <button type="submit" class="btn btn-secondary">Add</button>
+            </div>
+            <div class="valid-feedback">Project successfully added!</div>
+            <div class="invalid-feedback">Something went wrong. Please try again.</div>
+          </form>
+
+        </div>
+      </div>
     </div>
   </div>
 </section>
-<!-- Extension Modal -->
-<div class="modal fade" id="modalExtension" tabindex="-1" aria-labelledby="modalExtensionLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalExtensionLabel">
-          Add a Flask Extension
-        </h5>
-        <button type="button" class="btn btn-close bi bi-x" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Just add the slug (for now only PyPi is available), and we'll do the rest.</p>
-        <form method="POST" action="">
-          {{ form.csrf_token }}
-          {{ form.slug.label(text="https://pypi.org/project/") }} {{ form.slug(size=20, placeholder="project-slug") }}
-          <button type="button" class="btn btn-info">Add</button>
-        </form>
-
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Extension Modal -->
-<div class="modal fade" id="modalApp" tabindex="-1" aria-labelledby="modalAppLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="modalAppLabel">
-          Add a Flask Project
-        </h5>
-        <button type="button" class="btn btn-close bi bi-x" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <p>Register the github/gitlab url for the Application.</p>
-        <form method="POST" action="">
-          {{ form.csrf_token }}
-          {{ form.slug.label(text="Repository URL") }} {{ form.slug(size=20, placeholder="repo_url") }}
-          <button type="button" class="btn btn-info">Add</button>
-        </form>
-
-      </div>
-    </div>
-  </div>
-</div>
 {% endblock content %}
+
+{% block post_js %}
+<script type="text/javascript">
+  function handleSubmit(event, origin) {
+    event.preventDefault();
+    const form = event.target;
+    const slugInput = form.querySelector('input');
+    const button = form.querySelector('button[type="submit"]');
+
+    const slug = slugInput.value;
+    const payload = { "slug": slug, "origen": origin, "csrf_token": "{{ form.csrf_token._value() }}" };
+
+    fetch('{{ url_for("api.new_project") }}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => {
+        const url = "{{ url_for('website.get_project', slug='1') }}";
+        if (response.status === 200) {
+          window.location.href = url.replace("1", payload.slug);
+        } else if (response.status === 201) {
+          window.location.href = url.replace("1", payload.slug);
+        } else {
+          button.classList.remove('btn-primary', 'btn-info', 'btn-success');
+          button.classList.add('btn-danger');
+          form.classList.remove('is-valid');
+          form.classList.add('is-invalid');
+          form.querySelector('.invalid-feedback').textContent = 'An error occurred. Please try again.';
+        }
+      })
+      .catch(() => {
+        button.classList.remove('btn-primary', 'btn-info', 'btn-success');
+        button.classList.add('btn-danger');
+        form.classList.remove('is-valid');
+        form.classList.add('is-invalid');
+        form.querySelector('.invalid-feedback').textContent = 'An error occurred. Please try again.';
+      });
+  }
+
+
+</script>
+{% endblock post_js %}
