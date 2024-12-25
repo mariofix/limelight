@@ -22,7 +22,8 @@ def projects(project_type):
     if project_type == "projects":
         projects = db.session.execute(db.select(Project)).all()
     else:
-        projects = db.session.execute(db.select(Project)).all()
+        projects = db.session.execute(db.select(Project).where(Project.category == project_type)).all()
+
     return render_template(
         "website/project_list.html",
         project_type=project_type,

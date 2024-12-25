@@ -5,6 +5,7 @@ from flask_security.models import fsqla_v3 as fsqla
 from sqlalchemy import DateTime, func
 from sqlalchemy.orm import Mapped, declarative_mixin, mapped_column
 from sqlalchemy.types import JSON
+from sqlalchemy_utils.types.choice import ChoiceType
 
 from .database import db
 
@@ -32,6 +33,15 @@ class TimestampMixin:
     )
 
 
+PROJECT_TYPES = [
+    ("application", "Application"),
+    ("framework", "Framework"),
+    ("libraries", "Libraries"),
+    ("modules", "Modules"),
+    ("project", "Project"),
+]
+
+
 @dataclass
 class Project(db.Model, TimestampMixin):
     __tablename__ = "limelight_project"
@@ -41,6 +51,7 @@ class Project(db.Model, TimestampMixin):
     slug: Mapped[str] = mapped_column(db.String(128), unique=True)
     title: Mapped[str] = mapped_column(db.String(128), nullable=True, default=None)
     description: Mapped[str] = mapped_column(db.String(2048), nullable=True, default=None)
+    category: Mapped[str] = mapped_column(ChoiceType(PROJECT_TYPES), default="project")
 
     project_url: Mapped[str] = mapped_column(db.String(128), nullable=True, default=None)
     source_url: Mapped[str] = mapped_column(db.String(128), nullable=True, default=None)
