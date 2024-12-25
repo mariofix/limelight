@@ -17,5 +17,5 @@ def new_project():
         else:
             new_project = utils.create_project(db, form.data)
             new_project = utils.process_pypi_data(new_project)
-            return jsonify(new_project), 201
+            return jsonify({"slug": new_project.slug}), 201
     return jsonify(form.errors), 400
