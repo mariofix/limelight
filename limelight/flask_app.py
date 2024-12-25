@@ -86,4 +86,8 @@ def create_app(settings_file: str | None = None) -> Flask:
     app.register_blueprint(website, url_prefix="/")
     app.register_blueprint(api, url_prefix="/api/")
 
+    @app.get("/robots.txt")
+    def robots():
+        return "User-agent: * \nAllow: / \n\nSitemap: https://flaskpackages.pythonanywhere.com/sitemap.xml"
+
     return app
