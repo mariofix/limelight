@@ -90,4 +90,9 @@ SITEMAP_IGNORE_ENDPOINTS = [
     "role.create_view",
     "role.edit_view",
     "role.details_view",
+    "project.index_view",
+    "project.ajax_lookup",
+    "project.create_view",
+    "project.edit_view",
+    "project.details_view",
 ]

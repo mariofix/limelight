@@ -19,7 +19,15 @@ def help():
 
 @blueprint.get("/<any(applications,frameworks,libraries,modules,projects):project_type>/")
 def projects(project_type):
-    return render_template("website/project_list.html", project_type=project_type)
+    if project_type == "projects":
+        projects = db.session.execute(db.select(Project)).all()
+    else:
+        projects = db.session.execute(db.select(Project)).all()
+    return render_template(
+        "website/project_list.html",
+        project_type=project_type,
+        projects=projects,
+    )
 
 
 @blueprint.get("/projects/<slug>")
