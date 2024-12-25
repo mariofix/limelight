@@ -5,7 +5,7 @@ import requests
 from .version import __version__
 
 
-def fetch_pypi_data(url):
+def fetch_project_data(url):
     return requests.get(url, headers={"x-user-agent": f"limelight/{__version__}"})
 
 
@@ -38,13 +38,14 @@ def create_project(db, project_info: dict):
     new_project = Project(slug=project_info["slug"])
     if project_info["origen"] == "pypi":
         new_project.pypi_slug = new_project.slug
-        data = fetch_pypi_data(new_project.pypi_json_url())
-        new_project.pypi_data = data.json()
+        pypi_data = fetch_project_data(new_project.pypi_json_url())
+        new_project.pypi_data = pypi_data.json()
         new_project.pypi_data_date = datetime.datetime.now()
-
     elif project_info["origen"] == "anaconda":
         new_project.conda_slug = new_project.slug
-
+        conda_data = fetch_project_data(new_project.conda_json_url())
+        new_project.pypi_data = conda_data.json()
+        new_project.pypi_data_date = datetime.datetime.now()
     else:
         new_project.source_url = new_project.slug
 

@@ -80,7 +80,7 @@ class Project(db.Model, TimestampMixin):
         return f"https://pypi.org/pypi/{self.pypi_slug}/json"
 
     def conda_json_url(self) -> str:
-        return f"https://anaconda.org/{self.conda_slug}.json"
+        return f"https://api.anaconda.org/package/{self.conda_slug}"
 
 
 @dataclass
