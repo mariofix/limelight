@@ -84,7 +84,12 @@ def create_app(settings_file: str | None = None) -> Flask:
 
     @app.get("/robots.txt")
     def robots():
-        return "User-agent: * \nAllow: / \n\nSitemap: https://flaskpackages.pythonanywhere.com/sitemap.xml"
+        return " \
+User-agent: * \n \
+Allow: / \n\n \
+Sitemap: https://flaskpackages.pythonanywhere.com/sitemap-projects.xml\n \
+Sitemap: https://flaskpackages.pythonanywhere.com/sitemap.xml \
+        "
 
     # Sitemap
     sitemap = Sitemap()

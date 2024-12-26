@@ -55,7 +55,7 @@ http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">'
     )
     for project in projects:
         sitemap = (
-            f"{sitemap}\n<url><loc>https://flaskprojects.pythonanywhere.com/projects/{project[0].slug}</loc></url>"
+            f"{sitemap}\n<url><loc>https://flaskpackages.pythonanywhere.com/projects/{project[0].slug}</loc></url>"
         )
     sitemap = f"{sitemap}\n</urlset>"
     return Response(sitemap, mimetype="application/xml")
