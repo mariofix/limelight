@@ -2,7 +2,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = ""
-DEBUG = True
+DEBUG = False
 LOG_LEVEL = "DEBUG" if DEBUG else "INFO"
 TRUSTED_HOSTS = ["tardis.local", "flaskpackages.pythonanywhere.com"]
 SESSION_COOKIE_NAME = "limelight"
@@ -70,9 +70,9 @@ MAIL_TIMEOUT = 5
 MAIL_USE_LOCALTIME = True
 
 SITEMAP_INCLUDE_RULES_WITHOUT_PARAMS = True
+SITEMAP_URL_SCHEME = "https"
 SITEMAP_IGNORE_ENDPOINTS = [
     "admin.index",
-    "admin.static",
     "security.logout",
     "security.login",
     "security.verify",
@@ -95,4 +95,6 @@ SITEMAP_IGNORE_ENDPOINTS = [
     "project.create_view",
     "project.edit_view",
     "project.details_view",
+    "debugtoolbar.sql_select",
+    "robots",
 ]

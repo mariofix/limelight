@@ -62,10 +62,6 @@ def create_app(settings_file: str | None = None) -> Flask:
             "get_url": url_for,
         }
 
-    # Sitemap
-    sitemap = Sitemap()
-    sitemap.init_app(app)
-
     # Flask-Babel
     babel = Babel()
 
@@ -89,5 +85,9 @@ def create_app(settings_file: str | None = None) -> Flask:
     @app.get("/robots.txt")
     def robots():
         return "User-agent: * \nAllow: / \n\nSitemap: https://flaskpackages.pythonanywhere.com/sitemap.xml"
+
+    # Sitemap
+    sitemap = Sitemap()
+    sitemap.init_app(app)
 
     return app

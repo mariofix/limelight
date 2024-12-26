@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, Response, render_template
 
 from ..database import db
 from ..forms import NewProjectForm
@@ -41,3 +41,21 @@ def get_project(slug):
 def new_project():
     form = NewProjectForm()
     return render_template("website/new_project.html", form=form)
+
+
+@blueprint.get("/sitemap-projects.xml")
+def project_sitemap():
+    projects = db.session.execute(db.select(Project)).all()
+    sitemap: str = (
+        '<?xml version="1.0" encoding="utf-8"?>\n\
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" \
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
+xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 \
+http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">'
+    )
+    for project in projects:
+        sitemap = (
+            f"{sitemap}\n<url><loc>https://flaskprojects.pythonanywhere.com/projects/{project[0].slug}</loc></url>"
+        )
+    sitemap = f"{sitemap}\n</urlset>"
+    return Response(sitemap, mimetype="application/xml")
