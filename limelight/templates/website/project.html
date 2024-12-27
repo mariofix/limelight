@@ -25,16 +25,14 @@
     <!-- Header Section -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
-        <h1 class="h3 mb-0">{{ project.title }}</h1>
+        <h1 class="h3 mb-0">{{ project.title }} <button class="btn btn-outline-secondary btn-sm text-small">{{ project.category.value }}</button></h1>
         <p class="text-muted small mb-0">{{ project.description }}</p>
       </div>
       <div class="d-flex gap-2">
-        <button class="btn btn-outline-primary btn-sm">
-          <i class="bi bi-bell me-1"></i> Notifications
-        </button>
-        <button class="btn btn-primary btn-sm">
-          <i class="bi bi-plus me-1"></i> New Project
-        </button>
+        <span class="btn border-0 btn-sm">Supported Versions:</span>
+        {% for python_version in project.supported_python %}
+        <button class="btn btn-outline-success btn-sm">{{ python_version }}</button>
+        {% endfor %}
       </div>
     </div>
 
@@ -45,7 +43,7 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h6 class="text-muted mb-2">Total Users</h6>
+                <h6 class="text-muted mb-2">Stat 1</h6>
                 <h3 class="mb-0">8,549</h3>
                 <small class="text-success">
                   <i class="bi bi-arrow-up me-1"></i>12.5%
@@ -63,8 +61,8 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h6 class="text-muted mb-2">Revenue</h6>
-                <h3 class="mb-0">$24,890</h3>
+                <h6 class="text-muted mb-2">Stat 2</h6>
+                <h3 class="mb-0">24,890</h3>
                 <small class="text-success">
                   <i class="bi bi-arrow-up me-1"></i>8.2%
                 </small>
@@ -81,7 +79,7 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h6 class="text-muted mb-2">Orders</h6>
+                <h6 class="text-muted mb-2">Stat 3</h6>
                 <h3 class="mb-0">1,236</h3>
                 <small class="text-danger">
                   <i class="bi bi-arrow-down me-1"></i>3.1%
@@ -99,14 +97,14 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h6 class="text-muted mb-2">Growth</h6>
+                <h6 class="text-muted mb-2">Stat 4</h6>
                 <h3 class="mb-0">15.3%</h3>
                 <small class="text-success">
                   <i class="bi bi-arrow-up me-1"></i>5.8%
                 </small>
               </div>
               <div class="bg-info bg-opacity-10 p-3 rounded">
-                <i class="bi fa-graph-up text-info"></i>
+                <i class="bi bi-graph-up-arrow text-info"></i>
               </div>
             </div>
           </div>
@@ -121,70 +119,39 @@
         <div class="card border-0 shadow-sm">
           <div class="card-header bg-white border-0">
             <div class="d-flex justify-content-between align-items-center">
-              <h5 class="mb-0">Recent Activity</h5>
-              <button class="btn btn-link text-decoration-none p-0">View All</button>
+              <h5 class="mb-0">Project</h5>
+              <button class="btn btn-sm">Button</button>
             </div>
           </div>
           <div class="card-body">
-            <div class="timeline">
-              <div class="d-flex mb-3">
-                <div class="flex-shrink-0">
-                  <div class="bg-primary bg-opacity-10 p-2 rounded">
-                    <i class="bi bi-person.add text-primary"></i>
-                  </div>
-                </div>
-                <div class="flex-grow-1 ms-3">
-                  <h6 class="mb-1">New user registered</h6>
-                  <p class="text-muted small mb-0">2 minutes ago</p>
-                </div>
-              </div>
-              <div class="d-flex mb-3">
-                <div class="flex-shrink-0">
-                  <div class="bg-success bg-opacity-10 p-2 rounded">
-                    <i class="bi bi-check text-success"></i>
-                  </div>
-                </div>
-                <div class="flex-grow-1 ms-3">
-                  <h6 class="mb-1">Project milestone completed</h6>
-                  <p class="text-muted small mb-0">1 hour ago</p>
-                </div>
-              </div>
-              <div class="d-flex">
-                <div class="flex-shrink-0">
-                  <div class="bg-warning bg-opacity-10 p-2 rounded">
-                    <i class="bi bi-bell text-warning"></i>
-                  </div>
-                </div>
-                <div class="flex-grow-1 ms-3">
-                  <h6 class="mb-1">New feature release</h6>
-                  <p class="text-muted small mb-0">2 hours ago</p>
-                </div>
-              </div>
-            </div>
+
+            <pre style="height: 800px;"><code class="language-json">{{ project.pypi_data|tojson(indent=1) }}</code></pre>
           </div>
         </div>
       </div>
 
-      <!-- Quick Actions -->
       <div class="col-12 col-lg-4">
         <div class="card border-0 shadow-sm">
           <div class="card-header bg-white border-0">
-            <h5 class="mb-0">Quick Actions</h5>
+            <h5 class="mb-0">Links</h5>
           </div>
           <div class="card-body">
             <div class="d-grid gap-2">
-              <button class="btn btn-outline-primary">
-                <i class="bi bi-plus me-2"></i> Add New Project
-              </button>
-              <button class="btn btn-outline-success">
-                <i class="bi bi-person me-2"></i> Manage Team
-              </button>
-              <button class="btn btn-outline-info">
-                <i class="bi bi-shield-lock me-2"></i> Settings
-              </button>
-              <button class="btn btn-outline-warning">
-                <i class="bi bi-database me-2"></i> Generate Report
-              </button>
+              <a href="https://pypi.org/project/{{ project.pypi_slug }}" class="btn btn-outline-primary" role="button">
+                <i class="bi bi-plus me-2"></i> PyPi Repo
+              </a>
+              <a href="https://anaconda.org/{{ project.conda_slug }}" class="btn btn-outline-success" role="button">
+                <i class="bi bi-person me-2"></i> Conda Repo
+              </a>
+              <a href="{{ project.project_url }}" class="btn btn-outline-info" role="button">
+                <i class="bi bi-shield-lock me-2"></i> Project URL
+              </a>
+              <a href="{{ project.documentation_url }}" class="btn btn-outline-info" role="button">
+                <i class="bi bi-shield-lock me-2"></i> Documentation URL
+              </a>
+              <a href="{{ project.source_url }}" class="btn btn-outline-warning" role="button">
+                <i class="bi bi-database me-2"></i> Source URL
+              </a>
             </div>
           </div>
         </div>
@@ -193,3 +160,29 @@
   </div>
 </section>
 {% endblock content %}
+
+{% block post_js %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+
+<script>hljs.highlightAll();</script>
+{% endblock post_js%}
+
+{% block post_css%}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+<style>
+  pre {
+    white-space: pre-wrap;
+    /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;
+    /* Mozilla, since 1999 */
+    white-space: -pre-wrap;
+    /* Opera 4-6 */
+    white-space: -o-pre-wrap;
+    /* Opera 7 */
+    word-wrap: break-word;
+    /* Internet Explorer 5.5+ */
+  }
+</style>
+{% endblock post_css%}

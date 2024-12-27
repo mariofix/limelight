@@ -23,6 +23,7 @@ dependencies = [
     "flask-security[babel,common,fsqla]>=5.5.2",
     "setuptools>=75.6.0",
     "flask-limiter>=3.9.2",
+    "packaging>=24.2",
 ]
 
 [project.optional-dependencies]
