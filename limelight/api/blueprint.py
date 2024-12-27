@@ -3,11 +3,13 @@ from flask import Blueprint, jsonify
 from .. import utils
 from ..database import db
 from ..forms import NewProjectForm
+from ..limiter import limiter
 
 blueprint = Blueprint("api", __name__)
 
 
 @blueprint.post("/new-project/")
+@limiter.limit("1 per minute")
 def new_project():
     form = NewProjectForm()
     if form.validate_on_submit():

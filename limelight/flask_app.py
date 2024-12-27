@@ -10,6 +10,7 @@ from .admin.site import admin_site
 from .api import blueprint as api
 from .crud import get_context_data
 from .database import db, migrations
+from .limiter import limiter
 from .mail import mail
 from .models import Role, User
 from .website import blueprint as website
@@ -35,6 +36,9 @@ def create_app(settings_file: str | None = None) -> Flask:
 
     # FLask-Admin
     admin_site.init_app(app)
+
+    # Flask-Limiter
+    limiter.init_app(app)
 
     # Flask-Security
     # oauth = OAuth(app)

@@ -8,7 +8,7 @@ from wtforms import fields
 
 from .. import utils
 from ..database import db
-from ..models import Project, ProjectDatalog, User
+from ..models import Project, User
 from .mixins import AdminModelView
 
 
@@ -56,29 +56,23 @@ class RoleAdmin(AppAdmin, AdminModelView):
     icon = "fa-solid fa-list"
 
 
-class DatalogAdmin(AppAdmin, AdminModelView):
-    name = _("Log")
-    name_plural = _("Logs")
-    icon = "bi-list-ul"
-    column_list = ["id", "created_at", "project_id", "origen"]
+class TagAdmin(AppAdmin, AdminModelView):
+    name = _("Tag")
+    name_plural = _("Tags")
+    icon = "fa-solid fa-list"
 
-    @action("process_datalog", "Process Datalog", "The project's data will be updated.")
-    def action_process_datalog(self, ids):
-        data_list = ProjectDatalog.query.filter(ProjectDatalog.id.in_(ids))
-        for data in data_list.all():
-            try:
-                utils.process_datalog(data)
-            except Exception as e:
-                flash(f"{e = }", "error")
-            else:
-                flash(f"Data Processed {data.id}", "info")
+
+class ProjectTagAdmin(AppAdmin, AdminModelView):
+    name = _("Project Tag")
+    name_plural = _("Project Tags")
+    icon = "fa-solid fa-list"
 
 
 class ProjectAdmin(AppAdmin, AdminModelView):
     name = _("Project")
     name_plural = _("Projects")
     icon = "bi-star"
-    column_list = ["slug", "title", "description"]
+    column_list = ["slug", "title", "description", "category", "supported_python"]
 
     @action(
         "fetch_data",
