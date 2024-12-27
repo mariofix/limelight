@@ -9,7 +9,7 @@ from .version import __version__
 
 def expand_requires_python(requires_python, max_python_version="3.13"):
     if not requires_python:
-        raise ValueError("requires_python specifier cannot be empty.")
+        return []
 
     specifier = SpecifierSet(requires_python)
 

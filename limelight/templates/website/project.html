@@ -10,10 +10,10 @@
 <meta name="author" content="{{ project.title }}">
 <meta name="language" content="English">
 <meta name="revisit-after" content="7 days">
-<link rel="canonical" href="https://flaskpackages.pythonanywhere.com/projects/{{ project.slug }}">
+<link rel="canonical" href="https://flaskpackages.pythonanywhere.com/project/{{ project.slug }}">
 <meta property="og:title" content="{{ project.title }}">
 <meta property="og:site_name" content="Flask Packages">
-<meta property="og:url" content="https://flaskpackages.pythonanywhere.com/projects/{{ project.slug }}">
+<meta property="og:url" content="https://flaskpackages.pythonanywhere.com/project/{{ project.slug }}">
 <meta property="og:description" content="{{ project.description }}">
 <meta property="og:type" content="website">
 
@@ -30,9 +30,13 @@
       </div>
       <div class="d-flex gap-2">
         <span class="btn border-0 btn-sm">Supported Versions:</span>
+        {% if project.supported_python %}
         {% for python_version in project.supported_python %}
         <button class="btn btn-outline-success btn-sm">{{ python_version }}</button>
         {% endfor %}
+        {% else %}
+        <button class="btn btn-outline-warning btn-sm">Not Informed</button>
+        {% endif%}
       </div>
     </div>
 
@@ -43,14 +47,17 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h6 class="text-muted mb-2">Stat 1</h6>
-                <h3 class="mb-0">8,549</h3>
-                <small class="text-success">
-                  <i class="bi bi-arrow-up me-1"></i>12.5%
+                <h6 class="text-muted mb-2">Current Version</h6>
+                <h3 class="mb-0">{{ project.pypi_data.info.version }}</h3>
+                <small class="text-danger">
+                  {% if project.pypi_data.info.yanked %}
+                  Yanked
+                  {% endif %}
+                  &nbsp;
                 </small>
               </div>
               <div class="bg-primary bg-opacity-10 p-3 rounded">
-                <i class="bi bi-person text-primary"></i>
+                <i class="bi bi-bell text-primary"></i>
               </div>
             </div>
           </div>

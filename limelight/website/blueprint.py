@@ -54,8 +54,6 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 \
 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">'
     )
     for project in projects:
-        sitemap = (
-            f"{sitemap}\n<url><loc>https://flaskpackages.pythonanywhere.com/projects/{project[0].slug}</loc></url>"
-        )
+        sitemap = f"{sitemap}\n<url><loc>https://flaskpackages.pythonanywhere.com/project/{project[0].slug}</loc><priority>1.00</priority></url>"
     sitemap = f"{sitemap}\n</urlset>"
     return Response(sitemap, mimetype="application/xml")
