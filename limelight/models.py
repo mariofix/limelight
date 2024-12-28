@@ -52,6 +52,7 @@ class Project(db.Model, TimestampMixin):
     title: Mapped[str] = mapped_column(db.String(128), nullable=True, default=None)
     description: Mapped[str] = mapped_column(db.String(2048), nullable=True, default=None)
     category: Mapped[enum.Enum] = mapped_column(Enum(ProjectTypes), nullable=True, default=None)
+
     supported_python: Mapped[JSON] = mapped_column(type_=JSON, nullable=True)
 
     project_url: Mapped[str] = mapped_column(db.String(128), nullable=True, default=None)

@@ -1,40 +1,41 @@
-{% extends "main.html" %}
+{% extends "main.html" %} {% block title%}{{ project.title }} - Flask Packages{%
+endblock title %} {% block meta_content %}
+<meta name="description" content="{{ project.description }}" />
+<meta name="keywords" content="{{ project.description }}" />
+<meta name="robots" content="index, follow" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="author" content="{{ project.title }}" />
+<meta name="language" content="English" />
+<meta name="revisit-after" content="7 days" />
+<link rel="canonical" href="https://flaskpackages.pythonanywhere.com/project/{{ project.slug }}" />
+<meta property="og:title" content="{{ project.title }}" />
+<meta property="og:site_name" content="Flask Packages" />
+<meta property="og:url" content="https://flaskpackages.pythonanywhere.com/project/{{ project.slug }}" />
+<meta property="og:description" content="{{ project.description }}" />
+<meta property="og:type" content="website" />
 
-{% block title%}{{ project.title }} - Flask Packages{% endblock title %}
-
-{% block meta_content %}
-<meta name="description" content="{{ project.description }}">
-<meta name="keywords" content="{{ project.description }}">
-<meta name="robots" content="index, follow">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta name="author" content="{{ project.title }}">
-<meta name="language" content="English">
-<meta name="revisit-after" content="7 days">
-<link rel="canonical" href="https://flaskpackages.pythonanywhere.com/project/{{ project.slug }}">
-<meta property="og:title" content="{{ project.title }}">
-<meta property="og:site_name" content="Flask Packages">
-<meta property="og:url" content="https://flaskpackages.pythonanywhere.com/project/{{ project.slug }}">
-<meta property="og:description" content="{{ project.description }}">
-<meta property="og:type" content="website">
-
-{% endblock meta_content %}
-
-{% block content %}
+{% endblock meta_content %} {% block content %}
 <section class="py-5 bg-light">
   <div class="container">
     <!-- Header Section -->
     <div class="d-flex justify-content-between align-items-center mb-4">
       <div>
-        <h1 class="h3 mb-0">{{ project.title }} <button class="btn btn-outline-secondary btn-sm text-small">{{ project.category.value }}</button></h1>
+        <h1 class="h3 mb-0">
+          {{ project.title }}
+          <button class="btn btn-outline-secondary btn-sm text-small">
+            {{ project.category.value }}
+          </button>
+        </h1>
         <p class="text-muted small mb-0">{{ project.description }}</p>
       </div>
       <div class="d-flex gap-2">
         <span class="btn border-0 btn-sm">Supported Versions:</span>
-        {% if project.supported_python %}
-        {% for python_version in project.supported_python %}
-        <button class="btn btn-outline-success btn-sm">{{ python_version }}</button>
-        {% endfor %}
-        {% else %}
+        {% if project.supported_python %} {% for python_version in
+        project.supported_python %}
+        <button class="btn btn-outline-success btn-sm">
+          {{ python_version }}
+        </button>
+        {% endfor %} {% else %}
         <button class="btn btn-outline-warning btn-sm">Not Informed</button>
         {% endif%}
       </div>
@@ -50,9 +51,7 @@
                 <h6 class="text-muted mb-2">Current Version</h6>
                 <h3 class="mb-0">{{ project.pypi_data.info.version }}</h3>
                 <small class="text-danger">
-                  {% if project.pypi_data.info.yanked %}
-                  Yanked
-                  {% endif %}
+                  {% if project.pypi_data.info.yanked %} Yanked {% endif %}
                   &nbsp;
                 </small>
               </div>
@@ -68,11 +67,9 @@
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h6 class="text-muted mb-2">Stat 2</h6>
-                <h3 class="mb-0">24,890</h3>
-                <small class="text-success">
-                  <i class="bi bi-arrow-up me-1"></i>8.2%
-                </small>
+                <h6 class="text-muted mb-2">Open/Closed Issues</h6>
+                <h3 class="mb-0">34/671</h3>
+                <small class="text-success"> &nbsp; </small>
               </div>
               <div class="bg-success bg-opacity-10 p-3 rounded">
                 <i class="bi bi-currency-dollar text-success"></i>
@@ -122,7 +119,7 @@
     <!-- Main Content Area -->
     <div class="row g-3">
       <!-- Activity Timeline -->
-      <div class="col-12 col-lg-8">
+      <div class="col-12">
         <div class="card border-0 shadow-sm">
           <div class="card-header bg-white border-0">
             <div class="d-flex justify-content-between align-items-center">
@@ -131,34 +128,45 @@
             </div>
           </div>
           <div class="card-body">
-
-            <pre style="height: 800px;"><code class="language-json">{{ project.pypi_data|tojson(indent=1) }}</code></pre>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-12 col-lg-4">
-        <div class="card border-0 shadow-sm">
-          <div class="card-header bg-white border-0">
-            <h5 class="mb-0">Links</h5>
-          </div>
-          <div class="card-body">
-            <div class="d-grid gap-2">
-              <a href="https://pypi.org/project/{{ project.pypi_slug }}" class="btn btn-outline-primary" role="button">
-                <i class="bi bi-plus me-2"></i> PyPi Repo
-              </a>
-              <a href="https://anaconda.org/{{ project.conda_slug }}" class="btn btn-outline-success" role="button">
-                <i class="bi bi-person me-2"></i> Conda Repo
-              </a>
-              <a href="{{ project.project_url }}" class="btn btn-outline-info" role="button">
-                <i class="bi bi-shield-lock me-2"></i> Project URL
-              </a>
-              <a href="{{ project.documentation_url }}" class="btn btn-outline-info" role="button">
-                <i class="bi bi-shield-lock me-2"></i> Documentation URL
-              </a>
-              <a href="{{ project.source_url }}" class="btn btn-outline-warning" role="button">
-                <i class="bi bi-database me-2"></i> Source URL
-              </a>
+            <div class="d-flex align-items-start">
+              <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill" data-bs-target="#v-pills-home" type="button" role="tab" aria-controls="v-pills-home" aria-selected="true">
+                  Project Information
+                </button>
+                <button class="nav-link" id="v-pills-pypidata-tab" data-bs-toggle="pill" data-bs-target="#v-pills-pypidata" type="button" role="tab" aria-controls="v-pills-pypidata" aria-selected="false">
+                  PyPi Raw Data
+                </button>
+                <button class="nav-link" id="v-pills-ghdata-tab" data-bs-toggle="pill" data-bs-target="#v-pills-ghdata" type="button" role="tab" aria-controls="v-pills-ghdata" aria-selected="false">
+                  Github Raw Data
+                </button>
+              </div>
+              <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
+                  <div class="gap-2">
+                    <a href="https://pypi.org/project/{{ project.pypi_slug }}" class="btn btn-outline-primary" role="button">
+                      <i class="bi bi-plus me-2"></i> PyPi Repo
+                    </a>
+                    <a href="https://anaconda.org/{{ project.conda_slug }}" class="btn btn-outline-success" role="button">
+                      <i class="bi bi-person me-2"></i> Conda Repo
+                    </a>
+                    <a href="{{ project.project_url }}" class="btn btn-outline-info" role="button">
+                      <i class="bi bi-shield-lock me-2"></i> Project URL
+                    </a>
+                    <a href="{{ project.documentation_url }}" class="btn btn-outline-info" role="button">
+                      <i class="bi bi-shield-lock me-2"></i> Documentation URL
+                    </a>
+                    <a href="{{ project.source_url }}" class="btn btn-outline-warning" role="button">
+                      <i class="bi bi-database me-2"></i> Source URL
+                    </a>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-pypidata" role="tabpanel" aria-labelledby="v-pills-pypidata-tab" tabindex="0">
+                  <div class="json_tree"></div>
+                </div>
+                <div class="tab-pane fade" id="v-pills-ghdata" role="tabpanel" aria-labelledby="v-pills-ghdata-tab" tabindex="0">
+                  <div class="json_tree_gh"></div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -166,20 +174,21 @@
     </div>
   </div>
 </section>
-{% endblock content %}
-
-{% block post_js %}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/json.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
-
-<script>hljs.highlightAll();</script>
-{% endblock post_js%}
-
-{% block post_css%}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+{% endblock content %} {% block post_js %}
+<script type="text/javascript" src="{{ url_for('static', filename='js/jsonview.js', v=app_version)}}"></script>
+<script>
+  const data = {{ project.pypi_data| tojson }};
+  const gh_data = {{ project.git_data| tojson }};
+  const tree = jsonview.create(data);
+  const tree_gh = jsonview.create(gh_data);
+  jsonview.render(tree, document.querySelector(".json_tree"));
+  jsonview.render(tree_gh, document.querySelector(".json_tree_gh"));
+  <!-- jsonview.expand(tree); -->
+</script>
+{% endblock post_js%} {% block post_css%}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" />
 <style>
-  pre {
+  .json_tree {
     white-space: pre-wrap;
     /* Since CSS 2.1 */
     white-space: -moz-pre-wrap;

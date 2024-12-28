@@ -2,7 +2,7 @@ from flask import Blueprint, Response, render_template
 
 from ..database import db
 from ..forms import NewProjectForm
-from ..models import Project
+from ..models import Project, Tag
 
 blueprint = Blueprint("website", __name__)
 
@@ -19,7 +19,7 @@ def help():
 
 @blueprint.get("/<any(application,framework,library,module,project):project_type>/")
 def projects(project_type):
-    if project_type == "projects":
+    if project_type == "project":
         projects = db.session.execute(db.select(Project)).all()
     else:
         projects = db.session.execute(db.select(Project).where(Project.category == project_type)).all()
@@ -35,6 +35,12 @@ def projects(project_type):
 def get_project(slug):
     project = db.session.execute(db.select(Project).where(Project.slug == slug)).first()
     return render_template("website/project.html", project=project[0])
+
+
+@blueprint.get("/tag/<slug>")
+def get_tag(slug):
+    tag = db.session.execute(db.select(Tag).where(Tag.slug == slug)).first()
+    return render_template("website/tag.html", tag=tag[0])
 
 
 @blueprint.route("/new-project/", methods=["GET"])

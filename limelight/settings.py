@@ -7,7 +7,7 @@ LOG_LEVEL = "DEBUG" if DEBUG else "INFO"
 TRUSTED_HOSTS = ["tardis.local", "flaskpackages.pythonanywhere.com"]
 SESSION_COOKIE_NAME = "limelight"
 ADMIN_BASE_URL = "admin"
-
+GITHUB_TOKEN = ""
 SQLALCHEMY_DATABASE_URI = ""
 SQLALCHEMY_RECORD_QUERIES = DEBUG
 SQLALCHEMY_ECHO = False

@@ -18,7 +18,7 @@
   <div class="container">
     <div class="row text-center">
       <div class="col-md-4 mb-3">
-        <a href="#" class="card shadow-sm text-decoration-none">
+        <a href="{{ url_for('website.get_tag', slug='authentication') }}" class="card shadow-sm text-decoration-none">
           <div class="card-body">
             <i class="bi bi-person-lock" style="font-size: 2rem; color: var(--primary)"></i>
             <h5 class="card-title mt-2">I need user authentication</h5>
@@ -29,7 +29,7 @@
         </a>
       </div>
       <div class="col-md-4 mb-3">
-        <a href="#" class="card shadow-sm text-decoration-none">
+        <a href="{{ url_for('website.get_tag', slug='database') }}" class="card shadow-sm text-decoration-none">
           <div class="card-body">
             <i class="bi bi-database" style="font-size: 2rem; color: var(--success)"></i>
             <h5 class="card-title mt-2">I need database support</h5>
@@ -40,7 +40,7 @@
         </a>
       </div>
       <div class="col-md-4 mb-3">
-        <a href="#" class="card shadow-sm text-decoration-none">
+        <a href="{{ url_for('website.get_tag', slug='api') }}" class="card shadow-sm text-decoration-none">
           <div class="card-body">
             <i class="bi bi-plug" style="font-size: 2rem; color: var(--info)"></i>
             <h5 class="card-title mt-2">I need to build an API</h5>
@@ -49,7 +49,7 @@
         </a>
       </div>
       <div class="col-md-4 mb-3">
-        <a href="#" class="card shadow-sm text-decoration-none">
+        <a href="{{ url_for('website.get_tag', slug='forms') }}" class="card shadow-sm text-decoration-none">
           <div class="card-body">
             <i class="bi bi-ui-checks" style="font-size: 2rem; color: var(--warning)"></i>
             <h5 class="card-title mt-2">I need form handling</h5>
@@ -60,7 +60,7 @@
         </a>
       </div>
       <div class="col-md-4 mb-3">
-        <a href="#" class="card shadow-sm text-decoration-none">
+        <a href="{{ url_for('website.get_tag', slug='security') }}" class="card shadow-sm text-decoration-none">
           <div class="card-body">
             <i class="bi bi-shield-lock" style="font-size: 2rem; color: var(--danger)"></i>
             <h5 class="card-title mt-2">I need security features</h5>
@@ -69,7 +69,7 @@
         </a>
       </div>
       <div class="col-md-4 mb-3">
-        <a href="#" class="card shadow-sm text-decoration-none">
+        <a href="{{ url_for('website.get_tag', slug='file-uploads') }}" class="card shadow-sm text-decoration-none">
           <div class="card-body">
             <i class="bi bi-box-arrow-up" style="font-size: 2rem; color: var(--secondary)"></i>
             <h5 class="card-title mt-2">I need file uploads</h5>

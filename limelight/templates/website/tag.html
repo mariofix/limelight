@@ -1,0 +1,33 @@
+{% extends "main.html" %}
+
+{% block title%}{{ tag.title }} - Flask Packages{% endblock title %}
+
+{% block meta_content %}
+<meta name="description" content="{{ tag.description }}">
+<meta name="robots" content="index, follow">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="author" content="{{ tag.title }}">
+<meta name="language" content="English">
+<meta name="revisit-after" content="7 days">
+<link rel="canonical" href="https://flaskpackages.pythonanywhere.com/tag/{{ tag.slug }}">
+<meta property="og:title" content="{{ tag.title }}">
+<meta property="og:site_name" content="Flask Packages">
+<meta property="og:url" content="https://flaskpackages.pythonanywhere.com/tag/{{ tag.slug }}">
+<meta property="og:description" content="{{ tag.description }}">
+<meta property="og:type" content="website">
+
+{% endblock meta_content %}
+
+{% block content %}
+<section class="py-5 bg-light">
+  <div class="container">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <div>
+        <h1 class="h3 mb-0">{{ tag.title }} </h1>
+        <p class="text-muted small mb-0">{{ tag.description }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}
