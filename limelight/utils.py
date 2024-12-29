@@ -72,6 +72,8 @@ def fetch_project_info(project):
 
 
 def update_project_metadata(project: Any):
+    import re
+
     from .database import db
 
     # Pypi takes precedence, since conda-forge is not up-to-date
@@ -91,6 +93,13 @@ def update_project_metadata(project: Any):
 
         project.license = pypi_info.get("license", None)
 
+        git_slug = None
+        for _, link in pypi_info.get("project_urls").items():
+            if match := re.match(r"^https://(github|gitlab)\.com/([^/]+/[^/]+?)/$", link):
+                platform, repo_path = match.groups()
+                git_slug = f"{platform}:{repo_path}"
+                break
+        project.source_slug = git_slug
     # Not needed, left here for future-proofing
     # if project.conda_data:
     #     conda_info = project.conda_data
@@ -98,12 +107,21 @@ def update_project_metadata(project: Any):
     #     pass
 
     # TODO: Update Stats from here
+    repo_info = False
     if project.source_data:
         repo_info = project.source_data
     if repo_info:
         # project.creation_date = repo_info.get("created_at", None)
+        if not project.title:
+            project.title = repo_info.get("name", None)
+        if not project.description:
+            project.description = repo_info.get("description", None)
+        if not project.project_url:
+            project.project_url = repo_info.get("homepage", None)
         if not project.license:
             project.license = repo_info.get("license").get("spdx_id", None)
+        if not project.source_url:
+            project.source_url = repo_info.get("html_url", None)
 
     db.session.commit()
 
