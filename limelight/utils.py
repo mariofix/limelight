@@ -92,10 +92,10 @@ def update_project_metadata(project: Any):
         project.license = pypi_info.get("license", None)
 
     # Not needed, left here for future-proofing
-    if project.conda_data:
-        conda_info = False
-    if conda_info:
-        pass
+    # if project.conda_data:
+    #     conda_info = project.conda_data
+    # if conda_info:
+    #     pass
 
     # TODO: Update Stats from here
     if project.source_data:
