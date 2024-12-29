@@ -15,7 +15,7 @@
     <meta name="robots" content="index, follow">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="author" content="mariofix">
-    <link rel="canonical" href="https://flaskpackages.pythonanywhere.com/" />
+    <link rel="canonical" href="https://flaskpackages.pythonanywhere.com" />
     <meta property="og:title" content="Flask Packages">
     <meta property="og:site_name" content="Flask Packages">
     <meta property="og:url" content="https://flaskpackages.pythonanywhere.com" />
@@ -37,7 +37,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css">
+
     {% block post_css %}
     {% endblock post_css %}
     {% endblock head %}
@@ -45,6 +45,7 @@
 
   <body>
     <!-- Navigation -->
+
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
       <div class="container">
         <a class="navbar-brand" href="{{ url_for('website.home') }}">
@@ -79,19 +80,23 @@
         </div>
       </div>
     </nav>
+
+
     {% block content %}
 
     {% endblock content %}
 
+
     {% block footer %}
     <!-- Footer -->
-    <footer class="bg-dark text-white text-center py-3">
+    <footer class="footer mt-auto bg-dark py-3 text-white text-center">
+
       <div class="container">
-        <p>&copy; 2024 Limelight - Flask Extensions Showcase</p>
+        <p>&copy; 2024 Limelight - Find the Flask Extension you were not looking for.</p>
         <div>
-          <a href="#" class="text-white mx-2">Privacy Policy</a>
-          <a href="#" class="text-white mx-2">Terms of Service</a>
-          <a href="#" class="text-white mx-2">Contact</a>
+          <a href="https://github.com/mariofix/limelight/" class="text-white mx-2">Source Code</a>
+          <a href="{{ url_for('website.home') }}" class="text-white mx-2">Privacy Policy</a>
+          <a href="{{ url_for('website.home') }}" class="text-white mx-2">Acknowledgments</a>
         </div>
       </div>
     </footer>

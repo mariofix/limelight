@@ -60,44 +60,41 @@ class TagAdmin(AppAdmin, AdminModelView):
     name = _("Tag")
     name_plural = _("Tags")
     icon = "fa-solid fa-list"
-
-
-class ProjectTagAdmin(AppAdmin, AdminModelView):
-    name = _("Project Tag")
-    name_plural = _("Project Tags")
-    icon = "fa-solid fa-list"
+    column_list = ["title", "description", "projects"]
 
 
 class ProjectAdmin(AppAdmin, AdminModelView):
     name = _("Project")
     name_plural = _("Projects")
     icon = "bi-star"
-    column_list = ["slug", "title", "description", "category", "supported_python"]
+    column_list = ["slug", "tags", "category", "supported_python"]
 
     @action(
         "fetch_data",
         _("Fetch Project Data"),
-        _("Fetch the latest data from their repositories. Note: no post-data processing in this stage."),
+        _("Fetch the latest data from their repositories. \nNote: no post-data processing in this stage."),
     )
     def action_fetch_data(self, ids):
 
         projects = Project.query.filter(Project.id.in_(ids))
         for project in projects.all():
-            if project.pypi_slug:
-                data = utils.fetch_pypi_data(project.pypi_json_url())
-                project.pypi_data = data.json()
-                project.pypi_data_date = datetime.datetime.now()
-                db.session.commit()
+            utils.fetch_project_info(project)
             flash(f"Data Retrieved: {project}", "info")
 
     @action(
         "update_data",
         _("Update Project Data"),
-        _("Update project info from pypi_data and conda_data."),
+        _("Update project metadada from all available sources."),
     )
     def action_update_data(self, ids):
 
         projects = Project.query.filter(Project.id.in_(ids))
         for project in projects.all():
-            utils.process_pypi_data(project)
+            utils.update_project_metadata(project)
             flash(f"Data Processed: {project}", "info")
+
+
+class ProjectStatsAdmin(AppAdmin, AdminModelView):
+    name = _("Project Stats")
+    icon = "fa-solid fa-list"
+    column_list = ["source", "project", "date_pushed", "downloads_m"]

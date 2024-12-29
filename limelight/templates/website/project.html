@@ -48,15 +48,15 @@ endblock title %} {% block meta_content %}
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h6 class="text-muted mb-2">Current Version</h6>
+                <h6 class="text-muted mb-2">Current Release</h6>
                 <h3 class="mb-0">{{ project.pypi_data.info.version }}</h3>
-                <small class="text-danger">
-                  {% if project.pypi_data.info.yanked %} Yanked {% endif %}
-                  &nbsp;
-                </small>
+                <small class="text-success">8 days ago </small>
+                {% if project.pypi_data.info.yanked %}
+                - <small class="text-danger"> Yanked!</small>
+                {% endif %}
               </div>
               <div class="bg-primary bg-opacity-10 p-3 rounded">
-                <i class="bi bi-bell text-primary"></i>
+                <i class="bi bi-boxes text-primary"></i>
               </div>
             </div>
           </div>
@@ -69,10 +69,10 @@ endblock title %} {% block meta_content %}
               <div>
                 <h6 class="text-muted mb-2">Open/Closed Issues</h6>
                 <h3 class="mb-0">34/671</h3>
-                <small class="text-success"> &nbsp; </small>
+                <small class="text-danger"> +14% open issues than last month. </small>
               </div>
               <div class="bg-success bg-opacity-10 p-3 rounded">
-                <i class="bi bi-currency-dollar text-success"></i>
+                <i class="bi bi-bug text-success"></i>
               </div>
             </div>
           </div>
@@ -83,10 +83,10 @@ endblock title %} {% block meta_content %}
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h6 class="text-muted mb-2">Stat 3</h6>
-                <h3 class="mb-0">1,236</h3>
+                <h6 class="text-muted mb-2">Project Age</h6>
+                <h3 class="mb-0">2 years</h3>
                 <small class="text-danger">
-                  <i class="bi bi-arrow-down me-1"></i>3.1%
+                  &nbsp;
                 </small>
               </div>
               <div class="bg-warning bg-opacity-10 p-3 rounded">
@@ -101,10 +101,10 @@ endblock title %} {% block meta_content %}
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h6 class="text-muted mb-2">Stat 4</h6>
-                <h3 class="mb-0">15.3%</h3>
+                <h6 class="text-muted mb-2">Last Push</h6>
+                <h3 class="mb-0">17 days ago</h3>
                 <small class="text-success">
-                  <i class="bi bi-arrow-up me-1"></i>5.8%
+                  &nbsp;
                 </small>
               </div>
               <div class="bg-info bg-opacity-10 p-3 rounded">
@@ -124,7 +124,7 @@ endblock title %} {% block meta_content %}
           <div class="card-header bg-white border-0">
             <div class="d-flex justify-content-between align-items-center">
               <h5 class="mb-0">Project</h5>
-              <button class="btn btn-sm">Button</button>
+              <button class="btn btn-sm">Button here</button>
             </div>
           </div>
           <div class="card-body">
@@ -138,6 +138,9 @@ endblock title %} {% block meta_content %}
                 </button>
                 <button class="nav-link" id="v-pills-ghdata-tab" data-bs-toggle="pill" data-bs-target="#v-pills-ghdata" type="button" role="tab" aria-controls="v-pills-ghdata" aria-selected="false">
                   Github Raw Data
+                </button>
+                <button class="nav-link" id="v-pills-anadata-tab" data-bs-toggle="pill" data-bs-target="#v-pills-anadata" type="button" role="tab" aria-controls="v-pills-anadata" aria-selected="false">
+                  Anaconda Raw Data
                 </button>
               </div>
               <div class="tab-content" id="v-pills-tabContent">
@@ -166,6 +169,9 @@ endblock title %} {% block meta_content %}
                 <div class="tab-pane fade" id="v-pills-ghdata" role="tabpanel" aria-labelledby="v-pills-ghdata-tab" tabindex="0">
                   <div class="json_tree_gh"></div>
                 </div>
+                <div class="tab-pane fade" id="v-pills-anadata" role="tabpanel" aria-labelledby="v-pills-anadata-tab" tabindex="0">
+                  <div class="json_tree_ana"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -176,29 +182,16 @@ endblock title %} {% block meta_content %}
 </section>
 {% endblock content %} {% block post_js %}
 <script type="text/javascript" src="{{ url_for('static', filename='js/jsonview.js', v=app_version)}}"></script>
-<script>
+<script type="text/javascript">
   const data = {{ project.pypi_data| tojson }};
-  const gh_data = {{ project.git_data| tojson }};
+  const gh_data = {{ project.source_data| tojson }};
+  const ana_data = {{ project.conda_data| tojson }};
   const tree = jsonview.create(data);
   const tree_gh = jsonview.create(gh_data);
+  const tree_ana = jsonview.create(ana_data);
   jsonview.render(tree, document.querySelector(".json_tree"));
   jsonview.render(tree_gh, document.querySelector(".json_tree_gh"));
+  jsonview.render(tree_ana, document.querySelector(".json_tree_ana"));
   <!-- jsonview.expand(tree); -->
 </script>
-{% endblock post_js%} {% block post_css%}
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css" />
-<style>
-  .json_tree {
-    white-space: pre-wrap;
-    /* Since CSS 2.1 */
-    white-space: -moz-pre-wrap;
-    /* Mozilla, since 1999 */
-    white-space: -pre-wrap;
-    /* Opera 4-6 */
-    white-space: -o-pre-wrap;
-    /* Opera 7 */
-    word-wrap: break-word;
-    /* Internet Explorer 5.5+ */
-  }
-</style>
-{% endblock post_css%}
+{% endblock post_js%}

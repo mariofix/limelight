@@ -1,4 +1,5 @@
 import datetime
+from typing import Any
 
 import requests
 from packaging.specifiers import SpecifierSet
@@ -26,21 +27,116 @@ def expand_requires_python(requires_python, max_python_version="3.13"):
 
 
 def fetch_project_data(url):
-    return requests.get(url, headers={"x-user-agent": f"limelight/{__version__}"})
+    if not url:
+        return None
+    return requests.get(url, headers={"user-agent": f"limelight/{__version__}"})
 
 
-def fetch_github_api(github_slug):
+def fetch_github_api(url):
+    if not url:
+        return None
     from flask import current_app
 
     with current_app.app_context():
-        url = f"https://api.github.com/repos/{github_slug}"
         return requests.get(
             url,
             headers={
                 "user-agent": f"limelight/{__version__}",
                 "Authorization": f"Bearer {current_app.config['GITHUB_TOKEN']}",
+                "Accept": "application/vnd.github+json",
+                "X-GitHub-Api-Version": "2022-11-28",
             },
         )
+
+
+def fetch_project_info(project):
+    from .database import db
+
+    pypi_data = fetch_project_data(project.pypi_json_url())
+    if pypi_data:
+        project.pypi_data = pypi_data.json() if pypi_data else None
+        project.pypi_data_date = datetime.datetime.now()
+
+    conda_data = fetch_project_data(project.conda_json_url())
+    if conda_data:
+        project.conda_data = conda_data.json() if conda_data else None
+        project.conda_data_date = datetime.datetime.now()
+
+    github_data = fetch_github_api(project.github_json_url())
+    if github_data:
+        project.source_data = github_data.json() if github_data else None
+        project.source_data_date = datetime.datetime.now()
+
+    db.session.commit()
+    return project
+
+
+def update_project_metadata(project: Any):
+    from .database import db
+
+    # Pypi takes precedence, since conda-forge is not up-to-date
+    # Only use anaconda to provide instructions on installation
+    if project.pypi_data:
+        pypi_info = project.pypi_data.get("info", None)
+
+    if pypi_info:
+        project.title = pypi_info.get("name", None)
+        project.description = pypi_info.get("summary", None)
+        project.project_url = pypi_info.get("project_url", None)
+        project.supported_python = expand_requires_python(pypi_info.get("requires_python"))
+
+        project.docs_url = pypi_info.get("docs_url", None)
+        project.readme = pypi_info.get("description", None)
+        project.readme_type = pypi_info.get("description_content_type", None)
+
+        project.license = pypi_info.get("license", None)
+
+    # Not needed, left here for future-proofing
+    if project.conda_data:
+        conda_info = False
+    if conda_info:
+        pass
+
+    # TODO: Update Stats from here
+    if project.source_data:
+        repo_info = project.source_data
+    if repo_info:
+        # project.creation_date = repo_info.get("created_at", None)
+        if not project.license:
+            project.license = repo_info.get("license").get("spdx_id", None)
+
+    db.session.commit()
+
+
+def project_exists(db, slug: str):
+    from .models import Project
+
+    p = db.session.execute(db.select(Project).where(Project.slug == slug)).first()
+    return True if p else False
+
+
+def create_project(db, project_info: dict):
+    import re
+
+    from .models import Project
+
+    new_project = Project(slug=project_info["slug"])
+    if project_info["origen"] == "pypi":
+        new_project.pypi_slug = new_project.slug
+    elif project_info["origen"] == "anaconda":
+        new_project.conda_slug = new_project.slug
+    elif project_info["origen"] == "git":
+        if match := re.match(
+            r"^https://(github|gitlab)\.com/([^/]+/[^/]+?)\.git$",
+            new_project.slug,
+        ):
+            platform, repo_path = match.groups()
+            new_project.source_slug = f"{platform}:{repo_path}"
+
+    db.session.add(new_project)
+    db.session.commit()
+
+    return new_project
 
 
 def guess_git(project_info):
@@ -58,9 +154,6 @@ def guess_git(project_info):
         if k.find("ource") >= 0:
             link = l
             break
-        # if l  and (l.startswith("https://github.com") or l.startswith("https://gitlab.com")):
-
-    data = link.split("/")
 
     if link.endswith("/"):
         return f"{link[:-1]}.git", link, f"{link[:-1]}.git".replace("https://github.com/", "").replace(".git", "")
@@ -90,33 +183,3 @@ def process_pypi_data(project):
     project.git_data_date = datetime.datetime.now()
     db.session.commit()
     return project
-
-
-def project_exists(db, slug: str):
-    from .models import Project
-
-    p = db.session.execute(db.select(Project).where(Project.slug == slug)).first()
-    return True if p else False
-
-
-def create_project(db, project_info: dict):
-    from .models import Project
-
-    new_project = Project(slug=project_info["slug"])
-    if project_info["origen"] == "pypi":
-        new_project.pypi_slug = new_project.slug
-        pypi_data = fetch_project_data(new_project.pypi_json_url())
-        new_project.pypi_data = pypi_data.json()
-        new_project.pypi_data_date = datetime.datetime.now()
-    elif project_info["origen"] == "anaconda":
-        new_project.conda_slug = new_project.slug
-        conda_data = fetch_project_data(new_project.conda_json_url())
-        new_project.pypi_data = conda_data.json()
-        new_project.pypi_data_date = datetime.datetime.now()
-    else:
-        new_project.source_url = new_project.slug
-
-    db.session.add(new_project)
-    db.session.commit()
-
-    return new_project
