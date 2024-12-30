@@ -30,4 +30,39 @@
     </div>
   </div>
 </section>
+
+<section class="bg-light">
+  <div class="container">
+    <div class="row g-3 mb-4">
+      <div class="col-12">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Project Name</th>
+              <th>Python Version</th>
+              <th>Flask Version</th>
+              <th>First Release</th>
+              <th>Current Release</th>
+              <th>Downloads</th>
+              <th>Repo Info</th>
+            </tr>
+          </thead>
+          {% for project in tag.projects %}
+          <tbody>
+            <tr>
+              <td>{{ project.title }}</td>
+              <td>{{ project.supported_python|join(", ") }}</td>
+              <td>&gt;=2.2.1,&lt;4</td>
+              <td>{{ project.creation_date}}</td>
+              <td>{{ project.pypi_data.info.release }}</td>
+              <td>12M</td>
+              <td>34/25/56/110</td>
+            </tr>
+          </tbody>
+          {% endfor %}
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock content %}

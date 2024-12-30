@@ -37,9 +37,10 @@ def get_project(slug):
     return render_template("website/project.html", project=project[0])
 
 
-@blueprint.get("/tag/<slug>")
+@blueprint.get("/category/<slug>")
 def get_tag(slug):
     tag = db.session.execute(db.select(Tag).where(Tag.slug == slug)).first()
+
     return render_template("website/tag.html", tag=tag[0])
 
 

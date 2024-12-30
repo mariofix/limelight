@@ -63,11 +63,14 @@ class Project(db.Model, TimestampMixin):
     category: Mapped[enum.Enum] = mapped_column(Enum(ProjectTypes), nullable=True, default=None)
 
     supported_python: Mapped[JSON] = mapped_column(type_=JSON, nullable=True)
+    supported_flask: Mapped[str] = mapped_column(db.String(32), nullable=True)
     readme: Mapped[str] = mapped_column(db.String(16000), nullable=True, default=None)
     readme_type: Mapped[str] = mapped_column(db.String(32), nullable=True, default=None)
     license: Mapped[str] = mapped_column(db.String(255), nullable=True, default=None)
-    creation_date: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    last_release: Mapped[str] = mapped_column(db.String(16), nullable=True)
     last_release_date: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+    first_release_date: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=True)
 
     project_url: Mapped[str] = mapped_column(db.String(128), nullable=True, default=None)
     source_url: Mapped[str] = mapped_column(db.String(128), nullable=True, default=None)
@@ -84,6 +87,17 @@ class Project(db.Model, TimestampMixin):
     source_slug: Mapped[str] = mapped_column(db.String(128), nullable=True)
     source_data: Mapped[JSON] = mapped_column(type_=JSON, nullable=True)
     source_data_date: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=True)
+
+    issues_open: Mapped[int] = mapped_column(nullable=True, default=None)
+    issues_closed: Mapped[int] = mapped_column(nullable=True, default=None)
+
+    stars: Mapped[int] = mapped_column(nullable=True, default=None)
+    forks: Mapped[int] = mapped_column(nullable=True, default=None)
+    network: Mapped[int] = mapped_column(nullable=True, default=None)
+    watchers: Mapped[int] = mapped_column(nullable=True, default=None)
+    subscribers: Mapped[int] = mapped_column(nullable=True, default=None)
+
+    downloads: Mapped[int] = mapped_column(nullable=True, default=None)
 
     tags: Mapped[List["Tag"]] = relationship(secondary="limelight_project_tags", back_populates="projects")
 
@@ -122,6 +136,7 @@ class Tag(db.Model, TimestampMixin):
     slug: Mapped[str] = mapped_column(db.String(128), unique=True)
     title: Mapped[str] = mapped_column(db.String(128), nullable=False)
     description: Mapped[str] = mapped_column(db.String(2048), nullable=False)
+    icon: Mapped[str] = mapped_column(db.String(128), nullable=True)
 
     projects: Mapped[List["Project"]] = relationship(secondary="limelight_project_tags", back_populates="tags")
 
@@ -151,9 +166,7 @@ class ProjectStats(db.Model, TimestampMixin):
     watchers: Mapped[int] = mapped_column(nullable=True, default=None)
     subscribers: Mapped[int] = mapped_column(nullable=True, default=None)
 
-    downloads_d: Mapped[int] = mapped_column(nullable=True, default=None)
-    downloads_w: Mapped[int] = mapped_column(nullable=True, default=None)
-    downloads_m: Mapped[int] = mapped_column(nullable=True, default=None)
+    downloads: Mapped[int] = mapped_column(nullable=True, default=None)
 
     def __str__(self):
         return f"{self.source}:{self.id}"

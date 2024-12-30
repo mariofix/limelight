@@ -1,9 +1,9 @@
 [project]
 name = "limelight"
-dynamic = ["version"]
+version = "2024.12.29"
 description = "Flask shiniest stars"
 readme = "README.md"
-requires-python = ">=3.10"
+requires-python = ">=3.10,<4.0"
 license = { "text" = "MIT" }
 authors = [{ "name" = "Mario Hernandez", "email" = "mariofix@proton.me" }]
 
@@ -15,8 +15,7 @@ dependencies = [
     "python-multipart>=0.0.19",
     "flask-sitemap>=0.4.0",
     "requests>=2.32.3",
-    "sqlalchemy-mixins>=2.0.5",
-    "flask-admin[export,images,sqlalchemy-with-utils,translation]>=2.0.0a3",
+    "flask-admin[sqlalchemy-with-utils,translation]>=2.0.0a3",
     "flask-debugtoolbar>=0.16.0",
     "trove-classifiers>=2024.10.21.16",
     "flask-mailman>=1.1.1",
@@ -24,6 +23,8 @@ dependencies = [
     "setuptools>=75.6.0",
     "flask-limiter>=3.9.2",
     "packaging>=24.2",
+    "pypinfo>=22.0.0",
+    "click>=8.1.8",
 ]
 
 [project.optional-dependencies]

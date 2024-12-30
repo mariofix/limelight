@@ -19,5 +19,6 @@ def new_project():
         else:
             new_project = utils.create_project(db, form.data)
             new_project = utils.fetch_project_info(new_project)
+            new_project = utils.update_project_metadata(new_project)
             return jsonify({"slug": new_project.slug}), 201
     return jsonify(form.errors), 400
