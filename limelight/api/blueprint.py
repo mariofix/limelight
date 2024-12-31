@@ -1,7 +1,6 @@
 from flask import Blueprint, jsonify
 
-from .. import utils
-from ..database import db
+from ..crud import create_project, find_project
 from ..forms import NewProjectForm
 from ..limiter import limiter
 
@@ -13,12 +12,8 @@ blueprint = Blueprint("api", __name__)
 def new_project():
     form = NewProjectForm()
     if form.validate_on_submit():
-        project = utils.project_exists(db, form.data["slug"])
-        if project:
+        if project := find_project(form.data["slug"]):
             return jsonify(project), 200
-        else:
-            new_project = utils.create_project(db, form.data)
-            new_project = utils.fetch_project_info(new_project)
-            new_project = utils.update_project_metadata(new_project)
-            return jsonify({"slug": new_project.slug}), 201
+        new_project = create_project(form.data, True)
+        return jsonify({"slug": new_project.slug}), 201
     return jsonify(form.errors), 400
