@@ -21,7 +21,7 @@ class AppAdmin:
             "readonly": True,
         },
     }
-    page_size = 100
+    page_size = 20
     can_create = True
     can_edit = True
     can_delete = True
@@ -92,9 +92,3 @@ class ProjectAdmin(AppAdmin, AdminModelView):
         for project in projects.all():
             utils.update_project_metadata(project)
             flash(f"Data Processed: {project}", "info")
-
-
-class ProjectStatsAdmin(AppAdmin, AdminModelView):
-    name = _("Project Stats")
-    icon = "fa-solid fa-list"
-    column_list = ["source", "project", "date_pushed", "downloads_m"]

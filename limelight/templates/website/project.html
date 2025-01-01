@@ -30,12 +30,11 @@ endblock title %} {% block meta_content %}
       </div>
       <div class="d-flex gap-2">
         <span class="btn border-0 btn-sm">Supported Versions:</span>
-        {% if project.supported_python %} {% for python_version in
-        project.supported_python %}
+        {% if project.supported_python %}
         <button class="btn btn-outline-success btn-sm">
-          {{ python_version }}
+          {{ project.supported_python }}
         </button>
-        {% endfor %} {% else %}
+        {% else %}
         <button class="btn btn-outline-warning btn-sm">Not Informed</button>
         {% endif%}
       </div>
@@ -49,8 +48,8 @@ endblock title %} {% block meta_content %}
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <h6 class="text-muted mb-2">Current Release</h6>
-                <h3 class="mb-0">{{ project.pypi_data.info.version }}</h3>
-                <small class="text-success">8 days ago </small>
+                <h3 class="mb-0">{{ project.last_release }}</h3>
+                <small class="text-success">{{ project.last_release_ago() }}</small>
                 {% if project.pypi_data.info.yanked %}
                 - <small class="text-danger"> Yanked!</small>
                 {% endif %}
@@ -67,12 +66,12 @@ endblock title %} {% block meta_content %}
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h6 class="text-muted mb-2">Open/Closed Issues</h6>
-                <h3 class="mb-0">34/671</h3>
-                <small class="text-danger"> +14% open issues than last month. </small>
+                <h6 class="text-muted mb-2">Open Issues</h6>
+                <h3 class="mb-0">{{ project.issues_open }}</h3>
+                <small class="text-danger">&nbsp; </small>
               </div>
               <div class="bg-success bg-opacity-10 p-3 rounded">
-                <i class="bi bi-bug text-success"></i>
+                <i class="bi bi-record-circle text-success"></i>
               </div>
             </div>
           </div>
@@ -84,13 +83,13 @@ endblock title %} {% block meta_content %}
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <h6 class="text-muted mb-2">Project Age</h6>
-                <h3 class="mb-0">2 years</h3>
+                <h3 class="mb-0">{{ project.first_release_ago() }}</h3>
                 <small class="text-danger">
                   &nbsp;
                 </small>
               </div>
               <div class="bg-warning bg-opacity-10 p-3 rounded">
-                <i class="bi bi-bag text-warning"></i>
+                <i class="bi bi-calendar-event text-warning"></i>
               </div>
             </div>
           </div>
@@ -101,14 +100,14 @@ endblock title %} {% block meta_content %}
           <div class="card-body">
             <div class="d-flex justify-content-between align-items-center">
               <div>
-                <h6 class="text-muted mb-2">Last Push</h6>
-                <h3 class="mb-0">17 days ago</h3>
+                <h6 class="text-muted mb-2">License</h6>
+                <h3 class="mb-0">{{ project.license }}</h3>
                 <small class="text-success">
                   &nbsp;
                 </small>
               </div>
               <div class="bg-info bg-opacity-10 p-3 rounded">
-                <i class="bi bi-graph-up-arrow text-info"></i>
+                <i class="bi bi-file-text text-info"></i>
               </div>
             </div>
           </div>
@@ -123,7 +122,7 @@ endblock title %} {% block meta_content %}
         <div class="card border-0 shadow-sm">
           <div class="card-header bg-white border-0">
             <div class="d-flex justify-content-between align-items-center">
-              <h5 class="mb-0">Project</h5>
+              <h5 class="mb-0">Project Information</h5>
               <button class="btn btn-sm">Button here</button>
             </div>
           </div>
@@ -139,39 +138,106 @@ endblock title %} {% block meta_content %}
                 <button class="nav-link" id="v-pills-ghdata-tab" data-bs-toggle="pill" data-bs-target="#v-pills-ghdata" type="button" role="tab" aria-controls="v-pills-ghdata" aria-selected="false">
                   Github Raw Data
                 </button>
-                <button class="nav-link" id="v-pills-anadata-tab" data-bs-toggle="pill" data-bs-target="#v-pills-anadata" type="button" role="tab" aria-controls="v-pills-anadata" aria-selected="false">
+                <!-- <button class="nav-link" id="v-pills-anadata-tab" data-bs-toggle="pill" data-bs-target="#v-pills-anadata" type="button" role="tab" aria-controls="v-pills-anadata" aria-selected="false">
                   Anaconda Raw Data
-                </button>
+                </button> -->
               </div>
               <div class="tab-content" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
-                  <div class="gap-2">
-                    <a href="https://pypi.org/project/{{ project.pypi_slug }}" class="btn btn-outline-primary" role="button">
-                      <i class="bi bi-plus me-2"></i> PyPi Repo
-                    </a>
-                    <a href="https://anaconda.org/{{ project.conda_slug }}" class="btn btn-outline-success" role="button">
-                      <i class="bi bi-person me-2"></i> Conda Repo
-                    </a>
-                    <a href="{{ project.project_url }}" class="btn btn-outline-info" role="button">
-                      <i class="bi bi-shield-lock me-2"></i> Project URL
-                    </a>
-                    <a href="{{ project.documentation_url }}" class="btn btn-outline-info" role="button">
-                      <i class="bi bi-shield-lock me-2"></i> Documentation URL
-                    </a>
-                    <a href="{{ project.source_url }}" class="btn btn-outline-warning" role="button">
-                      <i class="bi bi-database me-2"></i> Source URL
-                    </a>
+                  <div class="container" id="icon-grid">
+                    <div class="row">
+                      <div class="col-md-3 col-6 mb-4">
+                        <div class="text-center">
+                          <i class="bi bi-bezier2 fs-1 text-primary mb-2"></i>
+                          <h2 class="fw-bold">{{ project.forks }}</h2>
+                          <p class="text-muted">Github Forks</p>
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-6 mb-4">
+                        <div class="text-center">
+                          <i class="bi bi-download fs-1 text-primary mb-2"></i>
+                          <h2 class="fw-bold">{{ project.downloads|default("No Data", boolean=True) }}</h2>
+                          <p class="text-muted">Downloads</p>
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-6 mb-4">
+                        <div class="text-center">
+                          <i class="bi bi-star fs-1 text-primary mb-2"></i>
+                          <h2 class="fw-bold">{{ project.stars }}</h2>
+                          <p class="text-muted">Github Stars</p>
+                        </div>
+                      </div>
+                      <div class="col-md-3 col-6 mb-4">
+                        <div class="text-center">
+                          <i class="bi bi-dot fs-1 text-primary mb-2"></i>
+                          <h2 class="fw-bold">{{ project.issues_closed }}</h2>
+                          <p class="text-muted">Closed Issues</p>
+                        </div>
+                      </div>
+                    </div>
+                    <hr>
+
+                    <div class="row row-cols-lg-3 row-cols-sm-2 row-col-1">
+                      <div class="col d-flex align-items-start">
+                        <i class="bi bi-link-45deg text-body-secondary flex-shrink-0 me-3"></i>
+                        <div>
+                          <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Project URLs</h3>
+                          <ul class="list-group list-group-horizontal mb-3">
+                            <a href="" class="list-group-item list-group-item-action"><i class="bi bi-globe"></i></a>
+                            <a href="" class="list-group-item list-group-item-action"><i class="bi bi-question-circle"></i></a>
+                            <a href="" class="list-group-item list-group-item-action"><i class="bi bi-github"></i></a>
+                            <a href="" class="list-group-item list-group-item-action"><i class="bi bi-boxes"></i></a>
+                          </ul>
+                        </div>
+                      </div>
+                      <div class="col d-flex align-items-start">
+                        <i class="bi bi-alarm text-body-secondary flex-shrink-0 me-3"></i>
+                        <div>
+                          <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Flask Support</h3>
+                          <p>{{ project.supported_flask|default("Not Found in project", boolean=true) }}</p>
+                        </div>
+                      </div>
+                      <div class="col d-flex align-items-start">
+                        <i class="bi bi-alarm text-body-secondary flex-shrink-0 me-3"></i>
+                        <div>
+                          <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Information</h3>
+                          <p>Open Readme</p>
+                        </div>
+                      </div>
+
+
+                      <div class="col d-flex align-items-start">
+                        <i class="bi bi-alarm text-body-secondary flex-shrink-0 me-3"></i>
+                        <div>
+                          <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Github Data</h3>
+                          <p>Network: {{project.network}} - Watchers: {{project.watchers}} - Subcribers: {{project.subcribers}}</p>
+                        </div>
+                      </div>
+
+                      <div class="col d-flex align-items-start">
+                        <i class="bi bi-alarm text-body-secondary flex-shrink-0 me-3"></i>
+                        <div>
+                          <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Categories</h3>
+                          <ul class="list-group list-group-horizontal mb-3">
+                            {% for tag in project.tags %}
+                            <li class="list-group-item">{{tag.name}}</li>
+                            {% endfor %}
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
+
                 <div class="tab-pane fade" id="v-pills-pypidata" role="tabpanel" aria-labelledby="v-pills-pypidata-tab" tabindex="0">
                   <div class="json_tree"></div>
                 </div>
                 <div class="tab-pane fade" id="v-pills-ghdata" role="tabpanel" aria-labelledby="v-pills-ghdata-tab" tabindex="0">
                   <div class="json_tree_gh"></div>
                 </div>
-                <div class="tab-pane fade" id="v-pills-anadata" role="tabpanel" aria-labelledby="v-pills-anadata-tab" tabindex="0">
+                <!-- <div class="tab-pane fade" id="v-pills-anadata" role="tabpanel" aria-labelledby="v-pills-anadata-tab" tabindex="0">
                   <div class="json_tree_ana"></div>
-                </div>
+                </div> -->
               </div>
             </div>
           </div>
@@ -185,13 +251,10 @@ endblock title %} {% block meta_content %}
 <script type="text/javascript">
   const data = {{ project.pypi_data| tojson }};
   const gh_data = {{ project.source_data| tojson }};
-  const ana_data = {{ project.conda_data| tojson }};
   const tree = jsonview.create(data);
   const tree_gh = jsonview.create(gh_data);
-  const tree_ana = jsonview.create(ana_data);
   jsonview.render(tree, document.querySelector(".json_tree"));
   jsonview.render(tree_gh, document.querySelector(".json_tree_gh"));
-  jsonview.render(tree_ana, document.querySelector(".json_tree_ana"));
-  <!-- jsonview.expand(tree); -->
+
 </script>
 {% endblock post_js%}
