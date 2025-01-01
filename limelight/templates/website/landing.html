@@ -17,66 +17,17 @@
 <section class="py-5 bg-light">
   <div class="container">
     <div class="row text-center">
+      {% for tag in featured_tags %}
       <div class="col-md-4 mb-3">
-        <a href="{{ url_for('website.get_tag', slug='authentication') }}" class="card shadow-sm text-decoration-none">
+        <a href="{{ url_for('website.get_tag', slug=tag[0].slug) }}" class="card shadow-sm text-decoration-none">
           <div class="card-body">
-            <i class="bi bi-person-lock" style="font-size: 2rem; color: var(--primary)"></i>
-            <h5 class="card-title mt-2">I need user authentication</h5>
-            <p class="text-muted">
-              Extensions to manage users and sessions.
-            </p>
+            <i class="{{ tag[0].icon}}" style="font-size: 2rem; color: var(--primary)"></i>
+            <h5 class="card-title mt-2">{{ tag[0].title }}</h5>
+            <p class="text-muted">{{ tag[0].description }}</p>
           </div>
         </a>
       </div>
-      <div class="col-md-4 mb-3">
-        <a href="{{ url_for('website.get_tag', slug='database') }}" class="card shadow-sm text-decoration-none">
-          <div class="card-body">
-            <i class="bi bi-database" style="font-size: 2rem; color: var(--success)"></i>
-            <h5 class="card-title mt-2">I need database support</h5>
-            <p class="text-muted">
-              Explore tools for integrating databases.
-            </p>
-          </div>
-        </a>
-      </div>
-      <div class="col-md-4 mb-3">
-        <a href="{{ url_for('website.get_tag', slug='api') }}" class="card shadow-sm text-decoration-none">
-          <div class="card-body">
-            <i class="bi bi-plug" style="font-size: 2rem; color: var(--info)"></i>
-            <h5 class="card-title mt-2">I need to build an API</h5>
-            <p class="text-muted">Discover API frameworks and tools.</p>
-          </div>
-        </a>
-      </div>
-      <div class="col-md-4 mb-3">
-        <a href="{{ url_for('website.get_tag', slug='forms') }}" class="card shadow-sm text-decoration-none">
-          <div class="card-body">
-            <i class="bi bi-ui-checks" style="font-size: 2rem; color: var(--warning)"></i>
-            <h5 class="card-title mt-2">I need form handling</h5>
-            <p class="text-muted">
-              Libraries to process and validate forms.
-            </p>
-          </div>
-        </a>
-      </div>
-      <div class="col-md-4 mb-3">
-        <a href="{{ url_for('website.get_tag', slug='security') }}" class="card shadow-sm text-decoration-none">
-          <div class="card-body">
-            <i class="bi bi-shield-lock" style="font-size: 2rem; color: var(--danger)"></i>
-            <h5 class="card-title mt-2">I need security features</h5>
-            <p class="text-muted">Secure your app with ready-made tools.</p>
-          </div>
-        </a>
-      </div>
-      <div class="col-md-4 mb-3">
-        <a href="{{ url_for('website.get_tag', slug='file-uploads') }}" class="card shadow-sm text-decoration-none">
-          <div class="card-body">
-            <i class="bi bi-box-arrow-up" style="font-size: 2rem; color: var(--secondary)"></i>
-            <h5 class="card-title mt-2">I need file uploads</h5>
-            <p class="text-muted">Easily manage file handling in Flask.</p>
-          </div>
-        </a>
-      </div>
+      {% endfor %}
     </div>
   </div>
 </section>
@@ -100,31 +51,13 @@
                 </tr>
               </thead>
               <tbody>
+                {% for p in projects %}
                 <tr>
-                  <td>Flask-RESTX</td>
-                  <td>API</td>
-                  <td>2 days ago</td>
+                  <td>{{ p[0].title }}</td>
+                  <td>{{ p[0].tags[0]|capitalize }}</td>
+                  <td>{{ p[0].last_release_ago() }}</td>
                 </tr>
-                <tr>
-                  <td>Flask-Migrate</td>
-                  <td>Database</td>
-                  <td>4 days ago</td>
-                </tr>
-                <tr>
-                  <td>Flask-Security</td>
-                  <td>Authentication</td>
-                  <td>1 week ago</td>
-                </tr>
-                <tr>
-                  <td>Flask-Marshmallow</td>
-                  <td>Serialization</td>
-                  <td>10 days ago</td>
-                </tr>
-                <tr>
-                  <td>Flask-SocketIO</td>
-                  <td>WebSockets</td>
-                  <td>2 weeks ago</td>
-                </tr>
+                {% endfor%}
               </tbody>
             </table>
           </div>
@@ -145,31 +78,13 @@
                 </tr>
               </thead>
               <tbody>
+                {% for r in releases %}
                 <tr>
-                  <td>Flask-SQLAlchemy</td>
-                  <td>0.0.0</td>
-                  <td>3 days ago</td>
+                  <td>{{ r[0].title }}</td>
+                  <td>{{ r[0].last_release }}</td>
+                  <td>{{ r[0].last_release_ago() }}</td>
                 </tr>
-                <tr>
-                  <td>Flask-RESTful</td>
-                  <td>1.8M</td>
-                  <td>API</td>
-                </tr>
-                <tr>
-                  <td>Flask-Login</td>
-                  <td>1.5M</td>
-                  <td>Authentication</td>
-                </tr>
-                <tr>
-                  <td>Flask-WTF</td>
-                  <td>1.2M</td>
-                  <td>Forms</td>
-                </tr>
-                <tr>
-                  <td>Flask-Marshmallow</td>
-                  <td>950K</td>
-                  <td>Serialization</td>
-                </tr>
+                {% endfor%}
               </tbody>
             </table>
           </div>

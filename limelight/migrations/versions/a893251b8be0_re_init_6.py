@@ -1,8 +1,8 @@
-"""(re)Init-4
+"""(re)Init-6
 
-Revision ID: fcdd25bd325c
+Revision ID: a893251b8be0
 Revises:
-Create Date: 2024-12-27 00:15:43.187816
+Create Date: 2024-12-31 21:50:37.366957
 
 """
 
@@ -11,7 +11,7 @@ import sqlalchemy as sa
 from alembic import op
 
 # revision identifiers, used by Alembic.
-revision = "fcdd25bd325c"
+revision = "a893251b8be0"
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -26,11 +26,16 @@ def upgrade():
         sa.Column("title", sa.String(length=128), nullable=True),
         sa.Column("description", sa.String(length=2048), nullable=True),
         sa.Column(
-            "category",
-            sa.Enum("application", "framework", "library", "module", "project", name="projecttypes"),
-            nullable=True,
+            "category", sa.Enum("project", "framework", "extension", "module", name="projecttypes"), nullable=True
         ),
         sa.Column("supported_python", sa.JSON(), nullable=True),
+        sa.Column("supported_flask", sa.String(length=32), nullable=True),
+        sa.Column("readme", sa.String(length=16000), nullable=True),
+        sa.Column("readme_type", sa.String(length=32), nullable=True),
+        sa.Column("license", sa.String(length=255), nullable=True),
+        sa.Column("last_release", sa.String(length=16), nullable=True),
+        sa.Column("last_release_date", sa.DateTime(timezone=True), nullable=True),
+        sa.Column("first_release_date", sa.DateTime(timezone=True), nullable=True),
         sa.Column("project_url", sa.String(length=128), nullable=True),
         sa.Column("source_url", sa.String(length=128), nullable=True),
         sa.Column("documentation_url", sa.String(length=128), nullable=True),
@@ -40,11 +45,17 @@ def upgrade():
         sa.Column("conda_slug", sa.String(length=128), nullable=True),
         sa.Column("conda_data", sa.JSON(), nullable=True),
         sa.Column("conda_data_date", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("git_url", sa.String(length=128), nullable=True),
-        sa.Column("git_data", sa.JSON(), nullable=True),
-        sa.Column("git_data_date", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("fetch_date_last", sa.DateTime(timezone=True), nullable=True),
-        sa.Column("fetch_date_next", sa.DateTime(timezone=True), nullable=True),
+        sa.Column("source_slug", sa.String(length=128), nullable=True),
+        sa.Column("source_data", sa.JSON(), nullable=True),
+        sa.Column("source_data_date", sa.DateTime(timezone=True), nullable=True),
+        sa.Column("issues_open", sa.Integer(), nullable=True),
+        sa.Column("issues_closed", sa.Integer(), nullable=True),
+        sa.Column("stars", sa.Integer(), nullable=True),
+        sa.Column("forks", sa.Integer(), nullable=True),
+        sa.Column("network", sa.Integer(), nullable=True),
+        sa.Column("watchers", sa.Integer(), nullable=True),
+        sa.Column("subscribers", sa.Integer(), nullable=True),
+        sa.Column("downloads", sa.Integer(), nullable=True),
         sa.Column(
             "created_at", sa.DateTime(timezone=True), server_default=sa.text("(CURRENT_TIMESTAMP)"), nullable=False
         ),
@@ -58,8 +69,13 @@ def upgrade():
         "limelight_tag",
         sa.Column("id", sa.Integer(), nullable=False),
         sa.Column("slug", sa.String(length=128), nullable=False),
+        sa.Column("name", sa.String(length=128), nullable=False),
         sa.Column("title", sa.String(length=128), nullable=False),
-        sa.Column("description", sa.String(length=2048), nullable=False),
+        sa.Column("description", sa.String(length=2048), nullable=True),
+        sa.Column("icon", sa.String(length=128), nullable=True),
+        sa.Column("active", sa.Boolean(), nullable=False),
+        sa.Column("feature_in_home", sa.Boolean(), nullable=False),
+        sa.Column("order_in_home", sa.Integer(), nullable=True),
         sa.Column(
             "created_at", sa.DateTime(timezone=True), server_default=sa.text("(CURRENT_TIMESTAMP)"), nullable=False
         ),
@@ -110,6 +126,35 @@ def upgrade():
         sa.UniqueConstraint("username", name=op.f("uq_user_username")),
     )
     op.create_table(
+        "limelight_project_stats",
+        sa.Column("id", sa.Integer(), nullable=False),
+        sa.Column("project_id", sa.Integer(), nullable=False),
+        sa.Column("source", sa.String(length=16), nullable=False),
+        sa.Column("date_creation", sa.DateTime(timezone=True), nullable=True),
+        sa.Column("date_modification", sa.DateTime(timezone=True), nullable=True),
+        sa.Column("date_pushed", sa.DateTime(timezone=True), nullable=True),
+        sa.Column("issues_open", sa.Integer(), nullable=True),
+        sa.Column("issues_closed", sa.Integer(), nullable=True),
+        sa.Column("stars", sa.Integer(), nullable=True),
+        sa.Column("forks", sa.Integer(), nullable=True),
+        sa.Column("network", sa.Integer(), nullable=True),
+        sa.Column("watchers", sa.Integer(), nullable=True),
+        sa.Column("subscribers", sa.Integer(), nullable=True),
+        sa.Column("downloads", sa.Integer(), nullable=True),
+        sa.Column(
+            "created_at", sa.DateTime(timezone=True), server_default=sa.text("(CURRENT_TIMESTAMP)"), nullable=False
+        ),
+        sa.Column(
+            "modified_at", sa.DateTime(timezone=True), server_default=sa.text("(CURRENT_TIMESTAMP)"), nullable=False
+        ),
+        sa.ForeignKeyConstraint(
+            ["project_id"],
+            ["limelight_project.id"],
+            name=op.f("fk_limelight_project_stats_project_id_limelight_project"),
+        ),
+        sa.PrimaryKeyConstraint("id", name=op.f("pk_limelight_project_stats")),
+    )
+    op.create_table(
         "limelight_project_tags",
         sa.Column("project_id", sa.Integer(), nullable=False),
         sa.Column("tag_id", sa.Integer(), nullable=False),
@@ -144,6 +189,7 @@ def downgrade():
     # ### commands auto generated by Alembic - please adjust! ###
     op.drop_table("roles_users")
     op.drop_table("limelight_project_tags")
+    op.drop_table("limelight_project_stats")
     op.drop_table("user")
     op.drop_table("role")
     op.drop_table("limelight_tag")

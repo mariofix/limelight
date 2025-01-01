@@ -1,4 +1,5 @@
 from flask import Blueprint, Response, render_template
+from sqlalchemy import desc
 
 from ..database import db
 from ..forms import NewProjectForm
@@ -9,7 +10,15 @@ blueprint = Blueprint("website", __name__)
 
 @blueprint.get("/")
 def home():
-    return render_template("website/landing.html")
+    featured_tags = db.session.execute(db.select(Tag).where(Tag.feature_in_home).order_by(Tag.order_in_home)).all()
+    projects = db.session.execute(db.select(Project).order_by(desc(Project.id)).limit(5)).all()
+    releases = db.session.execute(db.select(Project).order_by(desc(Project.last_release_date)).limit(5)).all()
+    return render_template(
+        "website/landing.html",
+        featured_tags=featured_tags,
+        projects=projects,
+        releases=releases,
+    )
 
 
 @blueprint.get("/help/")

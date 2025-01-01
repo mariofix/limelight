@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="{% block html_lang %}en{% endblock html_lang %}">
+
+  <head>
+    {% block head %}
+    <script defer src="https://cloud.umami.is/script.js" data-website-id="cf71b793-a9a0-4d9d-9005-e2629a2ae39f"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>{% block title %}Flask Packages - Community-Driven Development for Flask Enthusiasts{% endblock title %}</title>
+
+    {% block meta_content %}
+    <meta name="description" content="Community-Driven Development for Flask Enthusiasts">
+    <meta name="keywords" content="flask,extensions,project,python,development">
+    <meta name="robots" content="index, follow">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta name="author" content="mariofix">
+    <link rel="canonical" href="https://flaskpackages.pythonanywhere.com" />
+    <meta property="og:title" content="Flask Packages">
+    <meta property="og:site_name" content="Flask Packages">
+    <meta property="og:url" content="https://flaskpackages.pythonanywhere.com" />
+    <meta property="og:description" content="Community-Driven Development for Flask Enthusiasts">
+    <meta property="og:type" content="website">
+
+    {% endblock meta_content %}
+
+    <meta name="google-site-verification" content="YQqBu9x3ym7UcbVCX3VBv-FQb1PI2FBQlYaopsj5Y80" />
+    <meta name="msvalidate.01" content="3801A81CC043E6485E9A4113C491F7AA" />
+
+    {% block favicon %}
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='apple-touch-icon.png', v=app_version)}}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ url_for('static', filename='favicon-32x32.png', v=app_version)}}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ url_for('static', filename='favicon-16x16.png', v=app_version)}}">
+    <link rel="manifest" href="{{ url_for('static', filename='site.webmanifest', v=app_version)}}">
+    {% endblock favicon %}
+    <!-- CSS files -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta21/dist/css/tabler.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta17/dist/css/tabler-flags.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta21/dist/css/tabler-vendors.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.26.0/dist/tabler-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta21/dist/css/demo.css">
+
+    <style>
+      @import url("https://rsms.me/inter/inter.css");
+
+      :root {
+        --tblr-font-sans-serif: "Inter Var", -apple-system, BlinkMacSystemFont,
+          San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
+      }
+
+      body {
+        font-feature-settings: "cv03", "cv04", "cv11";
+      }
+    </style>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    {% block post_css %}
+    {% endblock post_css %}
+    {% endblock head %}
+  </head>
+
+  <body class="layout-fluid">
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta21/dist/js/demo-theme.js"></script>
+    <div class="page">
+      <!-- Sidebar -->
+      <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
+        <div class="container-fluid">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <a class="navbar-brand navbar-brand-autodark" href="{{ url_for('website.home') }}">
+            <i class="bi bi-cassette me-2"></i> Limelight
+          </a>
+
+          <div class="collapse navbar-collapse" id="sidebar-menu">
+            <ul class="navbar-nav pt-lg-3">
+              <li class="nav-item">
+                <a class="nav-link" href="./">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="bi bi-house"></i>
+                  </span>
+                  <span class="nav-link-title"> Home </span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="bi bi-house"></i>
+                  </span>
+                  <span class="nav-link-title"> Browse Categories </span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="bi bi-house"></i>
+                  </span>
+                  <span class="nav-link-title"> Browse Projects </span>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="./">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block"><i class="bi bi-question"></i>
+                  </span>
+                  <span class="nav-link-title"> Help </span>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+      <!-- Navbar -->
+      <header class="navbar navbar-expand-md d-none d-lg-flex d-print-none">
+        <div class="container-xl">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="navbar-nav flex-row order-md-last">
+            <div class="d-none d-md-flex">
+              <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                <i class="bi bi-moon"></i>
+              </a>
+              <a href="?theme=light" class="nav-link px-0 hide-theme-light" title="Enable light mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
+                <i class="bi bi-sun"></i>
+              </a>
+              <div class="nav-item dropdown d-none d-md-flex me-3">
+                <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Change Language">
+                  <i class="flag flag-country-us"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-arrow dropdown-menu-end dropdown-menu-card">
+                  <div class="card">
+
+                    <div class="list-group list-group-flush">
+                      <div class="list-group-item">
+                        <div class="row align-items-center">
+                          <div class="col-auto">
+                            <a href="#" class="list-group-item-actions">
+                              <i class="flag flag-country-es"></i> Español
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="collapse navbar-collapse" id="navbar-menu">
+            <div>
+              <form action="/search" method="get" autocomplete="off" novalidate>
+                <div class="input-icon">
+                  <span class="input-icon-addon">
+                    <i class="bi bi-search"></i>
+                  </span>
+                  <input type="text" name="q" class="form-control" placeholder="Search…" aria-label="Search in website">
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </header>
+      <div class="page-wrapper">
+        <!-- Page header -->
+        <div class="page-header d-print-none">
+          <div class="container-xl">
+            <div class="row g-2 align-items-center">
+              <div class="col">
+                <!-- Page pre-title -->
+                <h2 class="page-title">Flask Packages</h2>
+              </div>
+              <!-- Page title actions -->
+              <div class="col-auto ms-auto d-print-none">
+                <div class="btn-list">
+
+                  <a href="#" class="btn btn-primary d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#modal-report">
+                    <i class="bi bi-plus"></i>
+                    Submit a Project
+                  </a>
+                  <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal" data-bs-target="#modal-report" aria-label="Create new report">
+                    <i class="bi bi-plus"></i>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- Page body -->
+        <div class="page-body">
+          <div class="container-xl">
+            <div class="row text-center">
+              <div class="col-md-4 mb-3">
+                <a href="{{ url_for('website.get_tag', slug='authentication') }}" class="card shadow-sm text-decoration-none">
+                  <div class="card-body">
+                    <i class="bi bi-person-lock" style="font-size: 2rem; color: var(--primary)"></i>
+                    <h5 class="card-title mt-2">I need user authentication</h5>
+                    <p class="text-muted">
+                      Extensions to manage users and sessions.
+                    </p>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-4 mb-3">
+                <a href="{{ url_for('website.get_tag', slug='database') }}" class="card shadow-sm text-decoration-none">
+                  <div class="card-body">
+                    <i class="bi bi-database" style="font-size: 2rem; color: var(--success)"></i>
+                    <h5 class="card-title mt-2">I need database support</h5>
+                    <p class="text-muted">
+                      Explore tools for integrating databases.
+                    </p>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-4 mb-3">
+                <a href="{{ url_for('website.get_tag', slug='api') }}" class="card shadow-sm text-decoration-none">
+                  <div class="card-body">
+                    <i class="bi bi-plug" style="font-size: 2rem; color: var(--info)"></i>
+                    <h5 class="card-title mt-2">I need to build an API</h5>
+                    <p class="text-muted">Discover API frameworks and tools.</p>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-4 mb-3">
+                <a href="{{ url_for('website.get_tag', slug='forms') }}" class="card shadow-sm text-decoration-none">
+                  <div class="card-body">
+                    <i class="bi bi-ui-checks" style="font-size: 2rem; color: var(--warning)"></i>
+                    <h5 class="card-title mt-2">I need form handling</h5>
+                    <p class="text-muted">
+                      Libraries to process and validate forms.
+                    </p>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-4 mb-3">
+                <a href="{{ url_for('website.get_tag', slug='security') }}" class="card shadow-sm text-decoration-none">
+                  <div class="card-body">
+                    <i class="bi bi-shield-lock" style="font-size: 2rem; color: var(--danger)"></i>
+                    <h5 class="card-title mt-2">I need security features</h5>
+                    <p class="text-muted">Secure your app with ready-made tools.</p>
+                  </div>
+                </a>
+              </div>
+              <div class="col-md-4 mb-3">
+                <a href="{{ url_for('website.get_tag', slug='file-uploads') }}" class="card shadow-sm text-decoration-none">
+                  <div class="card-body">
+                    <i class="bi bi-box-arrow-up" style="font-size: 2rem; color: var(--secondary)"></i>
+                    <h5 class="card-title mt-2">I need file uploads</h5>
+                    <p class="text-muted">Easily manage file handling in Flask.</p>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="row row-deck m-1">
+            <div class="col-12">
+              <div class="card bg-transparent border-0">
+                <div class="card-body">
+                  <h3 class="card-header">Latest Projects</h3>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-3">
+              <div class="card">
+                <div class="card-status-top bg-green"></div>
+                <div class="card-header">
+                  <h5 class="card-title">Flask-RESTX</h5>
+                </div>
+                <div class="card-body">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-3">
+              <div class="card">
+                <div class="card-status-top bg-green"></div>
+                <div class="card-header">
+                  <h5 class="card-title">Flask-RESTX</h5>
+                </div>
+                <div class="card-body">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-3">
+              <div class="card">
+                <div class="card-status-top bg-green"></div>
+                <div class="card-header">
+                  <h5 class="card-title">Flask-Migrate</h5>
+                </div>
+                <div class="card-body">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-sm-3">
+              <div class="card">
+                <div class="card-status-top bg-green"></div>
+                <div class="card-header">
+                  <h5 class="card-title">Flask-Security</h5>
+                </div>
+                <div class="card-body">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row row-deck m-1">
+            <div class="col-12">
+              <div class="card bg-transparent border-0">
+                <div class="card-body">
+                  <h3 class="card-header">Latest Releases</h3>
+                </div>
+              </div>
+
+            </div>
+
+
+            <div class="col-md-3">
+              <div class="card">
+                <div class="card-status-top bg-green"></div>
+                <div class="card-header">
+                  <h5 class="card-title">Flask-RESTX</h5>
+                </div>
+                <div class="card-body">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card">
+                <div class="card-status-top bg-green"></div>
+                <div class="card-header">
+                  <h5 class="card-title">Flask-RESTX</h5>
+                </div>
+                <div class="card-body">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card">
+                <div class="card-status-top bg-green"></div>
+                <div class="card-header">
+                  <h5 class="card-title">Flask-Migrate</h5>
+                </div>
+                <div class="card-body">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3">
+              <div class="card">
+                <div class="card-status-top bg-green"></div>
+                <div class="card-header">
+                  <h5 class="card-title">Flask-Security</h5>
+                </div>
+                <div class="card-body">
+                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="footer footer-transparent d-print-none">
+          <div class="container-xl">
+            <div class="row text-center align-items-center flex-row-reverse">
+              <div class="col-lg-auto ms-lg-auto">
+                <ul class="list-inline list-inline-dots mb-0">
+                  <li class="list-inline-item">
+                    &copy; 2024 Limelight - Find the Flask Extension you were not looking for.
+                  </li>
+                  <li class="list-inline-item">
+                    <a href="./changelog.html" class="link-secondary" rel="noopener">
+                      {{app_version}}
+                    </a>
+                  </li>
+                </ul>
+              </div>
+
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+    <div class="modal modal-blur fade" id="modal-report" tabindex="-1" role="dialog" aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">New report</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" name="example-text-input" placeholder="Your report name" />
+            </div>
+            <label class="form-label">Report type</label>
+            <div class="form-selectgroup-boxes row mb-3">
+              <div class="col-lg-6">
+                <label class="form-selectgroup-item">
+                  <input type="radio" name="report-type" value="1" class="form-selectgroup-input" checked />
+                  <span class="form-selectgroup-label d-flex align-items-center p-3">
+                    <span class="me-3">
+                      <span class="form-selectgroup-check"></span>
+                    </span>
+                    <span class="form-selectgroup-label-content">
+                      <span class="form-selectgroup-title strong mb-1">Simple</span>
+                      <span class="d-block text-secondary">Provide only basic data needed for the report</span>
+                    </span>
+                  </span>
+                </label>
+              </div>
+              <div class="col-lg-6">
+                <label class="form-selectgroup-item">
+                  <input type="radio" name="report-type" value="1" class="form-selectgroup-input" />
+                  <span class="form-selectgroup-label d-flex align-items-center p-3">
+                    <span class="me-3">
+                      <span class="form-selectgroup-check"></span>
+                    </span>
+                    <span class="form-selectgroup-label-content">
+                      <span class="form-selectgroup-title strong mb-1">Advanced</span>
+                      <span class="d-block text-secondary">Insert charts and additional advanced analyses to be
+                        inserted in the report</span>
+                    </span>
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-8">
+                <div class="mb-3">
+                  <label class="form-label">Report url</label>
+                  <div class="input-group input-group-flat">
+                    <span class="input-group-text">
+                      https://tabler.io/reports/
+                    </span>
+                    <input type="text" class="form-control ps-0" value="report-01" autocomplete="off" />
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-4">
+                <div class="mb-3">
+                  <label class="form-label">Visibility</label>
+                  <select class="form-select">
+                    <option value="1" selected>Private</option>
+                    <option value="2">Public</option>
+                    <option value="3">Hidden</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label">Client name</label>
+                  <input type="text" class="form-control" />
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="mb-3">
+                  <label class="form-label">Reporting period</label>
+                  <input type="date" class="form-control" />
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <div>
+                  <label class="form-label">Additional information</label>
+                  <textarea class="form-control" rows="3"></textarea>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">
+              Cancel
+            </a>
+            <a href="#" class="btn btn-primary ms-auto" data-bs-dismiss="modal">
+              <i class="bi bi-plus"></i>
+              Create new report
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Tabler Core -->
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta21/dist/js/tabler.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tabler/core@1.0.0-beta21/dist/js/demo.js"></script>
+  </body>
+
+</html>

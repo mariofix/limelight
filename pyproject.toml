@@ -23,8 +23,7 @@ dependencies = [
     "setuptools>=75.6.0",
     "flask-limiter>=3.9.2",
     "packaging>=24.2",
-    "pypinfo>=22.0.0",
-    "click>=8.1.8",
+    "pendulum>=3.0.0",
 ]
 
 [project.optional-dependencies]

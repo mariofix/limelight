@@ -3,6 +3,7 @@ import enum
 from dataclasses import dataclass
 from typing import List, Optional
 
+import pendulum
 from flask_security.models import fsqla_v3 as fsqla
 from sqlalchemy import DateTime, Enum, ForeignKey, func
 from sqlalchemy.orm import Mapped, declarative_mixin, mapped_column, relationship
@@ -35,11 +36,14 @@ class TimestampMixin:
 
 
 class ProjectTypes(enum.Enum):
-    application: str = "Application"
-    framework: str = "Framework"
-    library: str = "Library"
-    module: str = "Module"
     project: str = "Project"
+    """Apps, Installables, Projects that uses Flask/Quart (eg: Flaskr)"""
+    framework: str = "Framework"
+    """Projects that implement or work tightly with Flask (eg: Flask-RESTX)"""
+    extension: str = "Extension"
+    """Projects that extends Flask and get included in app.extensions (eg: Flask-SQLAlchemy)"""
+    module: str = "Module"
+    """Projects that work tightly but doesn't get included in app.extensions (eg: Flask-AdminLTE3)"""
 
 
 class ProjectTags(db.Model, TimestampMixin):
@@ -128,15 +132,27 @@ class Project(db.Model, TimestampMixin):
     def gitlab_json_url(self) -> Optional[str]:
         return self.source_json_url()
 
+    def first_release_ago(self) -> str:
+        da_date = pendulum.instance(self.first_release_date)
+        return f"{da_date.diff_for_humans(absolute=True)}"
+
+    def last_release_ago(self) -> str:
+        da_date = pendulum.instance(self.last_release_date)
+        return f"{da_date.diff_for_humans()}"
+
 
 class Tag(db.Model, TimestampMixin):
     __tablename__ = "limelight_tag"
 
     id: Mapped[int] = mapped_column(primary_key=True)
     slug: Mapped[str] = mapped_column(db.String(128), unique=True)
+    name: Mapped[str] = mapped_column(db.String(128), nullable=False)
     title: Mapped[str] = mapped_column(db.String(128), nullable=False)
-    description: Mapped[str] = mapped_column(db.String(2048), nullable=False)
+    description: Mapped[str] = mapped_column(db.String(2048), nullable=True)
     icon: Mapped[str] = mapped_column(db.String(128), nullable=True)
+    active: Mapped[bool] = mapped_column(default=True, nullable=False)
+    feature_in_home: Mapped[bool] = mapped_column(default=False, nullable=False)
+    order_in_home: Mapped[int] = mapped_column(nullable=True)
 
     projects: Mapped[List["Project"]] = relationship(secondary="limelight_project_tags", back_populates="tags")
 

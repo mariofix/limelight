@@ -60,7 +60,7 @@ class TagAdmin(AppAdmin, AdminModelView):
     name = _("Tag")
     name_plural = _("Tags")
     icon = "fa-solid fa-list"
-    column_list = ["title", "description", "projects"]
+    column_list = ["slug", "name", "active", "projects"]
 
 
 class ProjectAdmin(AppAdmin, AdminModelView):

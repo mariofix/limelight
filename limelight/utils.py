@@ -72,42 +72,24 @@ def fetch_project_info(project):
 
 
 def get_downloads(package):
-    from click.testing import CliRunner
-    from pypinfo.cli import pypinfo
+    import json
+    import secrets
 
-    def run_pypinfo_with_output(args):
-        runner = CliRunner()
-        result = runner.invoke(pypinfo, ["--auth", "instance/bigquery-auth.json"])
-
-        result = runner.invoke(pypinfo, args)
-
-        if result.exit_code != 0:
-            raise RuntimeError(f"Error running pypinfo: {result.output}")
-
-        return result.output
-
-    download_data = run_pypinfo_with_output(["--all", "--json", package, "ci"])
-    # import json
-
-    # download_data = json.loads({
-    #     "last_update": "2024-12-30 04:25:10",
-    #     "query": {
-    #         "bytes_billed": 909115392,
-    #         "bytes_processed": 908272767,
-    #         "cached": false,
-    #         "estimated_cost": "0.01"
-    #     },
-    #     "rows": [
-    #         {
-    #             "ci": "True",
-    #             "download_count": 7954185
-    #         },
-    #         {
-    #             "ci": "None",
-    #             "download_count": 6344381
-    #         }
-    #     ]
-    # })
+    download_data = json.loads(
+        {
+            "last_update": "2024-12-30 04:25:10",
+            "query": {
+                "bytes_billed": 909115392,
+                "bytes_processed": 908272767,
+                "cached": False,
+                "estimated_cost": "0.01",
+            },
+            "rows": [
+                {"ci": "True", "download_count": secrets.randbelow(9999999)},
+                {"ci": "None", "download_count": secrets.randbelow(99999999)},
+            ],
+        }
+    )
     try:
         return download_data["rows"][1]["download_count"]
     except KeyError:
@@ -148,6 +130,7 @@ def update_project_metadata(project: Any):
 
         git_slug = None
         for _, link in pypi_info.get("project_urls").items():
+
             if match := re.match(r"^https://(github|gitlab)\.com/([^/]+/[^/]+?)(?:\.git|/)?$", link):
                 platform, repo_path = match.groups()
                 git_slug = f"{platform}:{repo_path}"
@@ -211,7 +194,7 @@ def find_source_slug(url):
     if not url:
         return None
     if match := re.match(
-        r"^https://(github|gitlab)\.com/([^/]+/[^/]+?)(?:\.git|/)?$",
+        r"^(?:https?://)?(github|gitlab)\.com/([^/]+/[^/]+?)(?:\.git|/)?$",
         url,
     ):
         platform, repo_path = match.groups()
@@ -296,13 +279,17 @@ def update_pypi_metadata(project, update_cache: bool = False):
         # not needed
         pass
 
-    possible = [project.project_url, project.documentation_url, project.source_url] + [
-        url for _, url in pypi_info.get("project_urls", {}).items()
-    ]
-    for l in possible:
-        if source_slug := find_source_slug(l):
+    possible = [
+        project.project_url,
+        project.documentation_url,
+        project.source_url,
+        pypi_info.get("home_page", None),
+        pypi_info.get("download_url", None),
+    ] + [url for _, url in pypi_info.get("project_urls", {}).items()]
+    for link in possible:
+        if source_slug := find_source_slug(link):
             project.source_slug = source_slug
-            project.source_url = l
+            project.source_url = link
             break
 
     return project

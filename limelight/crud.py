@@ -1,5 +1,3 @@
-from flask import current_app
-
 from .database import db
 from .models import Project
 from .utils import (
