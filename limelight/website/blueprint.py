@@ -26,7 +26,7 @@ def help():
     return render_template("website/landing.html")
 
 
-@blueprint.get("/<any(application,framework,library,module,project):project_type>/")
+@blueprint.get("/<any(framework,extension,module,project):project_type>/")
 def projects(project_type):
     if project_type == "project":
         projects = db.session.execute(db.select(Project)).all()
