@@ -24,6 +24,7 @@ dependencies = [
     "flask-limiter>=3.9.2",
     "packaging>=24.2",
     "pendulum>=3.0.0",
+    "sentry-sdk[flask]>=2.19.2",
 ]
 
 [project.optional-dependencies]
