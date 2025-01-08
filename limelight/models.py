@@ -133,12 +133,16 @@ class Project(db.Model, TimestampMixin):
         return self.source_json_url()
 
     def first_release_ago(self) -> str:
-        da_date = pendulum.instance(self.first_release_date)
-        return f"{da_date.diff_for_humans(absolute=True)}"
+        if self.first_release_date:
+            da_date = pendulum.instance(self.first_release_date)
+            return f"{da_date.diff_for_humans(absolute=True)}"
+        return "No Data"
 
     def last_release_ago(self) -> str:
-        da_date = pendulum.instance(self.last_release_date)
-        return f"{da_date.diff_for_humans()}"
+        if self.last_release_date:
+            da_date = pendulum.instance(self.last_release_date)
+            return f"{da_date.diff_for_humans()}"
+        return "No Data"
 
 
 class Tag(db.Model, TimestampMixin):

@@ -285,7 +285,9 @@ def update_pypi_metadata(project, update_cache: bool = False):
         project.source_url,
         pypi_info.get("home_page", None),
         pypi_info.get("download_url", None),
-    ] + [url for _, url in pypi_info.get("project_urls", {}).items()]
+    ]
+    if pypi_info.get("project_urls"):
+        possible = possible + [url for _, url in pypi_info.get("project_urls").items()]
     for link in possible:
         if source_slug := find_source_slug(link):
             project.source_slug = source_slug
