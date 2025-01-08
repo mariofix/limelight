@@ -1,5 +1,19 @@
 {% extends "main.html" %}
+{% block meta_content %}
+<meta name="description" content="Registered extensions under {{project_type}}">
+<meta name="robots" content="index, follow">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="author" content="mariofix">
+<meta name="language" content="English">
+<meta name="revisit-after" content="7 days">
+<link rel="canonical" href="https://flaskpackages.pythonanywhere.com/{{ project_type }}">
+<meta property="og:title" content="{{ project_type|capitalize }}s">
+<meta property="og:site_name" content="Flask Packages">
+<meta property="og:url" content="https://flaskpackages.pythonanywhere.com/{{ project_type }}">
+<meta property="og:description" content="Registered extensions under {{project_type}}">
+<meta property="og:type" content="website">
 
+{% endblock meta_content %}
 {% block content %}
 <section class="bg-primary text-white text-center py-5">
   <div class="container">
