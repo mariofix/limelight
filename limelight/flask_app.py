@@ -3,7 +3,6 @@ from flask_admin import helpers as admin_helpers
 from flask_babel import Babel
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_security import Security, SQLAlchemyUserDatastore
-from flask_sitemap import Sitemap
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from .admin.site import admin_site
@@ -13,6 +12,7 @@ from .database import db, migrations
 from .limiter import limiter
 from .mail import mail
 from .models import Role, User
+from .sitemap import sitemapper
 from .website import blueprint as website
 
 
@@ -95,8 +95,6 @@ Sitemap: https://flaskpackages.pythonanywhere.com/sitemap-projects.xml\n \
 Sitemap: https://flaskpackages.pythonanywhere.com/sitemap.xml \
         "
 
-    # Sitemap
-    sitemap = Sitemap()
-    sitemap.init_app(app)
-
+    # Flask-Sitemapper
+    sitemapper.init_app(app)
     return app

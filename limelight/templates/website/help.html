@@ -1,0 +1,33 @@
+{% extends "main.html" %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="bg-primary text-white text-center py-5">
+  <div class="container">
+    <h1>Discover Open Source Flask Extensions</h1>
+    <p>Community-Driven Development for Flask Enthusiasts</p>
+    <div>
+      <a href="{{ url_for('website.new_project') }}" class="btn btn-light btn-lg">Contribute Project</a>
+      <a href="{{ url_for('website.projects', project_type='project') }}" class="btn btn-outline-light btn-lg">Browse Projects</a>
+    </div>
+  </div>
+</section>
+
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row featurette">
+      <div class="col-md-12">
+        <h2 class="featurette-heading fw-normal lh-1">Want to help? <span class="text-body-secondary">Here's how...</span></h2>
+        <p class="lead">You can always check the <a href="https://github.com/mariofix/limelight" target="_blank">source code</a> for this project, The following is currently needed to have the "first proper version":</p>
+        <ul>
+          <li><strong>Opinions</strong>: Your opinion is very important to me, if you have suggestions, ideas, complaints, <a href="https://github.com/mariofix/limelight/discussions/new?category=general" target="_blank">they are all very welcomed.</a></li>
+          <li><strong>Information Gathering&Filtering</strong>: There are about <a href="https://pypi.org/search/?q=flask" target="_blank">8000 projects in pypi</a>, just add the slug and the system will do the rest, but there is so much the system can guess, so you can also modify the <a href="/projects">project's metadata</a> so the crawler can work next time.</li>
+          <li><strong>Front-End</strong>: As you can see, Visual Design is not my strong suit, ANY help in this topic is very much appreciated, <a href="https://github.com/mariofix/limelight/pull" target="_blank">just send a PR.</a></li>
+          <li><strong>Infra&SEO</strong>: The app is currently in the free tier of pythonanywhere, I intend to pay as the traffic demands it but another domain name or subdomain will be nice, and in kind of the same topic, suggestions on how to make the domain migration without suffering in the search engines.</li>
+          <li><strong>Pass the word</strong>: Just pass the word, this is the best thing you can do to help.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock content %}

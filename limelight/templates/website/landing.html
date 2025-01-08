@@ -12,7 +12,6 @@
     </div>
   </div>
 </section>
-
 <!-- Common Scenarios Section -->
 <section class="py-5 bg-light">
   <div class="container">
@@ -53,8 +52,8 @@
               <tbody>
                 {% for p in projects %}
                 <tr>
-                  <td>{{ p[0].title }}</td>
-                  <td>{{ p[0].tags[0]|capitalize }}</td>
+                  <td><a href="{{ url_for('website.get_project', slug=p[0].slug) }}">{{ p[0].title }}</a></td>
+                  <td><a href="{{ url_for('website.get_tag', slug=p[0].tags[0]) }}">{{ p[0].tags[0]|capitalize }}</a></td>
                   <td>{{ p[0].last_release_ago() }}</td>
                 </tr>
                 {% endfor%}
@@ -80,7 +79,7 @@
               <tbody>
                 {% for r in releases %}
                 <tr>
-                  <td>{{ r[0].title }}</td>
+                  <td><a href="{{ url_for('website.get_project', slug=r[0].slug) }}">{{ r[0].title }}</a></td>
                   <td>{{ r[0].last_release }}</td>
                   <td>{{ r[0].last_release_ago() }}</td>
                 </tr>
@@ -89,6 +88,23 @@
             </table>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="py-5 bg-light">
+  <div class="container">
+    <div class="row featurette">
+      <div class="col-md-12">
+        <h2 class="featurette-heading fw-normal lh-1">Want to help? <span class="text-body-secondary">Here's how...</span></h2>
+        <p class="lead">You can always check the <a href="https://github.com/mariofix/limelight" target="_blank">source code</a> for this project, The following is currently needed to have the "first proper version":</p>
+        <ul>
+          <li><strong>Opinions</strong>: Your opinion is very important to me, if you have suggestions, ideas, complaints, <a href="https://github.com/mariofix/limelight/discussions/new?category=general" target="_blank">they are all very welcomed.</a></li>
+          <li><strong>Information Gathering&Filtering</strong>: There are about <a href="https://pypi.org/search/?q=flask" target="_blank">8000 projects in pypi</a>, just add the slug and the system will do the rest, but there is so much the system can guess, so you can also modify the <a href="/projects">project's metadata</a> so the crawler can work next time.</li>
+          <li><strong>Front-End</strong>: As you can see, Visual Design is not my strong suit, ANY help in this topic is very much appreciated, <a href="https://github.com/mariofix/limelight/pull" target="_blank">just send a PR.</a></li>
+          <li><strong>Infra&SEO</strong>: The app is currently in the free tier of pythonanywhere, I intend to pay as the traffic demands it but another domain name or subdomain will be nice, and in kind of the same topic, suggestions on how to make the domain migration without suffering in the search engines.</li>
+          <li><strong>Pass the word</strong>: Just pass the word, this is the best thing you can do to help.</li>
+        </ul>
       </div>
     </div>
   </div>

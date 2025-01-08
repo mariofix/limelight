@@ -1,6 +1,6 @@
 [project]
 name = "limelight"
-version = "2024.12.29"
+version = "2025.1.0"
 description = "Flask shiniest stars"
 readme = "README.md"
 requires-python = ">=3.10,<4.0"
@@ -13,7 +13,6 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "flask-babel>=4.0.0",
     "python-multipart>=0.0.19",
-    "flask-sitemap>=0.4.0",
     "requests>=2.32.3",
     "flask-admin[sqlalchemy-with-utils,translation]>=2.0.0a3",
     "flask-debugtoolbar>=0.16.0",
@@ -24,7 +23,7 @@ dependencies = [
     "flask-limiter>=3.9.2",
     "packaging>=24.2",
     "pendulum>=3.0.0",
-    "sentry-sdk[flask]>=2.19.2",
+    "flask-sitemapper>=1.8.1",
 ]
 
 [project.optional-dependencies]
