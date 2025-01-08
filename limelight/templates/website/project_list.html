@@ -3,30 +3,45 @@
 {% block content %}
 <section class="bg-primary text-white text-center py-5">
   <div class="container">
-    <h1>Project List - {{ project_type }}</h1>
+
+    <h1>Registered Extensions{% if project_type != "fulllist"  %} - {{ project_type|capitalize }}s{% endif %}</h1>
+
   </div>
 </section>
 
-<div class="album py-5 bg-body-tertiary">
+<div class="py-5 bg-body-tertiary">
   <div class="container">
-    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
-      {% for project in projects %}
-      <div class="col mt-5">
-        <div class="card shadow-sm">
-          <div class="card-body">
-            <h5 class="card-title">{{ project[0].title }}</h5>
-            <p class="card-text">{{ project[0].description }}</p>
-            <div class="d-flex justify-content-between align-items-center">
-              <div class="btn-group">
-                <a href="{{ url_for('website.get_project', slug=project[0].slug) }}" role="button" class="btn btn-sm btn-outline-secondary">View</a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
+    <div class="row">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Current Release</th>
+            <th>Python Compatibility</th>
+            <th>Flask Compatibility</th>
+            <th>Downloads</th>
+            <th>Open Issues</th>
+            <th>Subscribers</th>
+            <th>Last Crawl</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for project in projects %}
+          <tr>
+            <td><a href="{{ url_for('website.get_project', slug=project[0].slug) }}">{{ project[0].slug }}</a></td>
+            <td><span class="d-inline-flex px-2 py-1 fw-semibold text-success-emphasis bg-success-subtle border border-success-subtle rounded-2">{{ project[0].last_release }}</span> <span class="text-secondary small">{{ project[0].last_release_ago() }}</span></td>
+            <td style="word-wrap: break-word;min-width: 50px;max-width: 50px;">{{ project[0].supported_python|default("Not Found", boolean=true) }}</td>
+            <td style="word-wrap: break-word;min-width: 50px;max-width: 50px;">{{ project[0].supported_flask|default("Not Found", boolean=true) }}</td>
+            <td>{{ project[0].downloads|default("Not Found", boolean=true) }}</td>
+            <td>{{ project[0].issues_open|default("Not Found", boolean=true) }}</td>
+            <td>{{ project[0].subscribers|default("Not Found", boolean=true) }}</td>
+            <td><span class="text-secondary small">{{ project[0].last_mod_ago() }}</span></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
     </div>
   </div>
 </div>
-
 {% endblock content %}

@@ -71,29 +71,9 @@ def fetch_project_info(project):
     return project
 
 
-def get_downloads(package):
-    import json
-    import secrets
+def get_downloads(package: str):
 
-    download_data = json.loads(
-        {
-            "last_update": "2024-12-30 04:25:10",
-            "query": {
-                "bytes_billed": 909115392,
-                "bytes_processed": 908272767,
-                "cached": False,
-                "estimated_cost": "0.01",
-            },
-            "rows": [
-                {"ci": "True", "download_count": secrets.randbelow(9999999)},
-                {"ci": "None", "download_count": secrets.randbelow(99999999)},
-            ],
-        }
-    )
-    try:
-        return download_data["rows"][1]["download_count"]
-    except KeyError:
-        return None
+    return None
 
 
 def update_project_metadata(project: Any):

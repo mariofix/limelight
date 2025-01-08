@@ -31,49 +31,41 @@
   </div>
 </section>
 
-<section class="bg-light">
+<div class="bg-body-tertiary">
   <div class="container">
-    <div class="col-md-12">
-      <div class="row row-cards">
-        <div class="space-y">
+    <div class="row">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Project</th>
+            <th>Current Release</th>
+            <th>Python Compatibility</th>
+            <th>Flask Compatibility</th>
+            <th>Downloads</th>
+            <th>Open Issues</th>
+            <th>Subscribers</th>
+            <th>Last Crawl</th>
+          </tr>
+        </thead>
+        <tbody>
           {% for project in tag.projects %}
-          <div class="card mb-3">
-            <div class="row g-0">
-              <div class="col-auto">&nbsp; &nbsp;</div>
-              <div class="col">
-                <div class="card-body ps-0">
-                  <div class="row">
-                    <div class="col">
-                      <h5 class="mb-0"><a href="{{ url_for('website.get_project', slug=project.slug) }}">{{ project.title }}</a></h5>
-                    </div>
-                    <div class="col-auto text-success">Current Release: {{ project.last_release }} published {{ project.last_release_ago() }}</div>
-                  </div>
-                  <div class="row">
-                    <div class="col-md">
-                      <div class="mt-3 list-inline list-inline-dots mb-0 text-secondary d-sm-block d-none">
-                        <div class="list-inline-item"><i class="bi bi-bezier2"></i> {{ project.forks }}</div>
-                        <div class="list-inline-item"><i class="bi bi-record-circle"></i> {{ project.issues_open }}</div>
-                        <div class="list-inline-item"><i class="bi bi-star"></i> {{ project.stars }}</div>
-                        <div class="list-inline-item"><i class="bi bi-download"></i> {{ project.downloads }}</div>
-                        <div class="list-inline-item"><i class="bi bi-calendar-check"></i> {{ project.first_release_ago() }}</div>
-                        <div class="list-inline-item"><i class="bi bi-file-text"></i> {{ project.license }}</div>
-                      </div>
-                    </div>
-                    <div class="col-md-auto">
-                      <div class="mt-3 badges">
-                        <a href="#" class="badge badge-outline text-secondary fw-normal badge-pill">Python {{ project.supported_python|default("Not Found in project", boolean=true) }}</a>
-                        <a href="#" class="badge badge-outline text-secondary fw-normal badge-pill">Flask {{ project.supported_flask|default("Not Found in project", boolean=true) }}</a>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <tr>
+            <td><a href="{{ url_for('website.get_project', slug=project.slug) }}">{{ project.slug }}</a></td>
+            <td><span class="d-inline-flex px-2 py-1 fw-semibold text-success-emphasis bg-success-subtle border border-success-subtle rounded-2">{{ project.last_release }}</span> <span class="text-secondary small">{{ project.last_release_ago() }}</span></td>
+            <td style="word-wrap: break-word;min-width: 50px;max-width: 50px;">{{ project.supported_python|default("Not Found", boolean=true) }}</td>
+            <td style="word-wrap: break-word;min-width: 50px;max-width: 50px;">{{ project.supported_flask|default("Not Found", boolean=true) }}</td>
+            <td>{{ project.downloads|default("Not Found", boolean=true) }}</td>
+            <td>{{ project.issues_open|default("Not Found", boolean=true) }}</td>
+            <td>{{ project.subscribers|default("Not Found", boolean=true) }}</td>
+            <td><span class="text-secondary small">{{ project.last_mod_ago() }}</span></td>
+          </tr>
           {% endfor %}
-        </div>
-      </div>
+        </tbody>
+      </table>
+
     </div>
   </div>
-</section>
+</div>
+
+
 {% endblock content %}

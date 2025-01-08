@@ -144,6 +144,11 @@ class Project(db.Model, TimestampMixin):
             return f"{da_date.diff_for_humans()}"
         return "No Data"
 
+    def last_mod_ago(self) -> str:
+        if self.modified_at:
+            da_date = pendulum.instance(self.modified_at)
+            return f"{da_date.diff_for_humans()}"
+
 
 class Tag(db.Model, TimestampMixin):
     __tablename__ = "limelight_tag"

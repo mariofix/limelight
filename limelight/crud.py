@@ -1,3 +1,6 @@
+import pendulum
+from sqlalchemy import func
+
 from .database import db
 from .models import Project
 from .utils import (
@@ -56,3 +59,24 @@ def update_project(project):
         db.session.refresh(project)
 
     return project
+
+
+def get_queue(days: int = 7):
+    last_week = pendulum.now().subtract(days=days)
+    pypi = db.session.execute(
+        db.select(Project).where(Project.pypi_data_date <= last_week).order_by(func.random())
+    ).first()
+    if pypi:
+        return pypi[0].slug
+
+    source = db.session.execute(
+        db.select(Project).where(Project.source_data_date <= last_week).order_by(func.random())
+    ).first()
+    if source:
+        return source[0].slug
+
+
+def process_queue(limit: int = 1):
+    for _ in range(limit):
+        project = get_queue(days=7)
+        print(f"{project = }")

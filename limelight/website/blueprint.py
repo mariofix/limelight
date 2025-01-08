@@ -1,6 +1,7 @@
 from flask import Blueprint, Response, render_template
 from sqlalchemy import desc
 
+from ..crud import process_queue
 from ..database import db
 from ..forms import NewProjectForm
 from ..models import Project, Tag
@@ -15,6 +16,8 @@ blueprint = Blueprint("website", __name__)
 )
 @blueprint.get("/")
 def home():
+    # We just want one on each request
+    process_queue(limit=1)
     featured_tags = db.session.execute(db.select(Tag).where(Tag.feature_in_home).order_by(Tag.order_in_home)).all()
     projects = db.session.execute(db.select(Project).order_by(desc(Project.id)).limit(5)).all()
     releases = db.session.execute(db.select(Project).order_by(desc(Project.last_release_date)).limit(5)).all()
@@ -32,6 +35,8 @@ def home():
 )
 @blueprint.get("/help/")
 def help():
+    # We just want one on each request
+    process_queue(limit=1)
     return render_template("website/help.html")
 
 
@@ -42,9 +47,9 @@ def help():
         "project_type": ["framework", "extension", "module", "project"],
     },
 )
-@blueprint.get("/<any(framework,extension,module,project):project_type>/")
+@blueprint.get("/<any(framework,extension,module,project,fulllist):project_type>/")
 def projects(project_type):
-    if project_type == "project":
+    if project_type == "fulllist":
         projects = db.session.execute(db.select(Project)).all()
     else:
         projects = db.session.execute(db.select(Project).where(Project.category == project_type)).all()
