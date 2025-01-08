@@ -110,3 +110,8 @@ http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">'
         sitemap = f"{sitemap}\n<url><loc>https://flaskpackages.pythonanywhere.com/project/{project[0].slug}</loc><priority>1.00</priority></url>"
     sitemap = f"{sitemap}\n</urlset>"
     return Response(sitemap, mimetype="application/xml")
+
+
+@blueprint.get("tyn4pbqky6nwdz36cm33m343uga1pqv7.txt")
+def index_now():
+    return "tyn4pbqky6nwdz36cm33m343uga1pqv7"
