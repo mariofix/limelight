@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://flaskpackages.pythonanywhere.com/sitemap-projects.xml
+Sitemap: https://flaskpackages.pythonanywhere.com/sitemap.xml

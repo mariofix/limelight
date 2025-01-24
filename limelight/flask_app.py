@@ -3,6 +3,7 @@ from flask_admin import helpers as admin_helpers
 from flask_babel import Babel
 from flask_debugtoolbar import DebugToolbarExtension
 from flask_security import Security, SQLAlchemyUserDatastore
+from jinja2_humanize_extension import HumanizeExtension
 from werkzeug.middleware.proxy_fix import ProxyFix
 
 from .admin.site import admin_site
@@ -11,13 +12,14 @@ from .crud import get_context_data
 from .database import db, migrations
 from .limiter import limiter
 from .mail import mail
-from .models import Role, User
+from .models import *  # noqa
 from .sitemap import sitemapper
 from .website import blueprint as website
 
 
 def create_app(settings_file: str | None = None) -> Flask:
     app = Flask("limelight")
+    app.jinja_env.add_extension(HumanizeExtension)
     app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1, x_prefix=1)
 
     # Configure App
@@ -86,15 +88,7 @@ def create_app(settings_file: str | None = None) -> Flask:
     app.register_blueprint(website, url_prefix="/")
     app.register_blueprint(api, url_prefix="/api/")
 
-    @app.get("/robots.txt")
-    def robots():
-        return " \
-User-agent: * \n \
-Allow: / \n\n \
-Sitemap: https://flaskpackages.pythonanywhere.com/sitemap-projects.xml\n \
-Sitemap: https://flaskpackages.pythonanywhere.com/sitemap.xml \
-        "
-
     # Flask-Sitemapper
     sitemapper.init_app(app)
+
     return app

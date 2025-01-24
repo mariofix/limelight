@@ -1,12 +1,11 @@
 [project]
 name = "limelight"
-version = "2025.1.0"
+version = "2025.2"
 description = "Flask shiniest stars"
+authors = [{ name = "Mario Hernandez", email = "mariofix@proton.me" }]
+license = { text = "MIT" }
 readme = "README.md"
 requires-python = ">=3.10,<4.0"
-license = { "text" = "MIT" }
-authors = [{ "name" = "Mario Hernandez", "email" = "mariofix@proton.me" }]
-
 dependencies = [
     "flask-migrate>=4.0.7",
     "flask>=3.1.0",
@@ -21,13 +20,21 @@ dependencies = [
     "flask-security[babel,common,fsqla]>=5.5.2",
     "setuptools>=75.6.0",
     "flask-limiter>=3.9.2",
-    "packaging>=24.2",
+    "packaging (>=24.2,<25.0)",
     "pendulum>=3.0.0",
     "flask-sitemapper>=1.8.1",
+    "jinja2-humanize-extension (>=0.4.0,<0.5.0)",
 ]
+
+[tool.poetry]
+package-mode = false
 
 [project.optional-dependencies]
 dev = ["pre-commit>=4.0.1", "black>=24.10.0"]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
 
 [tool.autopep8]
 max_line_length = 119
@@ -51,10 +58,3 @@ profile = "black"
 line_length = 119
 multi_line_output = 5
 py_version = 310
-
-[build-system]
-requires = ["setuptools"]
-build-backend = "setuptools.build_meta"
-
-[tool.setuptools.packages.find]
-include = ["limelight"]

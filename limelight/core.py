@@ -1,0 +1,2 @@
+class LimelightError(Exception):
+    pass

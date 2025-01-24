@@ -3,29 +3,55 @@ import re
 from typing import Any
 
 import requests
-from packaging.specifiers import SpecifierSet
-from packaging.version import Version
+from packaging.requirements import Requirement
 
+from .core import LimelightError
 from .database import db
 from .version import __version__
 
 
-def expand_requires_python(requires_python, max_python_version="3.13"):
-    if not requires_python:
-        return []
+def parse_requirement(req_string):
+    """
+    Parse a requirement string and extract package name, version constraints, and extras.
 
-    specifier = SpecifierSet(requires_python)
+    Args:
+        req_string (str): Requirement string to parse
 
-    max_major, max_minor = map(int, max_python_version.split("."))
-    versions = []
+    Returns:
+        dict: Parsed requirement details
+    """
+    try:
+        # Normalize the requirement string
+        req = Requirement(req_string.strip())
 
-    for major in range(2, max_major + 1):
-        for minor in range(0, max_minor + 1):
-            version = Version(f"{major}.{minor}")
-            if version in specifier:
-                versions.append(str(version))
+        return {
+            "name": req.name,
+            "specifier": str(req.specifier) if req.specifier else None,
+            "version_specs": [str(spec) for spec in req.specifier] if req.specifier else [],
+            "extras": list(req.extras),
+        }
+    except Exception:
+        return {"name": req_string.strip(), "specifier": None, "version_specs": [], "extras": []}
 
-    return versions
+
+def get_package_details(package_name, requires_dist):
+    """
+    Find the version specification and extras for a specific package from requires_dist.
+
+    Args:
+        package_name (str): Name of the package to find
+        requires_dist (list): List of requirement strings
+
+    Returns:
+        dict: Package details including name, version, and extras
+    """
+    if requires_dist:
+        for req_string in requires_dist:
+            parsed_req = parse_requirement(req_string)
+            if parsed_req["name"].lower() == package_name.lower():
+                return {"name": parsed_req["name"], "version": parsed_req["specifier"], "extras": parsed_req["extras"]}
+
+    return None
 
 
 def fetch_project_data(url):
@@ -74,6 +100,105 @@ def fetch_project_info(project):
 def get_downloads(package: str):
 
     return None
+
+
+def full_update_project_metadata(project):
+    """Updates Project info based on all available information."""
+    if project.pypi_data:
+        try:
+            pypi_info = project.pypi_data["response_data"]["info"]
+        except KeyError:
+            raise LimelightError("Project.pypi_data does not have a correct structure.")
+
+        print(f"{pypi_info = }")
+        project.title = pypi_info.get("name", None)
+        project.description = pypi_info.get("summary", None)
+        project.project_url = pypi_info.get("project_url", None)
+        project.supported_python = pypi_info.get("requires_python")
+        project.docs_url = pypi_info.get("docs_url", None)
+        project.readme = pypi_info.get("description", None)
+        project.readme_type = pypi_info.get("description_content_type", None)
+        project.license = pypi_info.get("license", None)
+        project.last_release = pypi_info.get("version", None)
+        if version_data := get_package_details("Flask", pypi_info.get("requires_dist")):
+            project.supported_flask = version_data["version"]
+
+        try:
+            project.last_release_date = datetime.datetime.fromisoformat(
+                project.pypi_data["response_data"]["releases"][pypi_info.get("version")][0]["upload_time"]
+            )
+        except (KeyError, IndexError):
+            project.last_release_date = None
+
+        try:
+
+            project.first_release_date = datetime.datetime.fromisoformat(
+                project.pypi_data["response_data"]["releases"][
+                    next(
+                        iter(project.pypi_data["response_data"]["releases"]),
+                    )
+                ][0]["upload_time"]
+            )
+        except (KeyError, IndexError):
+            project.first_release_date = None
+
+        db.session.commit()
+        db.session.refresh(project)
+
+    if project.source_data:
+        try:
+            repo_info = project.source_data["response_data"]
+        except KeyError:
+            raise LimelightError("Project.source_data does not have a correct structure.")
+
+        # Fill Missing Data
+        if not project.title:
+            project.title = repo_info.get("name", None)
+        if not project.description:
+            project.description = repo_info.get("description", None)
+        if not project.project_url:
+            project.project_url = repo_info.get("homepage", None)
+        if not project.license or len(project.license) > 20:
+            try:
+                project.license = repo_info.get("license").get("spdx_id", None)
+            except Exception:
+                project.license = None
+        if not project.source_url:
+            project.source_url = repo_info.get("html_url", None)
+
+        project.issues_open = repo_info.get("open_issues_count")
+        try:
+            url = f"{project.github_json_url()}/issues?state=closed&per_page=1"
+            github_data = fetch_github_api(url)
+            link_header = github_data.headers.get("Link")
+            match = re.search(r'page=(\d+)>; rel="last"', link_header)
+            if match:
+                total_closed_issues = int(match.group(1))
+            else:
+                total_closed_issues = 0
+            project.issues_closed = total_closed_issues
+        except Exception:
+            project.issues_closed = None
+
+        project.stars = repo_info.get("stargazers_count")
+        project.forks = repo_info.get("forks_count")
+        project.network = repo_info.get("network_count")
+        project.subscribers = repo_info.get("subscribers_count")
+        project.watchers = repo_info.get("watchers_count")
+        db.session.commit()
+        db.session.refresh(project)
+
+    if project.downloads_data:
+        try:
+            dload_info = project.downloads_data["response_data"]
+        except KeyError:
+            raise LimelightError("Project.pypi_data does not have a correct structure.")
+
+        project.downloads = dload_info["total_downloads"]
+
+    db.session.commit()
+    db.session.refresh(project)
+    return project
 
 
 def update_project_metadata(project: Any):
@@ -226,12 +351,18 @@ def update_github_metadata(project, update_cache: bool = False, overwrite_data: 
 
 def update_pypi_metadata(project, update_cache: bool = False):
     if update_cache:
-        pypi_data = fetch_project_data(project.pypi_json_url())
-        if pypi_data.status_code == 200:
-            project.pypi_data = pypi_data.json()
+        from .sources import PyPiClient, SourcesConfig
+
+        data_client = PyPiClient(SourcesConfig(project_slug=project.pypi_slug))
+        data = data_client.get()
+        if data["response_code"] == 200:
+            project.pypi_data = data
             project.pypi_data_date = datetime.datetime.now()
 
-    pypi_info = project.pypi_data.get("info", None)
+    try:
+        pypi_info = project.pypi_data["response_data"]["info"]
+    except KeyError:
+        raise LimelightError("project.pypi_data has the wrong structure")
 
     project.title = pypi_info.get("name", None)
     project.description = pypi_info.get("summary", None)
@@ -279,30 +410,22 @@ def update_pypi_metadata(project, update_cache: bool = False):
 
 def create_pypi_project(slug, fill_data: bool):
     from .models import Project
+    from .sources import PyPiClient, SourcesConfig
 
     new_project = Project(slug=slug, pypi_slug=slug)
     if fill_data:
-        pypi_data = fetch_project_data(new_project.pypi_json_url())
-        if pypi_data.status_code == 200:
-            new_project.pypi_data = pypi_data.json()
-            new_project.pypi_data_date = datetime.datetime.now()
-    return new_project
-
-
-def create_conda_project(slug, fill_data: bool):
-    from .models import Project
-
-    new_project = Project(slug=slug, conda_slug=slug)
-    if fill_data:
-        conda_data = fetch_project_data(new_project.conda_json_url())
-        if conda_data.status_code == 200:
-            new_project.conda_data = conda_data.json() if conda_data else None
-            new_project.conda_data_date = datetime.datetime.now()
+        data_client = PyPiClient(SourcesConfig(project_slug=slug))
+        new_project.pypi_data = data_client.get()
+        new_project.pypi_data_date = datetime.datetime.now()
+        new_project = update_pypi_metadata(new_project)
     return new_project
 
 
 def create_git_project(url, fill_data: bool):
+    from flask import current_app
+
     from .models import Project
+    from .sources import SourcesConfig
 
     if match := re.match(
         r"^https://(github|gitlab)\.com/([^/]+/[^/]+?)(?:\.git|/)?$",
@@ -311,9 +434,19 @@ def create_git_project(url, fill_data: bool):
         platform, repo_path = match.groups()
 
     new_project = Project(source_url=url, source_slug=f"{platform}:{repo_path}")
+    if platform == "github":
+        from .sources import GithubClient as GitClient
+
+        token = current_app.config["GITHUB_TOKEN"]
+    elif platform == "gitlab":
+        from .sources import GitlabClient as GitClient
+
+        token = current_app.config["GITLAB_TOKEN"]
+
     if fill_data:
-        github_data = fetch_github_api(new_project.github_json_url())
-        if github_data.staus_code == 200:
-            new_project.source_data = github_data.json()
-            new_project.source_data_date = datetime.datetime.now()
+        data_client = GitClient(
+            SourcesConfig(project_slug=repo_path.split("/")[1], owner_name=repo_path.split("/")[0]), token=token
+        )
+        new_project.source_data = data_client.get()
+        new_project.source_data_date = datetime.datetime.now()
     return new_project

@@ -1,13 +1,54 @@
 from flask import Blueprint, Response, render_template
 from sqlalchemy import desc
 
-from ..crud import process_queue
+from ..crud import add_queue, get_new_data, get_old_data, process_queue_item
 from ..database import db
 from ..forms import NewProjectForm
 from ..models import Project, Tag
 from ..sitemap import sitemapper
+from ..utils import full_update_project_metadata
 
 blueprint = Blueprint("website", __name__)
+
+
+# Queue Manager
+@blueprint.before_request
+def find_new_projects():
+    # pypi
+    if pypi := get_new_data(queue_type=1):
+        add_queue(project=pypi, project_type=1)
+
+    if git := get_new_data(queue_type=2):
+        add_queue(project=git, project_type=2)
+
+    if downloads := get_new_data(queue_type=4):
+        add_queue(project=downloads, project_type=4)
+
+
+@blueprint.before_request
+def find_old_pypi():
+    # pypi
+    if old_pypi := get_old_data(days=7, queue_type=1):
+        add_queue(project=old_pypi, project_type=1)
+
+
+@blueprint.before_request
+def find_old_git():
+    # git
+    if old_git := get_old_data(days=7, queue_type=2):
+        add_queue(project=old_git, project_type=2)
+
+
+@blueprint.before_request
+def find_old_dloads():
+    # downloads
+    if old_dload := get_old_data(days=7, queue_type=4):
+        add_queue(project=old_dload, project_type=2)
+
+
+@blueprint.before_request
+def queue_item():
+    process_queue_item()
 
 
 @sitemapper.include(
@@ -16,8 +57,6 @@ blueprint = Blueprint("website", __name__)
 )
 @blueprint.get("/")
 def home():
-    # We just want one on each request
-    process_queue(limit=1)
     featured_tags = db.session.execute(db.select(Tag).where(Tag.feature_in_home).order_by(Tag.order_in_home)).all()
     projects = db.session.execute(db.select(Project).order_by(desc(Project.id)).limit(5)).all()
     releases = db.session.execute(db.select(Project).order_by(desc(Project.last_release_date)).limit(5)).all()
@@ -35,8 +74,6 @@ def home():
 )
 @blueprint.get("/help/")
 def help():
-    # We just want one on each request
-    process_queue(limit=1)
     return render_template("website/help.html")
 
 
@@ -64,7 +101,8 @@ def projects(project_type):
 @blueprint.get("/project/<slug>")
 def get_project(slug):
     project = db.session.execute(db.select(Project).where(Project.slug == slug)).first()
-    return render_template("website/project.html", project=project[0])
+    project = full_update_project_metadata(project=project[0])
+    return render_template("website/project.html", project=project)
 
 
 @sitemapper.include(
@@ -107,7 +145,7 @@ xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 \
 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">'
     )
     for project in projects:
-        sitemap = f"{sitemap}\n<url><loc>https://flaskpackages.pythonanywhere.com/project/{project[0].slug}</loc><priority>1.00</priority></url>"
+        sitemap = f"{sitemap}\n<url><loc>https://flaskpackages.pythonanywhere.com/project/{project[0].slug}</loc><priority>1.00</priority></url>"  # noqa
     sitemap = f"{sitemap}\n</urlset>"
     return Response(sitemap, mimetype="application/xml")
 

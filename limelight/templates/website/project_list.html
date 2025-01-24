@@ -45,10 +45,10 @@
             <td><a href="{{ url_for('website.get_project', slug=project[0].slug) }}">{{ project[0].slug }}</a></td>
             <td><span class="d-inline-flex px-2 py-1 fw-semibold text-success-emphasis bg-success-subtle border border-success-subtle rounded-2">{{ project[0].last_release }}</span> <span class="text-secondary small">{{ project[0].last_release_ago() }}</span></td>
             <td style="word-wrap: break-word;min-width: 50px;max-width: 50px;">{{ project[0].supported_python|default("Not Found", boolean=true) }}</td>
-            <td style="word-wrap: break-word;min-width: 50px;max-width: 50px;">{{ project[0].supported_flask|default("Not Found", boolean=true) }}</td>
-            <td>{{ project[0].downloads|default("Not Found", boolean=true) }}</td>
-            <td>{{ project[0].issues_open|default("Not Found", boolean=true) }}</td>
-            <td>{{ project[0].subscribers|default("Not Found", boolean=true) }}</td>
+            <td style="word-wrap: break-word;min-width: 50px;max-width: 50px;">{{ project[0].supported_flask|default("Any version", boolean=true) }}</td>
+            <td>{{ project[0].downloads|default(0, boolean=True)|humanize_intword|replace("billion","B")|replace("million","M")|replace("thousand","K") }}</td>
+            <td>{{ project[0].issues_open|default("0", boolean=true) }}</td>
+            <td>{{ project[0].subscribers|default("0", boolean=true) }}</td>
             <td><span class="text-secondary small">{{ project[0].last_mod_ago() }}</span></td>
           </tr>
           {% endfor %}

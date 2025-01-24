@@ -1,5 +1,3 @@
-import datetime
-
 from flask import flash
 from flask_admin.actions import action
 from flask_admin.babel import lazy_gettext as _
@@ -7,7 +5,7 @@ from flask_security.utils import hash_password
 from wtforms import fields
 
 from .. import utils
-from ..database import db
+from ..crud import process_queue_item
 from ..models import Project, User
 from .mixins import AdminModelView
 
@@ -24,7 +22,7 @@ class AppAdmin:
     page_size = 20
     can_create = True
     can_edit = True
-    can_delete = True
+    can_delete = False
     column_display_pk = True
     save_as = True
     save_as_continue = True
@@ -63,11 +61,42 @@ class TagAdmin(AppAdmin, AdminModelView):
     column_list = ["slug", "name", "active", "projects"]
 
 
+origin_tuple = [
+    (1, "pypi"),
+    (2, "git-repo"),
+    (3, "conda"),
+    (4, "pepy-tech"),
+    (5, "google-big-query"),
+]
+
+
+class QueueAdmin(AppAdmin, AdminModelView):
+    name = _("Queue")
+    icon = "fa-solid fa-list"
+    column_list = ["project", "processed", "origin"]
+    form_choices = {"origin": origin_tuple}
+    column_choices = {"origin": origin_tuple}
+
+    @action(
+        "process",
+        _("Process Item"),
+        _("u sure?"),
+    )
+    def action_process(self, ids):
+        for id in ids:
+            try:
+                item = process_queue_item(id, True)
+            except Exception as e:
+                flash(f"Error: {e}", "error")
+            else:
+                flash(f"Processed {item.project}", "success")
+
+
 class ProjectAdmin(AppAdmin, AdminModelView):
     name = _("Project")
     name_plural = _("Projects")
     icon = "bi-star"
-    column_list = ["slug", "tags", "category", "supported_python"]
+    column_list = ["slug", "tags", "category", "supported_python", "supported_flask"]
 
     @action(
         "fetch_data",
@@ -84,11 +113,11 @@ class ProjectAdmin(AppAdmin, AdminModelView):
     @action(
         "update_data",
         _("Update Project Data"),
-        _("Update project metadada from all available sources."),
+        _("Update project metadada from all available cached-sources."),
     )
     def action_update_data(self, ids):
 
         projects = Project.query.filter(Project.id.in_(ids))
         for project in projects.all():
-            utils.update_project_metadata(project)
+            utils.full_update_project_metadata(project)
             flash(f"Data Processed: {project}", "info")

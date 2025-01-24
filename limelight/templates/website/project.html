@@ -50,7 +50,7 @@ endblock title %} {% block meta_content %}
                 <h6 class="text-muted mb-2">Current Release</h6>
                 <h3 class="mb-0">{{ project.last_release }}</h3>
                 <small class="text-success">{{ project.last_release_ago() }}</small>
-                {% if project.pypi_data.info.yanked %}
+                {% if project.pypi_data.response_data.info.yanked %}
                 - <small class="text-danger"> Yanked!</small>
                 {% endif %}
               </div>
@@ -138,9 +138,9 @@ endblock title %} {% block meta_content %}
                 <button class="nav-link" id="v-pills-ghdata-tab" data-bs-toggle="pill" data-bs-target="#v-pills-ghdata" type="button" role="tab" aria-controls="v-pills-ghdata" aria-selected="false">
                   Github Raw Data
                 </button>
-                <!-- <button class="nav-link" id="v-pills-anadata-tab" data-bs-toggle="pill" data-bs-target="#v-pills-anadata" type="button" role="tab" aria-controls="v-pills-anadata" aria-selected="false">
-                  Anaconda Raw Data
-                </button> -->
+                <button class="nav-link" id="v-pills-anadata-tab" data-bs-toggle="pill" data-bs-target="#v-pills-anadata" type="button" role="tab" aria-controls="v-pills-anadata" aria-selected="false">
+                  Downloads Raw Data
+                </button>
               </div>
               <div class="tab-content" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
@@ -156,7 +156,7 @@ endblock title %} {% block meta_content %}
                       <div class="col-md-3 col-6 mb-4">
                         <div class="text-center">
                           <i class="bi bi-download fs-1 text-primary mb-2"></i>
-                          <h2 class="fw-bold">{{ project.downloads|default("No Data", boolean=True) }}</h2>
+                          <h2 class="fw-bold">{{ project.downloads|default(0, boolean=True)|humanize_intword|replace("billion","B")|replace("million","M")|replace("thousand","K") }}</h2>
                           <p class="text-muted">Downloads</p>
                         </div>
                       </div>
@@ -194,7 +194,7 @@ endblock title %} {% block meta_content %}
                         <i class="bi bi-alarm text-body-secondary flex-shrink-0 me-3"></i>
                         <div>
                           <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Flask Support</h3>
-                          <p>{{ project.supported_flask|default("Not Found in project", boolean=true) }}</p>
+                          <p>{{ project.supported_flask|default("Any Version", boolean=true) }}</p>
                         </div>
                       </div>
                       <div class="col d-flex align-items-start">
@@ -235,9 +235,9 @@ endblock title %} {% block meta_content %}
                 <div class="tab-pane fade" id="v-pills-ghdata" role="tabpanel" aria-labelledby="v-pills-ghdata-tab" tabindex="0">
                   <div class="json_tree_gh"></div>
                 </div>
-                <!-- <div class="tab-pane fade" id="v-pills-anadata" role="tabpanel" aria-labelledby="v-pills-anadata-tab" tabindex="0">
-                  <div class="json_tree_ana"></div>
-                </div> -->
+                <div class="tab-pane fade" id="v-pills-anadata" role="tabpanel" aria-labelledby="v-pills-anadata-tab" tabindex="0">
+                  <div class="json_tree_dl"></div>
+                </div>
               </div>
             </div>
           </div>
@@ -251,10 +251,13 @@ endblock title %} {% block meta_content %}
 <script type="text/javascript">
   const data = {{ project.pypi_data| tojson }};
   const gh_data = {{ project.source_data| tojson }};
+  const dload_data = {{ project.downloads_data| tojson }};
   const tree = jsonview.create(data);
   const tree_gh = jsonview.create(gh_data);
+  const tree_dl = jsonview.create(dload_data);
   jsonview.render(tree, document.querySelector(".json_tree"));
   jsonview.render(tree_gh, document.querySelector(".json_tree_gh"));
+  jsonview.render(tree_dl, document.querySelector(".json_tree_dl"));
 
 </script>
 {% endblock post_js%}

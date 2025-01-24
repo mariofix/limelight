@@ -102,6 +102,8 @@ class Project(db.Model, TimestampMixin):
     subscribers: Mapped[int] = mapped_column(nullable=True, default=None)
 
     downloads: Mapped[int] = mapped_column(nullable=True, default=None)
+    downloads_data: Mapped[JSON] = mapped_column(type_=JSON, nullable=True)
+    downloads_data_date: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=True)
 
     tags: Mapped[List["Tag"]] = relationship(secondary="limelight_project_tags", back_populates="projects")
 
@@ -195,3 +197,21 @@ class ProjectStats(db.Model, TimestampMixin):
 
     def __str__(self):
         return f"{self.source}:{self.id}"
+
+
+@dataclass
+class Queue(db.Model, TimestampMixin):
+    __tablename__ = "limelight_project_queue"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+
+    project_id: Mapped[int] = mapped_column(ForeignKey("limelight_project.id"))
+    project: Mapped["Project"] = relationship("Project")
+
+    processed: Mapped[bool] = mapped_column(default=False, nullable=False)
+    origin: Mapped[int] = mapped_column(default=1, nullable=False, doc="1-pypi,2-source,3-conda,4-pepy,5-bigquery")
+
+    data: Mapped[JSON] = mapped_column(type_=JSON, nullable=True)
+
+    def __str__(self):
+        return f"Queue: {self.id} - {self.processed} - {self.project}"
