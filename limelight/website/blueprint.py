@@ -1,4 +1,4 @@
-from flask import Blueprint, Response, render_template
+from flask import Blueprint, Response, render_template, render_template_string
 from sqlalchemy import desc
 
 from ..crud import add_queue, get_new_data, get_old_data, process_queue_item
@@ -129,6 +129,12 @@ def new_project():
     return render_template("website/new_project.html", form=form)
 
 
+@blueprint.route("/robots.txt", methods=["GET"])
+def robots():
+    robots = render_template("robots.txt")
+    return Response(robots, mimetype="text/plain")
+
+
 @blueprint.get("/sitemap.xml")
 def full_sitemap():
     return sitemapper.generate()
@@ -137,16 +143,7 @@ def full_sitemap():
 @blueprint.get("/sitemap-projects.xml")
 def project_sitemap():
     projects = db.session.execute(db.select(Project)).all()
-    sitemap: str = (
-        '<?xml version="1.0" encoding="utf-8"?>\n\
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" \
-xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" \
-xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 \
-http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">'
-    )
-    for project in projects:
-        sitemap = f"{sitemap}\n<url><loc>https://flaskpackages.pythonanywhere.com/project/{project[0].slug}</loc><priority>1.00</priority></url>"  # noqa
-    sitemap = f"{sitemap}\n</urlset>"
+    sitemap = render_template("sitemap.xml", projects=projects)
     return Response(sitemap, mimetype="application/xml")
 
 
