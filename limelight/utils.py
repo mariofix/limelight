@@ -51,7 +51,7 @@ def get_package_details(package_name, requires_dist):
             if parsed_req["name"].lower() == package_name.lower():
                 return {"name": parsed_req["name"], "version": parsed_req["specifier"], "extras": parsed_req["extras"]}
 
-    return ">=3.0"
+    return {"name": "Flask", "version": ">=3.0", "extras": []}
 
 
 def fetch_project_data(url):
