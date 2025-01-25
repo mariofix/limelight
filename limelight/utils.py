@@ -114,7 +114,7 @@ def full_update_project_metadata(project):
         project.title = pypi_info.get("name", None)
         project.description = pypi_info.get("summary", None)
         project.project_url = pypi_info.get("project_url", None)
-        project.supported_python = pypi_info.get("requires_python")
+        project.supported_python = pypi_info.get("requires_python", ">=3.9")
         project.docs_url = pypi_info.get("docs_url", None)
         project.readme = pypi_info.get("description", None)
         project.readme_type = pypi_info.get("description_content_type", None)

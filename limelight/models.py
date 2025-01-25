@@ -65,8 +65,8 @@ class Project(db.Model, TimestampMixin):
     description: Mapped[str] = mapped_column(db.String(2048), nullable=True, default=None)
     category: Mapped[enum.Enum] = mapped_column(Enum(ProjectTypes), nullable=True, default=None)
 
-    supported_python: Mapped[JSON] = mapped_column(type_=JSON, nullable=True)
-    supported_flask: Mapped[str] = mapped_column(db.String(32), nullable=True)
+    supported_python: Mapped[str] = mapped_column(db.String(128), nullable=True)
+    supported_flask: Mapped[str] = mapped_column(db.String(128), nullable=True)
     readme: Mapped[str] = mapped_column(db.String(16000), nullable=True, default=None)
     readme_type: Mapped[str] = mapped_column(db.String(32), nullable=True, default=None)
     license: Mapped[str] = mapped_column(db.String(255), nullable=True, default=None)
