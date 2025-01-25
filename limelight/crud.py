@@ -251,6 +251,9 @@ def process_queue_item(id=None, overwrite=False):
     if not queue_item:
         return None
 
+    # Anoying .first() from fetch_queue_item(id)
+    queue_item = queue_item[0]
+
     if queue_item.processed and not overwrite:
         raise LimelightError(f"Queue Item {queue_item.id} already processed.")
 
