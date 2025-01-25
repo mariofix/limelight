@@ -24,13 +24,12 @@ dependencies = [
     "pendulum>=3.0.0",
     "flask-sitemapper>=1.8.1",
     "jinja2-humanize-extension (>=0.4.0,<0.5.0)",
+    "pre-commit>=4.0.1",
+    "black>=24.10.0",
 ]
 
 [tool.poetry]
-package-mode = false
 
-[project.optional-dependencies]
-dev = ["pre-commit>=4.0.1", "black>=24.10.0"]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

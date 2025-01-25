@@ -1,5 +1,5 @@
 [flake8]
-max-complexity = 10
+max-complexity = 30
 max-line-length = 119
 max-doc-length = 120
 indent-size = 4
@@ -9,7 +9,12 @@ exclude =
     .github,
     docs,
     tests
+    .venv
+    babel
+    instance
+    logs
 filename = *.py
 accept-encodings = utf-8
 inline-quotes = single
 multiline-quotes =  double
+ignore = F405

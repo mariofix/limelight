@@ -1,7 +1,8 @@
+import json
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Optional
+from typing import Any, Literal
 
 import requests
 
@@ -12,12 +13,13 @@ from .version import __version__
 class SourcesConfig:
     project_slug: str
     """Project slug"""
-    owner_name: Optional[str] = None
+    owner_name: str | None = None
     """user/org"""
-    token: Optional[str] = None
+    token: str | None = None
     """Required for pepy, github, and gitlab"""
-    bq_credentials: Optional[Path] = None
+    bq_credentials: Path | None = None
     """BigQuery Credentials path (json format)"""
+    git_origin: Literal["github", "gitlab"] | None = None
 
 
 class BaseApiClient(ABC):
@@ -31,11 +33,11 @@ class BaseApiClient(ABC):
         pass
 
     @abstractmethod
-    def get(self) -> Dict[str, Any]:
+    def get(self) -> dict[str, Any]:
         """Make API request and return response data"""
         pass
 
-    def _make_request(self, url: str, headers: Optional[Dict] = None, auth: Optional[tuple] = None) -> Dict[str, Any]:
+    def _make_request(self, url: str, headers: dict | None = None, auth: tuple | None = None) -> dict[str, Any]:
         try:
             response = self._session.get(url, headers=headers, auth=auth)
             response.raise_for_status()
@@ -43,7 +45,7 @@ class BaseApiClient(ABC):
                 "request_url": url,
                 "request_headers": headers,
                 "response_code": response.status_code,
-                "response_headers": None,
+                "response_headers": json.dumps(response.headers),
                 "response_data": response.json(),
             }
         except requests.exceptions.RequestException as e:
@@ -51,7 +53,7 @@ class BaseApiClient(ABC):
                 "request_url": url,
                 "request_headers": headers,
                 "response_code": response.status_code,
-                "response_headers": None,
+                "response_headers": json.dumps(response.headers),
                 "response_data": f"{e}",
             }
 
@@ -64,47 +66,44 @@ class PyPiClient(BaseApiClient):
     def setup_client(self) -> None:
         self.url = f"https://pypi.org/pypi/{self.config.project_slug}/json"
 
-    def get(self) -> Dict[str, Any]:
+    def get(self) -> dict[str, Any]:
         return self._make_request(self.url)
 
 
-class GithubClient(BaseApiClient):
+class GitRepoClient(BaseApiClient):
     def __init__(self, config: SourcesConfig):
+        if not config.git_origin:
+            raise ValueError("git_origin is required (github, gitlab)")
         if not config.token:
-            raise ValueError("GitHub token is required")
+            raise ValueError("Auth token is required")
         if not config.owner_name:
-            raise ValueError("Owner name is required for GitHub")
+            raise ValueError("Owner name is required")
 
         self.config = config
         super().__init__()
 
     def setup_client(self) -> None:
-        self.url = f"https://api.github.com/repos/{self.config.owner_name}/{self.config.project_slug}"
-        self.headers = {
-            "User-Agent": f"limelight/{__version__}",
-            "Authorization": f"Bearer {self.config.token}",
-            "Accept": "application/vnd.github+json",
-        }
+        if self.config.git_origin == "github":
+            self.url = f"https://api.github.com/repos/{self.config.owner_name}/{self.config.project_slug}"
+            self.headers = {
+                "User-Agent": f"limelight/{__version__}",
+                "Authorization": f"Bearer {self.config.token}",
+                "Accept": "application/vnd.github+json",
+            }
+        elif self.config.git_origin == "gitlab":
+            self.url = f"https://gitlab.com/api/v4/projects/{self.config.owner_name}%2F{self.config.project_slug}"
+            self.headers = {
+                "Authorization": f"Bearer {self.config.token}",
+                "User-Agent": f"limelight/{__version__}",
+            }
+        else:
+            raise NotImplementedError(f"{self.config.git_origin=} not supported yet")
 
-    def get(self) -> Dict[str, Any]:
+    def get(self) -> dict[str, Any]:
         return self._make_request(self.url, headers=self.headers)
 
-
-class GitlabClient(BaseApiClient):
-    def __init__(self, config: SourcesConfig):
-        if not config.token:
-            raise ValueError("GitLab token is required")
-        if not config.owner_name:
-            raise ValueError("Owner name is required for GitLab")
-
-        self.config = config
-        super().__init__()
-
-    def setup_client(self) -> None:
-        self.url = f"https://gitlab.com/api/v4/projects/{self.config.owner_name}%2F{self.config.project_slug}"
-        self.headers = {"Authorization": f"Bearer {self.config.token}"}
-
-    def get(self) -> Dict[str, Any]:
+    def get_closed_issues(self) -> int:
+        self.url = f"{self.url}/issues?state=closed&per_page=1"
         return self._make_request(self.url, headers=self.headers)
 
 
@@ -117,7 +116,7 @@ class PepyClient(BaseApiClient):
         self.url = f"https://api.pepy.tech/api/v2/projects/{self.config.project_slug}"
         self.headers = {"X-API-Key": self.config.token}
 
-    def get(self) -> Dict[str, Any]:
+    def get(self) -> dict[str, Any]:
         return self._make_request(self.url, headers=self.headers)
 
 
@@ -135,7 +134,7 @@ class BigQueryClient(BaseApiClient):
         self.client = bigquery.Client.from_service_account_json(str(self.config.bq_credentials))
         self.project = self.config.project_slug
 
-    def get(self) -> Dict[str, Any]:
+    def get(self) -> dict[str, Any]:
         try:
             query = f"""
                 SELECT *

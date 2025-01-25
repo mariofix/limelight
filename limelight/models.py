@@ -1,7 +1,6 @@
 import datetime
 import enum
 from dataclasses import dataclass
-from typing import List, Optional
 
 import pendulum
 from flask_security.models import fsqla_v3 as fsqla
@@ -105,22 +104,22 @@ class Project(db.Model, TimestampMixin):
     downloads_data: Mapped[JSON] = mapped_column(type_=JSON, nullable=True)
     downloads_data_date: Mapped[datetime.datetime] = mapped_column(DateTime(timezone=True), nullable=True)
 
-    tags: Mapped[List["Tag"]] = relationship(secondary="limelight_project_tags", back_populates="projects")
+    tags: Mapped[list["Tag"]] = relationship(secondary="limelight_project_tags", back_populates="projects")
 
     def __str__(self):
         return self.slug
 
-    def pypi_json_url(self) -> Optional[str]:
+    def pypi_json_url(self) -> str | None:
         if not self.pypi_slug:
             return None
         return f"https://pypi.org/pypi/{self.pypi_slug}/json"
 
-    def conda_json_url(self) -> Optional[str]:
+    def conda_json_url(self) -> str | None:
         if not self.conda_slug:
             return None
         return f"https://api.anaconda.org/package/{self.conda_slug}"
 
-    def source_json_url(self) -> Optional[str]:
+    def source_json_url(self) -> str | None:
         if not self.source_slug:
             return None
         if self.source_slug.startswith("github:"):
@@ -128,10 +127,10 @@ class Project(db.Model, TimestampMixin):
         if self.source_slug.startswith("gitlab:"):
             return f"https://api.gitlab.com/info/{self.source_slug.split(':')[1]}"
 
-    def github_json_url(self) -> Optional[str]:
+    def github_json_url(self) -> str | None:
         return self.source_json_url()
 
-    def gitlab_json_url(self) -> Optional[str]:
+    def gitlab_json_url(self) -> str | None:
         return self.source_json_url()
 
     def first_release_ago(self) -> str:
@@ -165,7 +164,7 @@ class Tag(db.Model, TimestampMixin):
     feature_in_home: Mapped[bool] = mapped_column(default=False, nullable=False)
     order_in_home: Mapped[int] = mapped_column(nullable=True)
 
-    projects: Mapped[List["Project"]] = relationship(secondary="limelight_project_tags", back_populates="tags")
+    projects: Mapped[list["Project"]] = relationship(secondary="limelight_project_tags", back_populates="tags")
 
     def __str__(self):
         return self.slug

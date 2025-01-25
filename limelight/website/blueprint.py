@@ -1,4 +1,4 @@
-from flask import Blueprint, Response, render_template, render_template_string
+from flask import Blueprint, Response, render_template
 from sqlalchemy import desc
 
 from ..crud import add_queue, get_new_data, get_old_data, process_queue_item

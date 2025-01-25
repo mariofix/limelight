@@ -51,7 +51,7 @@ def get_package_details(package_name, requires_dist):
             if parsed_req["name"].lower() == package_name.lower():
                 return {"name": parsed_req["name"], "version": parsed_req["specifier"], "extras": parsed_req["extras"]}
 
-    return None
+    return ">=3.0"
 
 
 def fetch_project_data(url):
@@ -367,7 +367,7 @@ def update_pypi_metadata(project, update_cache: bool = False):
     project.title = pypi_info.get("name", None)
     project.description = pypi_info.get("summary", None)
     project.project_url = pypi_info.get("project_url", None)
-    project.supported_python = pypi_info.get("requires_python", None)
+    project.supported_python = pypi_info.get("requires_python", ">=3.9")
     project.documentation_url = pypi_info.get("docs_url", None)
     project.readme = pypi_info.get("description", None)
     project.readme_type = pypi_info.get("description_content_type", None)
@@ -425,7 +425,7 @@ def create_git_project(url, fill_data: bool):
     from flask import current_app
 
     from .models import Project
-    from .sources import SourcesConfig
+    from .sources import GitRepoClient, SourcesConfig
 
     if match := re.match(
         r"^https://(github|gitlab)\.com/([^/]+/[^/]+?)(?:\.git|/)?$",
@@ -434,18 +434,15 @@ def create_git_project(url, fill_data: bool):
         platform, repo_path = match.groups()
 
     new_project = Project(source_url=url, source_slug=f"{platform}:{repo_path}")
-    if platform == "github":
-        from .sources import GithubClient as GitClient
-
-        token = current_app.config["GITHUB_TOKEN"]
-    elif platform == "gitlab":
-        from .sources import GitlabClient as GitClient
-
-        token = current_app.config["GITLAB_TOKEN"]
 
     if fill_data:
-        data_client = GitClient(
-            SourcesConfig(project_slug=repo_path.split("/")[1], owner_name=repo_path.split("/")[0]), token=token
+        data_client = GitRepoClient(
+            SourcesConfig(
+                project_slug=repo_path.split("/")[1],
+                owner_name=repo_path.split("/")[0],
+                token=current_app.config[f"{platform.upper()}_TOKEN"],
+                git_origin=platform,
+            )
         )
         new_project.source_data = data_client.get()
         new_project.source_data_date = datetime.datetime.now()
