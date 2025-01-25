@@ -76,6 +76,7 @@ class QueueAdmin(AppAdmin, AdminModelView):
     column_list = ["project", "processed", "origin"]
     form_choices = {"origin": origin_tuple}
     column_choices = {"origin": origin_tuple}
+    can_delete = True
 
     @action(
         "process",
