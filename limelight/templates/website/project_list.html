@@ -49,7 +49,7 @@
             <td>{{ project[0].downloads|default(0, boolean=True)|humanize_intword|replace("billion","B")|replace("million","M")|replace("thousand","K") }}</td>
             <td>{{ project[0].issues_open|default("0", boolean=true) }}</td>
             <td>{{ project[0].subscribers|default("0", boolean=true) }}</td>
-            <td><span class="text-secondary small">{{ project[0].last_mod_ago() }}</span></td>
+            <td><span class="text-secondary small">{{ project[0].last_pypi_ago() }}</span></td>
           </tr>
           {% endfor %}
         </tbody>
