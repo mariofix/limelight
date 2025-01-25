@@ -1,12 +1,13 @@
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-SECRET_KEY = ""
-DEBUG = False
+SECRET_KEY: str
+DEBUG: bool = False
 LOG_LEVEL = "DEBUG" if DEBUG else "INFO"
 TRUSTED_HOSTS = ["tardis.local", "flaskpackages.pythonanywhere.com"]
 SESSION_COOKIE_NAME = "limelight"
-GITHUB_TOKEN = ""
+GITHUB_TOKEN: str
+GITLAB_TOKEN: str
 SQLALCHEMY_DATABASE_URI = ""
 SQLALCHEMY_RECORD_QUERIES = DEBUG
 SQLALCHEMY_ECHO = False
