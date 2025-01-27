@@ -43,7 +43,7 @@ def find_old_git():
 def find_old_dloads():
     # downloads
     if old_dload := get_old_data(days=7, queue_type=4):
-        add_queue(project=old_dload, project_type=2)
+        add_queue(project=old_dload, project_type=4)
 
 
 @blueprint.before_request
