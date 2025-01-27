@@ -51,13 +51,13 @@
           {% for project in tag.projects %}
           <tr>
             <td><a href="{{ url_for('website.get_project', slug=project.slug) }}">{{ project.slug }}</a></td>
-            <td><span class="d-inline-flex px-2 py-1 fw-semibold text-success-emphasis bg-success-subtle border border-success-subtle rounded-2">{{ project.last_release }}</span> <span class="text-secondary small">{{ project.last_release_ago() }}</span></td>
+            <td><span class="d-inline-flex px-2 py-1 fw-semibold text-success-emphasis bg-success-subtle border border-success-subtle rounded-2">{{ project.last_release }}</span> <span class="text-secondary small">{{ project.date_last('last_release_date') }}</span></td>
             <td style="word-wrap: break-word;min-width: 50px;max-width: 50px;">{{ project.supported_python|default("Not Found", boolean=true) }}</td>
             <td style="word-wrap: break-word;min-width: 50px;max-width: 50px;">{{ project.supported_flask|default("Any version", boolean=true) }}</td>
             <td>{{ project.downloads|default(0, boolean=True)|humanize_intword|replace("billion","B")|replace("million","M")|replace("thousand","K") }}</td>
             <td>{{ project.issues_open|default("0", boolean=true) }}</td>
             <td>{{ project.subscribers|default("0", boolean=true) }}</td>
-            <td><span class="text-secondary small">{{ project.last_pypi_ago() }}</span></td>
+            <td><span class="text-secondary small">{{ project.date_last('pypi_data_date') }}</span></td>
           </tr>
           {% endfor %}
         </tbody>

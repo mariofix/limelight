@@ -46,7 +46,7 @@
                 <tr>
                   <th>Name</th>
                   <th>Category</th>
-                  <th>Added</th>
+                  <th>Created</th>
                 </tr>
               </thead>
               <tbody>
@@ -54,7 +54,7 @@
                 <tr>
                   <td><a href="{{ url_for('website.get_project', slug=p[0].slug) }}">{{ p[0].title }}</a></td>
                   <td><a href="{{ url_for('website.get_tag', slug=p[0].tags[0]) }}">{{ p[0].tags[0]|capitalize }}</a></td>
-                  <td>{{ p[0].last_release_ago() }}</td>
+                  <td>{{ p[0].date_last( 'first_release_date' ) }}</td>
                 </tr>
                 {% endfor%}
               </tbody>
@@ -73,7 +73,7 @@
                 <tr>
                   <th>Name</th>
                   <th>Version</th>
-                  <th>Date</th>
+                  <th>When</th>
                 </tr>
               </thead>
               <tbody>
@@ -81,7 +81,7 @@
                 <tr>
                   <td><a href="{{ url_for('website.get_project', slug=r[0].slug) }}">{{ r[0].title }}</a></td>
                   <td>{{ r[0].last_release }}</td>
-                  <td>{{ r[0].last_release_ago() }}</td>
+                  <td>{{ r[0].date_last( 'last_release_date' ) }}</td>
                 </tr>
                 {% endfor%}
               </tbody>
