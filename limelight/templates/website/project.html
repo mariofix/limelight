@@ -49,7 +49,7 @@ endblock title %} {% block meta_content %}
               <div>
                 <h6 class="text-muted mb-2">Current Release</h6>
                 <h3 class="mb-0">{{ project.last_release }}</h3>
-                <small class="text-success">{{ project.date_last('first_release_date') }}</small>
+                <small class="text-success">{{ project.date_last('last_release_date') }}</small>
                 {% if project.pypi_data.response_data.info.yanked %}
                 - <small class="text-danger"> Yanked!</small>
                 {% endif %}
@@ -151,8 +151,6 @@ endblock title %} {% block meta_content %}
                       <div class="col-md-6">
                         <ul class="list-group">
                           <li class="list-group-item"><strong>Project URL:</strong> <a href="{{ project.project_url }}" target="_project">{{ project.project_url }}</a></li>
-                          <li class="list-group-item"><strong>Current Version:</strong> {{ project.last_release }}</li>
-                          <li class="list-group-item"><strong>Release Date:</strong> {{ project.date_last('last_release_date') }}</li>
                           <li class="list-group-item"><strong>Supported Python Versions:</strong> {{ project.supported_python }}</li>
                           <li class="list-group-item"><strong>License:</strong> {{ project.license }}</li>
                         </ul>
@@ -162,7 +160,6 @@ endblock title %} {% block meta_content %}
                           <li class="list-group-item"><strong>Documentation URL:</strong> <a href="{{ project.documentation_url|default('#', boolean=True) }}" target="_project">{{ project.documentation_url|default('Not Found', boolean=True) }}</a></li>
                           <!-- <li class="list-group-item"><strong>Release Frequency:</strong> {{ project.release_frequency }}</li> -->
                           <li class="list-group-item"><strong>Dependencies:</strong> <a href="https://libraries.io/pypi/{{ project.pypi_slug }}" target="_librariesio">Open Libraries.io</a></li>
-                          <li class="list-group-item"><strong>Package Age:</strong> {{ project.date_last('first_release_date', 'True') }}</li>
                         </ul>
                       </div>
                     </div>
@@ -174,7 +171,6 @@ endblock title %} {% block meta_content %}
                       </div>
                       <div class="col-md-6">
                         <ul class="list-group">
-                          <li class="list-group-item"><strong>Owner:</strong> <a href="{{ project.source_url }}" target="_repo">{{ project.source_slug }}</a></li>
                           <li class="list-group-item"><strong>Stars:</strong> {{ project.stars }}</li>
                           <li class="list-group-item"><strong>Forks:</strong> {{ project.forks }}</li>
                           <li class="list-group-item"><strong>Open Issues:</strong> {{ project.issues_open }}</li>
