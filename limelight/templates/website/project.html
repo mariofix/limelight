@@ -49,7 +49,7 @@ endblock title %} {% block meta_content %}
               <div>
                 <h6 class="text-muted mb-2">Current Release</h6>
                 <h3 class="mb-0">{{ project.last_release }}</h3>
-                <small class="text-success">{{ project.last_release_ago() }}</small>
+                <small class="text-success">{{ project.date_last('first_release_date') }}</small>
                 {% if project.pypi_data.response_data.info.yanked %}
                 - <small class="text-danger"> Yanked!</small>
                 {% endif %}
@@ -83,7 +83,7 @@ endblock title %} {% block meta_content %}
             <div class="d-flex justify-content-between align-items-center">
               <div>
                 <h6 class="text-muted mb-2">Project Age</h6>
-                <h3 class="mb-0">{{ project.first_release_ago() }}</h3>
+                <h3 class="mb-0">{{ project.date_last('first_release_date', 'True') }}</h3>
                 <small class="text-danger">
                   &nbsp;
                 </small>
@@ -115,15 +115,13 @@ endblock title %} {% block meta_content %}
       </div>
     </div>
 
-    <!-- Main Content Area -->
     <div class="row g-3">
-      <!-- Activity Timeline -->
       <div class="col-12">
         <div class="card border-0 shadow-sm">
           <div class="card-header bg-white border-0">
             <div class="d-flex justify-content-between align-items-center">
               <h5 class="mb-0">Project Information</h5>
-              <button class="btn btn-sm btn-success" id="btnUpdateMetadata">Update Metadata</button>
+              <!-- <button class="btn btn-sm btn-success" id="btnUpdateMetadata">Update Metadata</button> -->
             </div>
           </div>
           <div class="card-body">
@@ -144,89 +142,73 @@ endblock title %} {% block meta_content %}
               </div>
               <div class="tab-content" id="v-pills-tabContent">
                 <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab" tabindex="0">
-                  <div class="container" id="icon-grid">
-                    <div class="row">
-                      <div class="col-md-3 col-6 mb-4">
-                        <div class="text-center">
-                          <i class="bi bi-bezier2 fs-1 text-primary mb-2"></i>
-                          <h2 class="fw-bold">{{ project.forks }}</h2>
-                          <p class="text-muted">Github Forks</p>
-                        </div>
+                  <div class="container">
+                    <!-- PyPI Section -->
+                    <div class="row mb-6">
+                      <div class="col-12">
+                        <h2 class="h4 text-primary mb-3">Package Information</h2>
                       </div>
-                      <div class="col-md-3 col-6 mb-4">
-                        <div class="text-center">
-                          <i class="bi bi-download fs-1 text-primary mb-2"></i>
-                          <h2 class="fw-bold">{{ project.downloads|default(0, boolean=True)|humanize_intword|replace("billion","B")|replace("million","M")|replace("thousand","K") }}</h2>
-                          <p class="text-muted">Downloads</p>
-                        </div>
+                      <div class="col-md-6">
+                        <ul class="list-group">
+                          <li class="list-group-item"><strong>Project URL:</strong> <a href="{{ project.project_url }}" target="_project">{{ project.project_url }}</a></li>
+                          <li class="list-group-item"><strong>Current Version:</strong> {{ project.last_release }}</li>
+                          <li class="list-group-item"><strong>Release Date:</strong> {{ project.date_last('last_release_date') }}</li>
+                          <li class="list-group-item"><strong>Supported Python Versions:</strong> {{ project.supported_python }}</li>
+                          <li class="list-group-item"><strong>License:</strong> {{ project.license }}</li>
+                        </ul>
                       </div>
-                      <div class="col-md-3 col-6 mb-4">
-                        <div class="text-center">
-                          <i class="bi bi-star fs-1 text-primary mb-2"></i>
-                          <h2 class="fw-bold">{{ project.stars }}</h2>
-                          <p class="text-muted">Github Stars</p>
-                        </div>
-                      </div>
-                      <div class="col-md-3 col-6 mb-4">
-                        <div class="text-center">
-                          <i class="bi bi-dot fs-1 text-primary mb-2"></i>
-                          <h2 class="fw-bold">{{ project.issues_closed }}</h2>
-                          <p class="text-muted">Closed Issues</p>
-                        </div>
+                      <div class="col-md-6">
+                        <ul class="list-group">
+                          <li class="list-group-item"><strong>Documentation URL:</strong> <a href="{{ project.documentation_url|default('#', boolean=True) }}" target="_project">{{ project.documentation_url|default('Not Found', boolean=True) }}</a></li>
+                          <!-- <li class="list-group-item"><strong>Release Frequency:</strong> {{ project.release_frequency }}</li> -->
+                          <li class="list-group-item"><strong>Dependencies:</strong> <a href="https://libraries.io/pypi/{{ project.pypi_slug }}" target="_librariesio">Open Libraries.io</a></li>
+                          <li class="list-group-item"><strong>Package Age:</strong> {{ project.date_last('first_release_date', 'True') }}</li>
+                        </ul>
                       </div>
                     </div>
-                    <hr>
 
-                    <div class="row row-cols-lg-3 row-cols-sm-2 row-col-1">
-                      <div class="col d-flex align-items-start">
-                        <i class="bi bi-link-45deg text-body-secondary flex-shrink-0 me-3"></i>
-                        <div>
-                          <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Project URLs</h3>
-                          <ul class="list-group list-group-horizontal mb-3">
-                            <a href="" class="list-group-item list-group-item-action"><i class="bi bi-globe"></i></a>
-                            <a href="" class="list-group-item list-group-item-action"><i class="bi bi-question-circle"></i></a>
-                            <a href="" class="list-group-item list-group-item-action"><i class="bi bi-github"></i></a>
-                            <a href="" class="list-group-item list-group-item-action"><i class="bi bi-boxes"></i></a>
-                          </ul>
-                        </div>
+                    <!-- GitHub Section -->
+                    <div class="row mb-6 my-4">
+                      <div class="col-12">
+                        <h2 class="h4 text-success mb-3">Repository Data</h2>
                       </div>
-                      <div class="col d-flex align-items-start">
-                        <i class="bi bi-alarm text-body-secondary flex-shrink-0 me-3"></i>
-                        <div>
-                          <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Flask Support</h3>
-                          <p>{{ project.supported_flask|default("Any Version", boolean=true) }}</p>
-                        </div>
+                      <div class="col-md-6">
+                        <ul class="list-group">
+                          <li class="list-group-item"><strong>Owner:</strong> <a href="{{ project.source_url }}" target="_repo">{{ project.source_slug }}</a></li>
+                          <li class="list-group-item"><strong>Stars:</strong> {{ project.stars }}</li>
+                          <li class="list-group-item"><strong>Forks:</strong> {{ project.forks }}</li>
+                          <li class="list-group-item"><strong>Open Issues:</strong> {{ project.issues_open }}</li>
+                          <li class="list-group-item"><strong>Closed Issues:</strong> {{ project.issues_closed }}</li>
+                        </ul>
                       </div>
-                      <div class="col d-flex align-items-start">
-                        <i class="bi bi-alarm text-body-secondary flex-shrink-0 me-3"></i>
-                        <div>
-                          <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Information</h3>
-                          <p>Open Readme</p>
-                        </div>
+                      <div class="col-md-6">
+                        <ul class="list-group">
+                          <li class="list-group-item"><strong>Repository:</strong> <a href="{{ project.source_url }}" target="_repo">{{ project.source_slug }}</a></li>
+                          <!-- <li class="list-group-item"><strong>Last Commit Date:</strong> Jan 20, 2025</li>
+                          <li class="list-group-item"><strong>Recent Activity:</strong> 15 commits in last 30 days</li>
+                          <li class="list-group-item"><strong>Primary Language:</strong> Python</li>
+                          <li class="list-group-item"><strong>Contributors:</strong> 8</li> -->
+                        </ul>
                       </div>
+                    </div>
 
-
-                      <div class="col d-flex align-items-start">
-                        <i class="bi bi-alarm text-body-secondary flex-shrink-0 me-3"></i>
-                        <div>
-                          <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Github Data</h3>
-                          <p>Network: {{project.network}} - Watchers: {{project.watchers}} - Subcribers: {{project.subcribers}}</p>
-                        </div>
+                    <!-- PePy.tech Section -->
+                    <div class="row mb-3 my-4">
+                      <div class="col-12">
+                        <h2 class="h4 text-info mb-3">Download Statistics</h2>
                       </div>
-
-                      <div class="col d-flex align-items-start">
-                        <i class="bi bi-alarm text-body-secondary flex-shrink-0 me-3"></i>
-                        <div>
-                          <h3 class="fw-bold mb-0 fs-4 text-body-emphasis">Categories</h3>
-                          <ul class="list-group list-group-horizontal mb-3">
-                            {% for tag in project.tags %}
-                            <li class="list-group-item">{{tag.name}}</li>
-                            {% endfor %}
-                          </ul>
-                        </div>
+                      <div class="col-md-4">
+                        <ul class="list-group">
+                          <li class="list-group-item"><strong>Total Downloads:</strong> {{ project.downloads|humanize_intword|replace("billion","B")|replace("million","M")|replace("thousand","K") }}</li>
+                          <!-- <li class="list-group-item"><strong>Downloads (Last 30 Days):</strong> {{ (project.downloads*0.016)|humanize_intword|replace("billion","B")|replace("million","M")|replace("thousand","K") }}</li> -->
+                        </ul>
+                      </div>
+                      <div class="col-md-8">
+                        <canvas id="grafico-versiones"></canvas>
                       </div>
                     </div>
                   </div>
+
                 </div>
 
                 <div class="tab-pane fade" id="v-pills-pypidata" role="tabpanel" aria-labelledby="v-pills-pypidata-tab" tabindex="0">
@@ -247,11 +229,122 @@ endblock title %} {% block meta_content %}
   </div>
 </section>
 {% endblock content %} {% block post_js %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/chartjs-plugin-datalabels/2.2.0/chartjs-plugin-datalabels.min.js"></script>
+
+<script>
+  function analyzeFlaskDownloads(data) {
+    const latestVersion = data.versions[data.versions.length - 1];
+    const versionDownloads = {};
+
+    Object.values(data.downloads).forEach(dailyDownloads => {
+      Object.entries(dailyDownloads).forEach(([version, count]) => {
+        versionDownloads[version] = (versionDownloads[version] || 0) + count;
+      });
+    });
+
+    const sortedVersions = Object.entries(versionDownloads)
+      .sort(([, a], [, b]) => b - a);
+
+    const result = {
+      topVersions: {},
+      latestVersion: {
+        version: latestVersion,
+        downloads: versionDownloads[latestVersion] || 0
+      },
+      others: 0
+    };
+
+    let othersTotal = 0;
+    let topCount = 0;
+
+    sortedVersions.forEach(([version, downloads]) => {
+      if (version === latestVersion) return;
+
+      if (topCount < 3) {
+        result.topVersions[version] = downloads;
+        topCount++;
+      } else {
+        othersTotal += downloads;
+      }
+    });
+
+    result.others = othersTotal;
+
+    return result;
+  }
+
+  const ctx = document.getElementById('grafico-versiones');
+  const dloads_data = {{ project.downloads_data.response_data | tojson }};
+  const analyzedData = analyzeFlaskDownloads(dloads_data);
+
+
+  // Prepare data for the chart
+  const chartLabels = [analyzedData.latestVersion.version, ...Object.keys(analyzedData.topVersions), 'Other'];
+
+  const chartData = [analyzedData.latestVersion.downloads, ...Object.values(analyzedData.topVersions), analyzedData.others];
+
+
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels: chartLabels,
+      datasets: [{
+        label: 'Downloads',
+        data: chartData,
+        backgroundColor: [
+          '#198754',  // green
+          '#FF6384',  // pink
+          '#36A2EB',  // blue
+          '#4BC0C0',  // turquoise
+          '#9966FF',  // purple
+        ]
+      }]
+    },
+    options: {
+      plugins: {
+        title: {
+          display: true,
+          text: 'Version Downloads',
+          font: {
+            size: 16
+          }
+        },
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              const total = context.dataset.data.reduce((a, b) => a + b, 0);
+              const value = context.raw;
+              const percentage = ((value / total) * 100).toFixed(1);
+              return `${context.label}: ${percentage}% (${value.toLocaleString()} downloads)`;
+            }
+          }
+        },
+        datalabels: {
+          formatter: (value, ctx) => {
+            const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
+            const percentage = ((value / total) * 100).toFixed(1);
+            return `${percentage}%`;
+          },
+          color: '#fff',
+          font: {
+            weight: 'bold'
+          }
+        }
+      }
+    },
+    plugins: [ChartDataLabels]
+  });
+</script>
+
 <script type="text/javascript" src="{{ url_for('static', filename='js/jsonview.js', v=app_version)}}"></script>
 <script type="text/javascript">
   const data = {{ project.pypi_data| tojson }};
   const gh_data = {{ project.source_data| tojson }};
   const dload_data = {{ project.downloads_data| tojson }};
+  gh_data["request_headers"]["Authorization"] = null;
+  dload_data["request_headers"]["X-API-Key"] = null;
+
   const tree = jsonview.create(data);
   const tree_gh = jsonview.create(gh_data);
   const tree_dl = jsonview.create(dload_data);

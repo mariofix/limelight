@@ -1,4 +1,5 @@
 import re
+from typing import Any
 
 import pendulum
 from flask import current_app
@@ -19,12 +20,12 @@ def get_context_data() -> dict:
     return data
 
 
-def find_project(slug: str):
+def find_project(slug: str) -> Project:
     p = db.session.execute(db.select(Project).where(Project.slug == slug)).first()
-    return True if p else False
+    return p[0] if p else False
 
 
-def create_project(project_info: dict, fill_data: bool = False):
+def create_project(project_info: dict, fill_data: bool = False) -> Project:
 
     creators = {
         "pypi": create_pypi_project,
@@ -55,7 +56,7 @@ def update_project(project):
     return project
 
 
-def get_old_data(days: int = 7, queue_type: int = 1):
+def get_old_data(days: int = 7, queue_type: int = 1) -> Any:
     last_week = pendulum.now().subtract(days=days)
     if queue_type == 1:
         return db.session.execute(
@@ -71,7 +72,7 @@ def get_old_data(days: int = 7, queue_type: int = 1):
         ).first()
 
 
-def get_new_data(queue_type: int = 2):
+def get_new_data(queue_type: int = 2) -> Any:
     if queue_type == 1:
         return db.session.execute(
             db.select(Project).where(Project.pypi_data_date is None).order_by(func.random())
@@ -86,7 +87,7 @@ def get_new_data(queue_type: int = 2):
         ).first()
 
 
-def get_queue(days: int = 7, queue_type: int = 1):
+def get_queue(days: int = 7, queue_type: int = 1) -> str:
     if queue_type == 1:
         last_week = pendulum.now().subtract(days=days)
         pypi = db.session.execute(
@@ -102,7 +103,7 @@ def get_queue(days: int = 7, queue_type: int = 1):
     #     return source[0].slug
 
 
-def add_queue(project, project_type: int):
+def add_queue(project, project_type: int) -> Queue:
     new_queue = Queue()
     new_queue.project_id = project[0].id
     new_queue.processed = False
@@ -167,7 +168,7 @@ def add_queue(project, project_type: int):
 #     return None
 
 
-def fetch_queue_item(id=None):
+def fetch_queue_item(id=None) -> Any:
     """Fetch a queue item from the database."""
     query = (
         db.select(Queue).where(Queue.id == id)

@@ -103,6 +103,8 @@ def get_downloads(package: str):
 
 
 def full_update_project_metadata(project):
+    from flask import current_app
+
     """Updates Project info based on all available information."""
     if project.pypi_data:
         try:
@@ -110,7 +112,6 @@ def full_update_project_metadata(project):
         except KeyError:
             raise LimelightError("Project.pypi_data does not have a correct structure.")
 
-        print(f"{pypi_info = }")
         project.title = pypi_info.get("name", None)
         project.description = pypi_info.get("summary", None)
         project.project_url = pypi_info.get("project_url", None)
@@ -128,7 +129,8 @@ def full_update_project_metadata(project):
                 project.pypi_data["response_data"]["releases"][pypi_info.get("version")][0]["upload_time"]
             )
         except (KeyError, IndexError):
-            project.last_release_date = None
+            current_app.logger.info(f"last_release_date - {pypi_info.get('version') = }")
+            current_app.logger.info(f"last_release_date - {project.pypi_data['response_data']['releases'] = }")
 
         try:
 
@@ -140,10 +142,9 @@ def full_update_project_metadata(project):
                 ][0]["upload_time"]
             )
         except (KeyError, IndexError):
-            project.first_release_date = None
+            current_app.logger.info(f"first_release_date - {project.pypi_data['response_data']['releases'] = }")
 
         db.session.commit()
-        db.session.refresh(project)
 
     if project.source_data:
         try:
@@ -166,27 +167,21 @@ def full_update_project_metadata(project):
         if not project.source_url:
             project.source_url = repo_info.get("html_url", None)
 
-        project.issues_open = repo_info.get("open_issues_count")
+        project.issues_open = repo_info.get("open_issues_count", 0)
         try:
-            url = f"{project.github_json_url()}/issues?state=closed&per_page=1"
-            github_data = fetch_github_api(url)
-            link_header = github_data.headers.get("Link")
-            match = re.search(r'page=(\d+)>; rel="last"', link_header)
-            if match:
-                total_closed_issues = int(match.group(1))
-            else:
-                total_closed_issues = 0
-            project.issues_closed = total_closed_issues
-        except Exception:
-            project.issues_closed = None
+            link_header = project.source_data["closed_issues"]["response_headers"].get("Link", None)
+            if match := re.search(r'page=(\d+)>; rel="last"', link_header):
+                project.issues_closed = int(match.group(1))
 
-        project.stars = repo_info.get("stargazers_count")
-        project.forks = repo_info.get("forks_count")
-        project.network = repo_info.get("network_count")
-        project.subscribers = repo_info.get("subscribers_count")
-        project.watchers = repo_info.get("watchers_count")
+        except Exception:
+            current_app.logger.info(f"{project.source_data = }")
+
+        project.stars = repo_info.get("stargazers_count", 0)
+        project.forks = repo_info.get("forks_count", 0)
+        project.network = repo_info.get("network_count", 0)
+        project.subscribers = repo_info.get("subscribers_count", 0)
+        project.watchers = repo_info.get("watchers_count", 0)
         db.session.commit()
-        db.session.refresh(project)
 
     if project.downloads_data:
         try:
@@ -194,10 +189,9 @@ def full_update_project_metadata(project):
         except KeyError:
             raise LimelightError("Project.pypi_data does not have a correct structure.")
 
-        project.downloads = dload_info["total_downloads"]
+        project.downloads = dload_info.get("total_downloads", 0)
+        db.session.commit()
 
-    db.session.commit()
-    db.session.refresh(project)
     return project
 
 

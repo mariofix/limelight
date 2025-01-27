@@ -3,6 +3,7 @@ import enum
 from dataclasses import dataclass
 
 import pendulum
+from flask import current_app
 from flask_security.models import fsqla_v3 as fsqla
 from sqlalchemy import DateTime, Enum, ForeignKey, func
 from sqlalchemy.orm import Mapped, declarative_mixin, mapped_column, relationship
@@ -133,27 +134,32 @@ class Project(db.Model, TimestampMixin):
     def gitlab_json_url(self) -> str | None:
         return self.source_json_url()
 
-    def first_release_ago(self) -> str:
+    # Start Deprecation
+    def first_release_ago(self) -> str | None:
         if self.first_release_date:
-            da_date = pendulum.instance(self.first_release_date)
-            return f"{da_date.diff_for_humans(absolute=True)}"
-        return "No Data"
+            return self.date_last(self.first_release_date, True)
 
-    def last_release_ago(self) -> str:
+    def last_release_ago(self) -> str | None:
         if self.last_release_date:
-            da_date = pendulum.instance(self.last_release_date)
-            return f"{da_date.diff_for_humans()}"
-        return "No Data"
+            return self.date_last(self.last_release_date)
 
-    def last_mod_ago(self) -> str:
+    def last_mod_ago(self) -> str | None:
         if self.modified_at:
-            da_date = pendulum.instance(self.modified_at)
-            return f"{da_date.diff_for_humans()}"
+            return self.date_last(self.modified_at)
 
-    def last_pypi_ago(self) -> str:
+    def last_pypi_ago(self) -> str | None:
         if self.pypi_data_date:
-            da_date = pendulum.instance(self.pypi_data_date)
-            return f"{da_date.diff_for_humans()}"
+            return self.date_last(self.pypi_data_date)
+
+    # Stop Deprecation
+
+    def date_last(self, date_field: str, absolute: bool = False) -> str | None:
+        try:
+            de_date = pendulum.instance(getattr(self, date_field))
+            return f"{de_date.diff_for_humans(absolute=absolute)}"
+        except Exception as error:
+            current_app.logger.warning(f"returning None {error = }")
+            return None
 
 
 class Tag(db.Model, TimestampMixin):
