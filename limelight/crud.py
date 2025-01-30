@@ -221,7 +221,7 @@ def handle_pepy(queue_item):
 
 ORIGIN_HANDLERS = {
     1: handle_pypi,
-    3: handle_git_repo,
+    2: handle_git_repo,
     4: handle_pepy,
 }
 
