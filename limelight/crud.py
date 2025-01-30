@@ -238,6 +238,7 @@ def process_data(client, queue_item, destination):
         data["closed_issues"] = client.get_closed_issues()
 
     # Update project with fetched data
+    setattr(queue_item, "data", data)
     setattr(queue_item.project, destination, data)
     setattr(queue_item.project, f"{destination}_date", pendulum.now())
 
