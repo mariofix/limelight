@@ -48,8 +48,7 @@ def find_old_dloads():
 
 @blueprint.before_request
 def queue_item():
-    # process_queue_item()
-    pass
+    process_queue_item()
 
 
 @sitemapper.include(

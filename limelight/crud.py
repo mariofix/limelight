@@ -104,6 +104,14 @@ def get_queue(days: int = 7, queue_type: int = 1) -> str:
 
 
 def add_queue(project, project_type: int) -> Queue:
+    if db.session.execute(
+        db.select(Queue)
+        .where(Queue.project_id == project[0].id)
+        .where(Queue.origin == project_type)
+        .where(Queue.processed == False)
+    ).one_or_none():
+        return
+
     new_queue = Queue()
     new_queue.project_id = project[0].id
     new_queue.processed = False
