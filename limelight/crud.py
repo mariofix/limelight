@@ -203,6 +203,7 @@ def handle_git_repo(queue_item):
             project_slug=repo,
             owner_name=owner,
             token=current_app.config.get(f"{org.upper()}_TOKEN"),
+            git_origin=org,
         )
     )
     return client, "source_data"
