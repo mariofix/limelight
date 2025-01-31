@@ -37,22 +37,6 @@ class BaseApiClient(ABC):
         """Make API request and return response data"""
         pass
 
-    def serialize_headers(self, headers: Any) -> dict[str, Any]:
-        try:
-            return json.dumps(headers)
-        except Exception as e:
-            print(f"{ e = }")
-            print(f"{ headers = }")
-
-        data = []
-        for k, d in headers.items():
-            try:
-                data.append((f"{k}", f"{d}"))
-            except Exception as e:
-                print(f"{ e = }")
-
-        return data
-
     def _make_request(self, url: str, headers: dict | None = None, auth: tuple | None = None) -> dict[str, Any]:
         try:
             response = self._session.get(url, headers=headers, auth=auth)
