@@ -61,7 +61,7 @@ class BaseApiClient(ABC):
                 "request_url": url,
                 "request_headers": headers,
                 "response_code": response.status_code,
-                "response_headers": self.serialize_headers(response.headers),
+                "response_headers": {str(key): str(value) for key, value in response.headers.items()},
                 "response_data": response.json(),
             }
         except requests.exceptions.RequestException as e:
@@ -69,7 +69,7 @@ class BaseApiClient(ABC):
                 "request_url": url,
                 "request_headers": headers,
                 "response_code": response.status_code,
-                "response_headers": self.serialize_headers(response.headers),
+                "response_headers": {str(key): str(value) for key, value in response.headers.items()},
                 "response_data": f"{e}",
             }
 
