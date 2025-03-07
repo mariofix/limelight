@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {% for p in projects %}
   <url>
-    <loc>https://flaskpackages.pythonanywhere.com{{ url_for('website.get_project', slug=p[0].slug.lower()) }}</loc>
+    <loc>{{ url_for('website.get_project', slug=p[0].slug.lower(), _external=True) }}</loc>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
     <lastmod>{{p[0].modified_at.strftime('%Y-%m-%d')}}</lastmod>

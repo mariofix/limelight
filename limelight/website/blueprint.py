@@ -1,4 +1,4 @@
-from flask import Blueprint, Response, render_template, redirect, url_for
+from flask import Blueprint, Response, redirect, render_template, url_for
 from sqlalchemy import desc
 
 from ..crud import add_queue, get_new_data, get_old_data, process_queue_item
@@ -14,36 +14,21 @@ blueprint = Blueprint("website", __name__)
 # Queue Manager
 @blueprint.before_request
 def find_new_projects():
-    # pypi
-    if pypi := get_new_data(queue_type=1):
-        add_queue(project=pypi, project_type=1)
+    queue_types = {1: "pypi", 2: "git", 4: "downloads"}
 
-    if git := get_new_data(queue_type=2):
-        add_queue(project=git, project_type=2)
-
-    if downloads := get_new_data(queue_type=4):
-        add_queue(project=downloads, project_type=4)
+    for queue_type, _name in queue_types.items():
+        if data := get_new_data(queue_type=queue_type):
+            add_queue(project=data, project_type=queue_type)
 
 
 @blueprint.before_request
-def find_old_pypi():
-    # pypi
-    if old_pypi := get_old_data(days=7, queue_type=1):
-        add_queue(project=old_pypi, project_type=1)
+def find_old_projects():
+    queue_types = {1: "pypi", 2: "git", 4: "downloads"}
+    days = 7
 
-
-@blueprint.before_request
-def find_old_git():
-    # git
-    if old_git := get_old_data(days=7, queue_type=2):
-        add_queue(project=old_git, project_type=2)
-
-
-@blueprint.before_request
-def find_old_dloads():
-    # downloads
-    if old_dload := get_old_data(days=7, queue_type=4):
-        add_queue(project=old_dload, project_type=4)
+    for queue_type, _name in queue_types.items():
+        if old_data := get_old_data(days=days, queue_type=queue_type):
+            add_queue(project=old_data, project_type=queue_type)
 
 
 @blueprint.before_request
@@ -107,17 +92,17 @@ def projects(project_type):
 )
 @blueprint.get("/about/<any(flask,quart):slug>/")
 def get_project_info(slug):
-    project = db.session.execute(db.select(Project).where(Project.slug == slug)).first()
-    project = full_update_project_metadata(project=project[0])
+    project = db.first_or_404(db.select(Project).where(Project.slug == slug))
+    project = full_update_project_metadata(project=project)
     return render_template(f"website/{slug}_info.html", project=project)
 
 
 @blueprint.get("/project/<slug>")
 def get_project(slug):
-    # if slug in ["flask", "quart"]:
-    #     redirect(f"{url_for("/")}/about/{slug}", code=301)
-    project = db.session.execute(db.select(Project).where(Project.slug == slug)).first()
-    project = full_update_project_metadata(project=project[0])
+    if slug in ["flask", "quart"]:
+        return redirect(url_for("website.get_project_info", slug=slug), code=301)
+    project = db.first_or_404(db.select(Project).where(Project.slug == slug))
+    project = full_update_project_metadata(project=project)
     return render_template("website/project.html", project=project)
 
 
@@ -130,9 +115,8 @@ def get_project(slug):
 )
 @blueprint.get("/category/<slug>")
 def get_tag(slug):
-    tag = db.session.execute(db.select(Tag).where(Tag.slug == slug)).first()
-
-    return render_template("website/tag.html", tag=tag[0])
+    tag = db.first_or_404(db.select(Tag).where(Tag.slug == slug))
+    return render_template("website/tag.html", tag=tag)
 
 
 @sitemapper.include(

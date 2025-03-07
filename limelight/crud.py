@@ -57,34 +57,33 @@ def update_project(project):
 
 
 def get_old_data(days: int = 7, queue_type: int = 1) -> Any:
+    """Fetch projects with outdated data based on queue type."""
     last_week = pendulum.now().subtract(days=days)
-    if queue_type == 1:
-        return db.session.execute(
-            db.select(Project).where(Project.pypi_data_date <= last_week).order_by(func.random())
-        ).first()
-    if queue_type == 2:
-        return db.session.execute(
-            db.select(Project).where(Project.source_data_date <= last_week).order_by(func.random())
-        ).first()
-    if queue_type == 4:
-        return db.session.execute(
-            db.select(Project).where(Project.downloads_data_date <= last_week).order_by(func.random())
-        ).first()
+
+    field_map = {
+        1: Project.pypi_data_date,
+        2: Project.source_data_date,
+        4: Project.downloads_data_date,
+    }
+
+    if field := field_map.get(queue_type):
+        return db.session.execute(db.select(Project).where(field <= last_week).order_by(func.random())).first()
+
+    return None
 
 
 def get_new_data(queue_type: int = 2) -> Any:
-    if queue_type == 1:
-        return db.session.execute(
-            db.select(Project).where(Project.pypi_data_date is None).order_by(func.random())
-        ).first()
-    if queue_type == 2:
-        return db.session.execute(
-            db.select(Project).where(Project.source_data_date is None).order_by(func.random())
-        ).first()
-    if queue_type == 4:
-        return db.session.execute(
-            db.select(Project).where(Project.downloads_data_date is None).order_by(func.random())
-        ).first()
+    """Fetch projects with no existing data based on queue type."""
+    field_map = {
+        1: Project.pypi_data_date,
+        2: Project.source_data_date,
+        4: Project.downloads_data_date,
+    }
+
+    if field := field_map.get(queue_type):
+        return db.session.execute(db.select(Project).where(field.is_(None)).order_by(func.random())).first()
+
+    return None
 
 
 def get_queue(days: int = 7, queue_type: int = 1) -> str:
@@ -95,12 +94,6 @@ def get_queue(days: int = 7, queue_type: int = 1) -> str:
         ).first()
         if pypi:
             return pypi[0].slug
-
-    # source = db.session.execute(
-    #     db.select(Project).where(Project.source_data_date <= last_week).order_by(func.random())
-    # ).first()
-    # if source:
-    #     return source[0].slug
 
 
 def add_queue(project, project_type: int) -> Queue:
@@ -122,67 +115,15 @@ def add_queue(project, project_type: int) -> Queue:
     return new_queue
 
 
-# def process_queue_item(id: int = None, overwrite: bool = False):
-#     if id:
-#         query = db.select(Queue).where(Queue.id == id)
-#     else:
-#         query = db.select(Queue).where(Queue.processed == False).limit(1).order_by(Queue.id)
-
-#     if item := db.session.execute(query).first():
-#         from flask import current_app
-
-#         q = item[0]
-#         if q.processed and not overwrite:
-#             raise LimelightError(f"Queue Item {q.id} already processed.")
-
-#         if q.origin == 1:
-#             client = PyPiClient(SourcesConfig(project_slug=q.project.pypi_slug))
-#             dest = "pypi_data"
-
-#         elif q.origin == 2:
-#             if match := re.match(r"([^:]+):([^/]+)/([^/]+)$", q.project.source_slug):
-#                 org, owner, repo = match.groups()
-#                 client = GitRepoClient(
-#                     SourcesConfig(
-#                         project_slug=repo,
-#                         owner_name=owner,
-#                         token=current_app.config[f"{org.upper()}_TOKEN"],
-#                         git_origin=org,
-#                     )
-#                 )
-#                 dest = "source_data"
-
-#         elif q.origin == 4:
-#             client = PepyClient(
-#                 SourcesConfig(project_slug=q.project.pypi_slug, token=current_app.config["PEPY_TOKEN"])
-#             )
-#             dest = "downloads_data"
-
-#         try:
-#             q.data = client.get()
-
-#             if q.data["response_code"] == 200:
-#                 # we also want the headers closed issues results
-#                 if q.origin == 2:
-#                     q.data["closed_issues"] = client.get_closed_issues()
-#                 setattr(q.project, dest, q.data)
-#                 setattr(q.project, f"{dest}_date", pendulum.now())
-#         except Exception:
-#             pass
-
-#         q.processed = True
-#         db.session.commit()
-#         return q
-#     return None
-
-
 def fetch_queue_item(id=None) -> Any:
     """Fetch a queue item from the database."""
-    query = (
-        db.select(Queue).where(Queue.id == id)
-        if id
-        else db.select(Queue).where(Queue.processed.is_(False)).limit(1).order_by(Queue.id)
-    )
+    query = db.select(Queue)
+
+    if id:
+        query = query.where(Queue.id == id)
+    else:
+        query = query.where(Queue.processed.is_(False)).order_by(Queue.id).limit(1)
+
     return db.session.execute(query).first()
 
 
@@ -238,7 +179,7 @@ def process_data(client, queue_item, destination):
         data["closed_issues"] = client.get_closed_issues()
 
     # Update project with fetched data
-    setattr(queue_item, "data", data)
+    queue_item.data = data
     setattr(queue_item.project, destination, data)
     setattr(queue_item.project, f"{destination}_date", pendulum.now())
 
