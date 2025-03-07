@@ -1,4 +1,4 @@
-from flask import Blueprint, Response, render_template
+from flask import Blueprint, Response, render_template, redirect, url_for
 from sqlalchemy import desc
 
 from ..crud import add_queue, get_new_data, get_old_data, process_queue_item
@@ -98,8 +98,24 @@ def projects(project_type):
     )
 
 
+@sitemapper.include(
+    priority=0.6,
+    changefreq="weekly",
+    url_variables={
+        "slug": ["flask", "quart"],
+    },
+)
+@blueprint.get("/about/<any(flask,quart):slug>/")
+def get_project_info(slug):
+    project = db.session.execute(db.select(Project).where(Project.slug == slug)).first()
+    project = full_update_project_metadata(project=project[0])
+    return render_template(f"website/{slug}_info.html", project=project)
+
+
 @blueprint.get("/project/<slug>")
 def get_project(slug):
+    # if slug in ["flask", "quart"]:
+    #     redirect(f"{url_for("/")}/about/{slug}", code=301)
     project = db.session.execute(db.select(Project).where(Project.slug == slug)).first()
     project = full_update_project_metadata(project=project[0])
     return render_template("website/project.html", project=project)
@@ -130,7 +146,7 @@ def new_project():
 
 
 @blueprint.route("/robots.txt", methods=["GET"])
-def robots():
+def robok():
     robots = render_template("robots.txt")
     return Response(robots, mimetype="text/plain")
 

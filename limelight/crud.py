@@ -108,7 +108,7 @@ def add_queue(project, project_type: int) -> Queue:
         db.select(Queue)
         .where(Queue.project_id == project[0].id)
         .where(Queue.origin == project_type)
-        .where(Queue.processed == False)
+        .where(Queue.processed.is_(False))
     ).one_or_none():
         return
 
