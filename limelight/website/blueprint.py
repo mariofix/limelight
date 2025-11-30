@@ -1,7 +1,7 @@
 from flask import Blueprint, Response, redirect, render_template, url_for
 from sqlalchemy import desc
 
-from ..crud import add_queue, get_new_data, get_old_data, process_queue_item
+from ..crud import add_queue, get_new_data, get_old_data, process_queue_item, cleanup
 from ..database import db
 from ..forms import NewProjectForm
 from ..models import Project, Tag
@@ -34,6 +34,7 @@ def find_old_projects():
 @blueprint.before_request
 def queue_item():
     process_queue_item()
+    cleanup()
 
 
 @sitemapper.include(

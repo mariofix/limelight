@@ -3,7 +3,7 @@ from typing import Any
 
 import pendulum
 from flask import current_app
-from sqlalchemy import func
+from sqlalchemy import func, delete
 
 from .core import LimelightError
 from .database import db
@@ -11,6 +11,7 @@ from .models import Project, Queue
 from .sources import GitRepoClient, PepyClient, PyPiClient, SourcesConfig
 from .utils import create_git_project, create_pypi_project, update_github_metadata, update_pypi_metadata
 from .version import __version__
+from datetime import datetime, timedelta, timezone
 
 
 def get_context_data() -> dict:
@@ -226,3 +227,11 @@ def process_queue_item(id=None, overwrite=False):
     db.session.commit()
 
     return queue_item
+
+
+def cleanup(days: int = 14) -> bool:
+    """Remove queue entries older than specified days."""
+    cutoff = datetime.now(timezone.utc) - timedelta(days=days)
+    db.session.execute(delete(Queue).where(Queue.created_at <= cutoff))
+    db.session.commit()
+    return True
