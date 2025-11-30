@@ -20,9 +20,9 @@ def get_context_data() -> dict:
     return data
 
 
-def find_project(slug: str) -> Project:
+def find_project(slug: str) -> Project | None:
     p = db.session.execute(db.select(Project).where(Project.slug == slug)).first()
-    return p[0] if p else False
+    return p[0] if p else None
 
 
 def create_project(project_info: dict, fill_data: bool = False) -> Project:
@@ -86,7 +86,7 @@ def get_new_data(queue_type: int = 2) -> Any:
     return None
 
 
-def get_queue(days: int = 7, queue_type: int = 1) -> str:
+def get_queue(days: int = 7, queue_type: int = 1) -> str | None:
     if queue_type == 1:
         last_week = pendulum.now().subtract(days=days)
         pypi = db.session.execute(
@@ -96,7 +96,7 @@ def get_queue(days: int = 7, queue_type: int = 1) -> str:
             return pypi[0].slug
 
 
-def add_queue(project, project_type: int) -> Queue:
+def add_queue(project, project_type: int) -> Queue | None:
     if db.session.execute(
         db.select(Queue)
         .where(Queue.project_id == project[0].id)
@@ -144,7 +144,7 @@ def handle_git_repo(queue_item):
             project_slug=repo,
             owner_name=owner,
             token=current_app.config.get(f"{org.upper()}_TOKEN"),
-            git_origin=org,
+            git_origin=org,  # type: ignore
         )
     )
     return client, "source_data"

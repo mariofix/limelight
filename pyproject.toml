@@ -1,6 +1,6 @@
 [project]
 name = "limelight"
-version = "2025.2"
+version = "2025.12.0"
 description = "Flask shiniest stars"
 authors = [{ name = "Mario Hernandez", email = "mariofix@proton.me" }]
 license = { text = "MIT" }
@@ -13,7 +13,7 @@ dependencies = [
     "flask-babel>=4.0.0",
     "python-multipart>=0.0.19",
     "requests>=2.32.3",
-    "flask-admin[sqlalchemy-with-utils,translation]>=2.0.0a3",
+    "flask-admin[sqlalchemy-with-utils,translation]>=2.0.2",
     "flask-debugtoolbar>=0.16.0",
     "trove-classifiers>=2024.10.21.16",
     "flask-mailman>=1.1.1",
