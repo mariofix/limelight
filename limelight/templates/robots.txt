@@ -1,5 +1,9 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /api/
+Disallow: /login/
+Disallow: /logout/
 
-Sitemap: https://flaskpackages.pythonanywhere.com/sitemap-projects.xml
-Sitemap: https://flaskpackages.pythonanywhere.com/sitemap.xml
+Sitemap: {{ request.host_url }}sitemap-projects.xml
+Sitemap: {{ request.host_url }}sitemap.xml

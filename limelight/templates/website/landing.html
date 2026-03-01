@@ -1,5 +1,27 @@
 {% extends "main.html" %}
 
+{% block title %}Flask Packages - Discover Open Source Flask Extensions{% endblock title %}
+
+{% block meta_content %}
+<meta name="description" content="Discover and explore open source Flask extensions, frameworks, modules, and projects. Community-driven development for Flask enthusiasts.">
+<meta name="keywords" content="flask,extensions,python,web framework,packages,open source,modules,frameworks">
+<meta name="robots" content="index, follow">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="author" content="mariofix">
+<link rel="canonical" href="{{ request.base_url }}" />
+<meta property="og:title" content="Flask Packages - Discover Open Source Flask Extensions">
+<meta property="og:site_name" content="Flask Packages">
+<meta property="og:url" content="{{ request.base_url }}" />
+<meta property="og:description" content="Discover and explore open source Flask extensions, frameworks, modules, and projects. Community-driven development for Flask enthusiasts.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="{{ url_for('static', filename='android-chrome-512x512.png', _external=True) }}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flask Packages - Discover Open Source Flask Extensions">
+<meta name="twitter:description" content="Discover and explore open source Flask extensions, frameworks, modules, and projects.">
+<meta name="twitter:image" content="{{ url_for('static', filename='android-chrome-512x512.png', _external=True) }}">
+{% endblock meta_content %}
+
 {% block content %}
 <!-- Hero Section -->
 <section class="bg-primary text-white text-center py-5">

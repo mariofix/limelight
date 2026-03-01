@@ -1,5 +1,27 @@
 {% extends "main.html" %}
 
+{% block title %}Flask - Flask Packages{% endblock title %}
+
+{% block meta_content %}
+<meta name="description" content="Explore Flask - the lightweight WSGI web application framework for Python. Discover extensions, tools, and projects built with Flask.">
+<meta name="keywords" content="flask,python,web framework,WSGI,extensions,packages">
+<meta name="robots" content="index, follow">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="author" content="mariofix">
+<link rel="canonical" href="{{ request.base_url }}" />
+<meta property="og:title" content="Flask - Flask Packages">
+<meta property="og:site_name" content="Flask Packages">
+<meta property="og:url" content="{{ request.base_url }}" />
+<meta property="og:description" content="Explore Flask - the lightweight WSGI web application framework for Python.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="{{ url_for('static', filename='android-chrome-512x512.png', _external=True) }}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Flask - Flask Packages">
+<meta name="twitter:description" content="Explore Flask - the lightweight WSGI web application framework for Python.">
+<meta name="twitter:image" content="{{ url_for('static', filename='android-chrome-512x512.png', _external=True) }}">
+{% endblock meta_content %}
+
 {% block content %}
 <!-- Hero Section -->
 <section class="bg-primary text-white text-center py-5">

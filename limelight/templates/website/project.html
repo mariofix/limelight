@@ -1,18 +1,40 @@
 {% extends "main.html" %} {% block title%}{{ project.title }} - Flask Packages{%
 endblock title %} {% block meta_content %}
 <meta name="description" content="{{ project.description }}" />
-<meta name="keywords" content="{{ project.description }}" />
+<meta name="keywords" content="{{ project.title }},flask,python,{% for tag in project.tags %}{{ tag.name }},{% endfor %}extension,package" />
 <meta name="robots" content="index, follow" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="author" content="{{ project.title }}" />
 <meta name="language" content="English" />
 <meta name="revisit-after" content="7 days" />
-<link rel="canonical" href="https://flaskpackages.pythonanywhere.com/project/{{ project.slug }}/" />
-<meta property="og:title" content="{{ project.title }}" />
+<link rel="canonical" href="{{ request.base_url }}" />
+<meta property="og:title" content="{{ project.title }} - Flask Packages" />
 <meta property="og:site_name" content="Flask Packages" />
-<meta property="og:url" content="https://flaskpackages.pythonanywhere.com/project/{{ project.slug }}/" />
+<meta property="og:url" content="{{ request.base_url }}" />
 <meta property="og:description" content="{{ project.description }}" />
 <meta property="og:type" content="website" />
+<meta property="og:locale" content="en_US" />
+<meta property="og:image" content="{{ url_for('static', filename='android-chrome-512x512.png', _external=True) }}" />
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="{{ project.title }} - Flask Packages" />
+<meta name="twitter:description" content="{{ project.description }}" />
+<meta name="twitter:image" content="{{ url_for('static', filename='android-chrome-512x512.png', _external=True) }}" />
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "{{ project.title }}",
+  "description": "{{ project.description }}",
+  "url": "{{ request.base_url }}",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Any",
+  "programmingLanguage": "Python"
+  {% if project.license %}, "license": "{{ project.license }}"{% endif %}
+  {% if project.project_url %}, "downloadUrl": "{{ project.project_url }}"{% endif %}
+  {% if project.source_url %}, "codeRepository": "{{ project.source_url }}"{% endif %}
+  {% if project.last_release %}, "softwareVersion": "{{ project.last_release }}"{% endif %}
+}
+</script>
 
 {% endblock meta_content %} {% block content %}
 <section class="py-5 bg-light">

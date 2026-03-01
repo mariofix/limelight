@@ -1,5 +1,27 @@
 {% extends "main.html" %}
 
+{% block title %}Help & Contributing - Flask Packages{% endblock title %}
+
+{% block meta_content %}
+<meta name="description" content="Learn how to contribute to Flask Packages - submit projects, improve the codebase, and help grow the Flask community directory.">
+<meta name="keywords" content="flask,help,contribute,open source,python,extensions">
+<meta name="robots" content="index, follow">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta name="author" content="mariofix">
+<link rel="canonical" href="{{ request.base_url }}" />
+<meta property="og:title" content="Help & Contributing - Flask Packages">
+<meta property="og:site_name" content="Flask Packages">
+<meta property="og:url" content="{{ request.base_url }}" />
+<meta property="og:description" content="Learn how to contribute to Flask Packages - submit projects, improve the codebase, and help grow the Flask community directory.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="{{ url_for('static', filename='android-chrome-512x512.png', _external=True) }}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Help & Contributing - Flask Packages">
+<meta name="twitter:description" content="Learn how to contribute to Flask Packages.">
+<meta name="twitter:image" content="{{ url_for('static', filename='android-chrome-512x512.png', _external=True) }}">
+{% endblock meta_content %}
+
 {% block content %}
 <!-- Hero Section -->
 <section class="bg-primary text-white text-center py-5">
