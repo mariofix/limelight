@@ -1,17 +1,25 @@
 {% extends "main.html" %}
+{% block title %}{% if project_type == "fulllist" %}All Flask Projects{% else %}Flask {{ project_type|capitalize }}s{% endif %} - Flask Packages{% endblock title %}
 {% block meta_content %}
-<meta name="description" content="Registered extensions under {{project_type}}">
+<meta name="description" content="{% if project_type == 'fulllist' %}Browse all registered Flask projects, extensions, frameworks, and modules.{% else %}Registered Flask {{ project_type }}s - browse and discover open source Flask {{ project_type }}s.{% endif %}">
+<meta name="keywords" content="flask,{{ project_type }},python,open source,packages,extensions">
 <meta name="robots" content="index, follow">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="author" content="mariofix">
 <meta name="language" content="English">
 <meta name="revisit-after" content="7 days">
-<link rel="canonical" href="https://flaskpackages.pythonanywhere.com/{{ project_type }}/">
-<meta property="og:title" content="{{ project_type|capitalize }}s">
+<link rel="canonical" href="{{ request.base_url }}" />
+<meta property="og:title" content="{% if project_type == 'fulllist' %}All Flask Projects{% else %}Flask {{ project_type|capitalize }}s{% endif %} - Flask Packages">
 <meta property="og:site_name" content="Flask Packages">
-<meta property="og:url" content="https://flaskpackages.pythonanywhere.com/{{ project_type }}/">
-<meta property="og:description" content="Registered extensions under {{project_type}}">
+<meta property="og:url" content="{{ request.base_url }}" />
+<meta property="og:description" content="{% if project_type == 'fulllist' %}Browse all registered Flask projects, extensions, frameworks, and modules.{% else %}Registered Flask {{ project_type }}s - browse and discover open source Flask {{ project_type }}s.{% endif %}">
 <meta property="og:type" content="website">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="{{ url_for('static', filename='android-chrome-512x512.png', _external=True) }}">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{% if project_type == 'fulllist' %}All Flask Projects{% else %}Flask {{ project_type|capitalize }}s{% endif %} - Flask Packages">
+<meta name="twitter:description" content="{% if project_type == 'fulllist' %}Browse all registered Flask projects, extensions, frameworks, and modules.{% else %}Registered Flask {{ project_type }}s - browse and discover open source Flask {{ project_type }}s.{% endif %}">
+<meta name="twitter:image" content="{{ url_for('static', filename='android-chrome-512x512.png', _external=True) }}">
 
 {% endblock meta_content %}
 {% block content %}
