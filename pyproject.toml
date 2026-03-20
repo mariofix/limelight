@@ -3,37 +3,42 @@ name = "limelight"
 version = "2026.3.0"
 description = "Flask shiniest stars"
 authors = [{ name = "Mario Hernandez", email = "mariofix@proton.me" }]
-license = { text = "MIT" }
+license = "MIT"
 readme = "README.md"
 requires-python = ">=3.12,<4.0"
 dependencies = [
-    "flask>=3.1.0",
-    "flask-migrate>=4.0.7",
+    "flask>=3.1.3",
+    "flask-migrate>=4.1.0",
     "flask-babel>=4.0.0",
     "flask-admin[sqlalchemy-with-utils,translation]>=2.0.2",
     "flask-debugtoolbar>=0.16.0",
     "flask-mailman>=1.1.1",
-    "flask-security[babel,common,fsqla]>=5.5.2",
-    "flask-limiter>=3.9.2",
-    "flask-sitemapper>=1.8.1",
-    "packaging>=24.2,<25.0",
-    "pendulum>=3.0.0",
-    "python-dotenv>=1.0.1",
-    "python-multipart>=0.0.19",
-    "requests>=2.32.3",
-    "trove-classifiers>=2024.10.21.16",
+    "flask-security[babel,common,fsqla]>=5.7.1",
+    "flask-limiter>=4.1.1",
+    "flask-sitemapper>=1.8.2",
+    "packaging>=26.0",
+    "pendulum>=3.2.0",
+    "python-dotenv>=1.2.2",
+    "python-multipart>=0.0.22",
+    "requests>=2.32.5",
+    "trove-classifiers>=2026.1.14.14",
     "jinja2-humanize-extension>=0.4.0,<0.5.0",
 ]
 
 [project.optional-dependencies]
 dev = [
-    "black>=24.10.0",
-    "pre-commit>=4.0.1",
+    "black>=26.3.1",
+    "pre-commit>=4.5.1",
+    "pytest>=9.0.2",
+    "pytest-flask>=1.3.0",
 ]
+
+[tool.setuptools.packages.find]
+include = ["limelight*"]
 
 [build-system]
 requires = ["setuptools>=75.0"]
-build-backend = "setuptools.backends.legacy:build"
+build-backend = "setuptools.build_meta"
 
 [tool.autopep8]
 max_line_length = 119
