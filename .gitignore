@@ -3,12 +3,6 @@
 
 ### Project ###
 .vscode
-flask_admin/
-flask_adminlte4/
-startbootstrap-new-age-master/
-old/
-
-### Flask ###
 instance/*
 !instance/.gitignore
 .webassets-cache

@@ -4,6 +4,7 @@ from sqlalchemy import desc
 from ..crud import add_queue, get_new_data, get_old_data, process_queue_item, cleanup
 from ..database import db
 from ..forms import NewProjectForm
+from ..limiter import limiter
 from ..models import Project, Tag
 from ..sitemap import sitemapper
 from ..utils import full_update_project_metadata
@@ -99,6 +100,7 @@ def get_project_info(slug):
 
 
 @blueprint.get("/project/<slug>")
+@limiter.limit("30 per minute")
 def get_project(slug):
     if slug in ["flask", "quart"]:
         return redirect(url_for("website.get_project_info", slug=slug), code=301)
@@ -137,11 +139,13 @@ def robok():
 
 
 @blueprint.get("/sitemap.xml")
+@limiter.limit("10 per minute")
 def full_sitemap():
     return sitemapper.generate()
 
 
 @blueprint.get("/sitemap-projects.xml")
+@limiter.limit("10 per minute")
 def project_sitemap():
     projects = db.session.execute(db.select(Project)).all()
     sitemap = render_template("sitemap.xml", projects=projects)

@@ -42,6 +42,11 @@ def create_app(settings_file: str | None = None) -> Flask:
     # Flask-Limiter
     limiter.init_app(app)
 
+    @app.before_request
+    @limiter.limit("30 per minute", exempt_when=lambda: not request.path.startswith("/admin"))
+    def admin_rate_limit():
+        pass
+
     # Flask-Security
     # oauth = OAuth(app)
     # oauth.register(

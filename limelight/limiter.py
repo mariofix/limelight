@@ -3,7 +3,7 @@ from flask_limiter.util import get_remote_address
 
 limiter = Limiter(
     get_remote_address,
+    default_limits=["200 per day", "60 per minute"],
     storage_uri="memory://",
-    # storage_uri="redis://localhost:6379",
     strategy="fixed-window",
 )

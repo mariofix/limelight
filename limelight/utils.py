@@ -103,9 +103,8 @@ def get_downloads(package: str):
 
 
 def full_update_project_metadata(project):
-    from flask import current_app
-
     """Updates Project info based on all available information."""
+    from flask import current_app
     if project.pypi_data:
         try:
             pypi_info = project.pypi_data["response_data"]["info"]
@@ -128,21 +127,18 @@ def full_update_project_metadata(project):
             project.last_release_date = datetime.datetime.fromisoformat(
                 project.pypi_data["response_data"]["releases"][pypi_info.get("version")][0]["upload_time"]
             )
-        except (KeyError, IndexError):
-            current_app.logger.info(f"last_release_date - {pypi_info.get('version') = }")
-            current_app.logger.info(f"last_release_date - {project.pypi_data['response_data']['releases'] = }")
+        except (KeyError, IndexError, TypeError, ValueError):
+            current_app.logger.info(f"last_release_date not found for version {pypi_info.get('version')!r}")
 
         try:
-
             project.first_release_date = datetime.datetime.fromisoformat(
                 project.pypi_data["response_data"]["releases"][
-                    next(
-                        iter(project.pypi_data["response_data"]["releases"]),
-                    )
+                    next(iter(project.pypi_data["response_data"]["releases"]))
                 ][0]["upload_time"]
             )
-        except (KeyError, IndexError):
-            current_app.logger.info(f"first_release_date - {project.pypi_data['response_data']['releases'] = }")
+        except (KeyError, IndexError, TypeError, ValueError):
+            release_count = len(project.pypi_data["response_data"].get("releases", {}))
+            current_app.logger.info(f"first_release_date not found, {release_count} releases available")
 
         db.session.commit()
 
